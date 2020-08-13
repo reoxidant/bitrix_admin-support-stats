@@ -199,7 +199,7 @@ if ($SUP_RIGHT > "D") {
             "items" => array(
                 array(
                     "text" => GetMessage("SUP_M_TICKETS_STATS"),
-                    "url" => "ticket_stats_list.php?lang=" . LANGUAGE_ID,
+                    "url" => "ticket_stats_graph.php?lang=" . LANGUAGE_ID,
                     "more_url" => array(
                         "ticket_stats_list.php",
                     ),
@@ -207,7 +207,7 @@ if ($SUP_RIGHT > "D") {
                 ),
                 array(
                     "text" => GetMessage("SUP_M_TICKETS_COUNT_STATS"),
-                    "url" => "ticket_stats_graph.php?lang=" . LANGUAGE_ID,
+                    "url" => "ticket_stats_list.php?lang=" . LANGUAGE_ID,
                     "more_url" => array(
                         "ticket_stats_graph.php",
                     ),
