@@ -30,4 +30,10 @@ $MESS["SUP_M_TIMETABLE"] = "Расписания";
 $MESS["SUP_M_HOLIDAYS"] = "Исключения";
 $MESS["SUP_M_SHEDULE"] = "Расписания";
 $MESS["SUP_M_SHEDULE_TITLE"] = "Расписания";
+//MUIV DEVELOP
+$MESS['SUP_M_STATS'] = "Статистика";
+$MESS['SUP_M_STATS_TITLE'] = "Статистика";
+$MESS["SUP_M_TICKETS_STATS"] = "Статистика по заявкам";
+$MESS["SUP_M_TICKETS_COUNT_STATS"] = "Статистика по количеству заявок";
+$MESS["SUP_M_INSTRUCTIONS_STATS"] = "Статистика страниц Инструкций";
 ?>

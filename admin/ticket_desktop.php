@@ -138,9 +138,6 @@ $FilterArr = Array(
 
 $lAdmin->InitFilter($FilterArr);//������������� �������
 
-
-
-
 if ($bAdmin!="Y" && $bDemo!="Y") $find_responsible_id = $USER->GetID();
 
 InitBVar($find_responsible_exact_match);
@@ -472,8 +469,6 @@ while (list($key, $arrR) = each($arrTickets)):
 </table><br>
 <?endwhile;?>
 
-
-
 <?
 $lAdmin->EndCustomContent();
 
@@ -555,9 +550,6 @@ require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_admi
 </tr>
 <?$filter->Buttons(array("table_id"=>$sTableID, "url"=>$APPLICATION->GetCurPage(), "form"=>"form1"));$filter->End();?>
 </form>
-
-
-
 
 <?$lAdmin->DisplayList();?>
 
