@@ -36,16 +36,6 @@ if ($SUP_RIGHT > "D") {
             ),
             "title" => GetMessage("SUP_M_TICKETS_ALT")
         );
-    $aMenu["items"][] = array(
-        "text" => GetMessage("SUP_M_TICKETS"),
-        "url" => "ticket_list.php?lang=" . LANGUAGE_ID . "&amp;set_default=Y",
-        "more_url" => array(
-            "ticket_list.php",
-            "ticket_edit.php",
-            "ticket_message_edit.php"
-        ),
-        "title" => GetMessage("SUP_M_TICKETS_ALT")
-    );
 
     if ($SUP_RIGHT >= "T")
         $aMenu["items"][] = array(
