@@ -19,23 +19,21 @@ $DB->Query("DELETE FROM b_event_message WHERE EVENT_NAME in (
 	)");
 */
 $arEventNames = array(
-	'TICKET_NEW_FOR_AUTHOR', 
-	'TICKET_NEW_FOR_TECHSUPPORT',
-	'TICKET_CHANGE_FOR_TECHSUPPORT', 
-	'TICKET_CHANGE_BY_AUTHOR_FOR_AUTHOR', 
-	'TICKET_CHANGE_BY_SUPPORT_FOR_AUTHOR',
-	'TICKET_OVERDUE_REMINDER',
-	'TICKET_GENERATE_SUPERCOUPON',
+    'TICKET_NEW_FOR_AUTHOR',
+    'TICKET_NEW_FOR_TECHSUPPORT',
+    'TICKET_CHANGE_FOR_TECHSUPPORT',
+    'TICKET_CHANGE_BY_AUTHOR_FOR_AUTHOR',
+    'TICKET_CHANGE_BY_SUPPORT_FOR_AUTHOR',
+    'TICKET_OVERDUE_REMINDER',
+    'TICKET_GENERATE_SUPERCOUPON',
 );
-$rs = CEventMessage::GetList($v1, $v2, array('EVENT_NAME' => implode('|', $arEventNames)));
-while ($arEventMessage = $rs->Fetch())
-{
-	CEventMessage::Delete($arEventMessage['ID']);
+$rs = CEventMessage ::GetList($v1, $v2, array('EVENT_NAME' => implode('|', $arEventNames)));
+while ($arEventMessage = $rs -> Fetch()) {
+    CEventMessage ::Delete($arEventMessage['ID']);
 }
 
-foreach ($arEventNames as $e)
-{
-	CEventType::Delete($e);
+foreach ($arEventNames as $e) {
+    CEventType ::Delete($e);
 }
 
 ?>

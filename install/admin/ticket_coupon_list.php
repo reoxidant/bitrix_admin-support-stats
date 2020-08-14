@@ -1,1 +1,1 @@
-<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/support/admin/ticket_coupon_list.php");?>
+<? require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/admin/ticket_coupon_list.php"); ?>

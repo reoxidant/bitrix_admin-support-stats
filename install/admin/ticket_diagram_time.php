@@ -1,1 +1,1 @@
-<?require($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/support/admin/ticket_diagram_time.php");?>
+<? require($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/admin/ticket_diagram_time.php"); ?>

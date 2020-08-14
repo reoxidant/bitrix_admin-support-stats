@@ -16,16 +16,16 @@ class Graph implements PropertyContainerInterface
 
     public function addProperty($name, $value)
     {
-        $this->propertyContainer[$name] = $value;
+        $this -> propertyContainer[$name] = $value;
     }
 
     public function getProperty($name)
     {
-        return $this->propertyContainer[$name] ?? null;
+        return $this -> propertyContainer[$name] ?? null;
     }
 
     public function getAllProperties()
     {
-        return $this->propertyContainer ?? null;
+        return $this -> propertyContainer ?? null;
     }
 }

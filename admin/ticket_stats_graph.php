@@ -6,36 +6,36 @@
  * @package PhpStorm
  */
 
-require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_admin_before.php");
-require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/support/prolog.php");
-require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/support/include.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/prolog.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
 
-$bDemo = (CTicket::IsDemo()) ? "Y" : "N";
-$bAdmin = (CTicket::IsAdmin()) ? "Y" : "N";
-$bSupportTeam = (CTicket::IsSupportTeam()) ? "Y" : "N";
+$bDemo = (CTicket ::IsDemo()) ? "Y" : "N";
+$bAdmin = (CTicket ::IsAdmin()) ? "Y" : "N";
+$bSupportTeam = (CTicket ::IsSupportTeam()) ? "Y" : "N";
 $message = null;
 
-if($bAdmin!="Y" && $bSupportTeam!="Y" && $bDemo!="Y") $APPLICATION->AuthForm(GetMessage("ACCESS_DENIED"));
+if ($bAdmin != "Y" && $bSupportTeam != "Y" && $bDemo != "Y") $APPLICATION -> AuthForm(GetMessage("ACCESS_DENIED"));
 
-IncludeModuleLangFile($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/support/include.php");
+IncludeModuleLangFile($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
 IncludeModuleLangFile(__FILE__);
-include($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/support/colors.php");
-require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/img.php");
+include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
 
 require_once('classes/Graph.php');
 require_once('classes/CAdminFilter.php');
 
-use admin\classes\Graph;
 use admin\classes\CAdminFilter;
+use admin\classes\Graph;
 
 $graph = new Graph();
-$graph->addProperty("sTableId", 't_report_graph');
+$graph -> addProperty("sTableId", 't_report_graph');
 
-list('sTableId' => $sTableId) = $graph->getAllProperties();
+list('sTableId' => $sTableId) = $graph -> getAllProperties();
 
 $admin = new CAdminFilter();
 $admin -> addProperty('oSort', new CAdminList($sTableId));
-$admin -> addProperty('lAdmin', new CAdminList($sTableId, $admin->getProperty('oSort')));
+$admin -> addProperty('lAdmin', new CAdminList($sTableId, $admin -> getProperty('oSort')));
 
 $arrMessages = array(
     GetMessage("SUP_F_SITE"),
@@ -51,24 +51,24 @@ $arrMessages = array(
 
 $admin -> addProperty('filter', new CAdminList("filter_id", $arrMessages));
 
-$admin->setValDefaultFilter();
+$admin -> setValDefaultFilter();
 
-$admin -> getProperty('lAdmin') -> InitFilter($admin->getProperty('arFilterFields'));
+$admin -> getProperty('lAdmin') -> InitFilter($admin -> getProperty('arFilterFields'));
 
-if ($bAdmin!="Y" && $bDemo!="Y") $find_responsible_id = $USER->GetID();
+if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
 
 InitBVar($find_responsible_exact_match);
 
 $admin -> addArrFilter();
 
-$rsTickets = CTicket::GetList($by, $order, $admin->getProperty('arFilter'), $is_filtered, "Y", "N", "N");
+$rsTickets = CTicket ::GetList($by, $order, $admin -> getProperty('arFilter'), $is_filtered, "Y", "N", "N");
 
 $OPEN_TICKETS = $CLOSE_TICKETS = 0;
 $arrTickets = array();
 $arrTime = array();
 
-require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/prolog_admin_after.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
 
-require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/include/epilog_admin.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");
 
 ?>

@@ -1,2 +1,7 @@
-.popupmenu .popupitem .support_menu_icon {background-image:url(support.gif);}
-.popupmenu .popupitemover .support_menu_icon {background-image:url(support_over.gif);}
+.popupmenu .popupitem .support_menu_icon {
+    background-image: url(support.gif);
+}
+
+.popupmenu .popupitemover .support_menu_icon {
+    background-image: url(support_over.gif);
+}

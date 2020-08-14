@@ -8,7 +8,8 @@
 
 namespace admin\classes;
 
-interface PropertyContainerInterface{
+interface PropertyContainerInterface
+{
     function addProperty($name, $value);
 
     function getProperty($name);

@@ -12,7 +12,8 @@ use CTicket;
 
 class DatabaseManager
 {
-    public function getListTicket($by, $order, $arFilter, $is_filtered, $checkRights, $getUserName, $getExtraName){
-        return CTicket::GetList($by, $order, $arFilter, $is_filtered, $checkRights, $getUserName, $getExtraName);
+    public function getListTicket($by, $order, $arFilter, $is_filtered, $checkRights, $getUserName, $getExtraName)
+    {
+        return CTicket ::GetList($by, $order, $arFilter, $is_filtered, $checkRights, $getUserName, $getExtraName);
     }
 }
