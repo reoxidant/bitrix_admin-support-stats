@@ -25,9 +25,9 @@ include($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/support/colors.php");
 require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/main/img.php");
 
 /***************************************************************************
-									Функции
+									пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 ***************************************************************************/
-function CheckFilter() // проверка введенных полей
+function CheckFilter() // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
 {
 	global $arFilterFields;
 	reset($arFilterFields); foreach ($arFilterFields as $f) global $$f; 
@@ -65,14 +65,14 @@ function CheckFilter() // проверка введенных полей
 }
 
 /***************************************************************************
-								Обработка GET | POST
+								пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ GET | POST
 ****************************************************************************/
 
 
 
 $sTableID = "t_report_graph";
-$oSort = new CAdminSorting($sTableID);// инициализация сортировки
-$lAdmin = new CAdminList($sTableID, $oSort);// инициализация списка
+$oSort = new CAdminSorting($sTableID);// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
+$lAdmin = new CAdminList($sTableID, $oSort);// пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
 
 $filter = new CAdminFilter(
 	"filter_id", 
@@ -126,7 +126,7 @@ $FilterArr2 = Array(
 $arFilterFields = array_merge($FilterArr1, $FilterArr2);
 
 
-$lAdmin->InitFilter($arFilterFields);//инициализация фильтра
+$lAdmin->InitFilter($arFilterFields);//пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
 
 
 
@@ -157,7 +157,6 @@ else
 	if($e = $APPLICATION->GetException())
 	{
 		$message = new CAdminMessage(GetMessage("SUP_FILTER_ERROR"), $e);
-		//$message = new CAdminMessage(GetMessage("SUP_FILTER_ERROR"), $e);
 	}
 }
 
