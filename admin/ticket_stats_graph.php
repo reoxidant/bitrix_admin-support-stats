@@ -24,9 +24,13 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
 
 require_once('classes/Graph.php');
 require_once('classes/CAdminFilter.php');
+require_once('classes/Ticket.php');
+require_once('classes/SupportUser.php');
 
 use admin\classes\CAdminFilter;
 use admin\classes\Graph;
+use admin\classes\Ticket;
+use admin\classes\SupportUser;
 
 $graph = new Graph();
 $graph -> addProperty("sTableId", 't_report_graph');
@@ -53,21 +57,48 @@ $admin -> addProperty('filter', new CAdminList("filter_id", $arrMessages));
 
 $admin -> setValDefaultFilter();
 
+$admin -> setArFilterFields();
+
 $admin -> getProperty('lAdmin') -> InitFilter($admin -> getProperty('arFilterFields'));
 
-if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
+/*if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
 
-InitBVar($find_responsible_exact_match);
+InitBVar($find_responsible_exact_match);*/
 
 $admin -> addArrFilter();
 
-$rsTickets = CTicket ::GetList($by, $order, $admin -> getProperty('arFilter'), $is_filtered, "Y", "N", "N");
+$message = ($admin->error ?? null) ? $admin->error : null;
 
-$OPEN_TICKETS = $CLOSE_TICKETS = 0;
-$arrTickets = array();
-$arrTime = array();
+$tickets = new Ticket();
+
+$tickets->addListTicketsByFilterProperty("rsTickets", $admin->getProperty('arFilter'));
+
+$tickets->addDefaultPropertyByKeys("arrTime", ["1", "1_2", "2_3", "3_4", "4_5", "5_6", "6_7", "7"], 0);
+$tickets->addDefaultPropertyByKeys("arrMess", ["2_m", "3_m", "4_m", "5_m", "6_m", "7_m", "8_m", "9_m", "10_m"], 0);
+
+$tickets->fillOutTickets('rsTickets');
+
+$user = new SupportUser($tickets->arTicketUsersID);
+
+$admin -> getProperty('lAdmin') -> BeginCustomContent();
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
+
+if ($message)
+    echo $message -> Show();
+?>
+<!--Время на сервере:  17.08.2020 16:12:21-->
+<p><? echo GetMessage("SUP_SERVER_TIME") . "&nbsp;" . GetTime(time(), "FULL") ?></p>
+<!--Нагрузка на техподдержку-->
+<h2><?= GetMessage("SUP_GRAPH_ALT") ?></h2>
+
+<?php
+    //TODO: Create lines text status
+    $graph->createImageGraph($tickets->getProperty('show_graph'), $admin -> getProperty('arFilterFields'), $admin->getProperty('defaultFilterValues'));
+?>
+
+<?php
+$admin -> getProperty('lAdmin') -> DisplayList();
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");
 
