@@ -62,7 +62,7 @@ class CAdminFilter implements PropertyContainerInterface
         foreach ($this -> propertyContainer['arFilterFields'] as $f) global $$f;
         $arMsg = array();
 
-        if (strlen(trim($find_date1)) > 0 || strlen(trim($find_date2)) > 0) {
+        if (strlen(trim($find_date1 ?? null)) > 0 || strlen(trim($find_date2 ?? null)) > 0) {
             $date_1_ok = false;
             /** @noinspection PhpDeprecationInspection */
             $date1_stm = MkDateTime(ConvertDateTime($find_date1, "D.M.Y"), "d.m.Y");
@@ -90,20 +90,19 @@ class CAdminFilter implements PropertyContainerInterface
 
     public function addArrFilter()
     {
-
         $arFilter = array(
-            "SITE" => $find_site,
-            "DATE_CREATE_1" => $find_date1,
-            "DATE_CREATE_2" => $find_date2,
-            "RESPONSIBLE_ID" => $find_responsible_id,
-            "RESPONSIBLE" => $find_responsible,
-            "RESPONSIBLE_EXACT_MATCH" => $find_responsible_exact_match,
-            "SLA" => $find_sla_id,
-            "CATEGORY" => $find_category_id,
-            "CRITICALITY" => $find_criticality_id,
-            "STATUS" => $find_status_id,
-            "MARK" => $find_mark_id,
-            "SOURCE" => $find_source_id,
+            "SITE" => $find_site ?? null,
+            "DATE_CREATE_1" => $find_date1 ?? null,
+            "DATE_CREATE_2" => $find_date2 ?? null,
+            "RESPONSIBLE_ID" => $find_responsible_id ?? null,
+            "RESPONSIBLE" => $find_responsible ?? null,
+            "RESPONSIBLE_EXACT_MATCH" => $find_responsible_exact_match ?? null,
+            "SLA" => $find_sla_id ?? null,
+            "CATEGORY" => $find_category_id ?? null,
+            "CRITICALITY" => $find_criticality_id ?? null,
+            "STATUS" => $find_status_id ?? null,
+            "MARK" => $find_mark_id ?? null,
+            "SOURCE" => $find_source_id ?? null,
         );
 
         if ($this -> checkFilter()) {
