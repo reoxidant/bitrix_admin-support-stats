@@ -13,6 +13,7 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
 $bDemo = (CTicket ::IsDemo()) ? "Y" : "N";
 $bAdmin = (CTicket ::IsAdmin()) ? "Y" : "N";
 $bSupportTeam = (CTicket ::IsSupportTeam()) ? "Y" : "N";
+$message = null;
 
 if ($bAdmin != "Y" && $bSupportTeam != "Y" && $bDemo != "Y") $APPLICATION -> AuthForm(GetMessage("ACCESS_DENIED"));
 
@@ -56,6 +57,8 @@ $admin -> addProperty('filter', new CAdminList("filter_id", $arrMessages));
 
 $admin -> setValDefaultFilter();
 
+$admin -> setArFilterFields();
+
 $admin -> getProperty('lAdmin') -> InitFilter($admin -> getProperty('arFilterFields'));
 
 /*if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
@@ -63,6 +66,8 @@ $admin -> getProperty('lAdmin') -> InitFilter($admin -> getProperty('arFilterFie
 InitBVar($find_responsible_exact_match);*/
 
 $admin -> addArrFilter();
+
+$message = ($admin->error ?? null) ? $admin->error : null;
 
 $tickets = new Ticket();
 
@@ -77,6 +82,10 @@ $user = new SupportUser($tickets->arTicketUsersID);
 
 $admin -> getProperty('lAdmin') -> BeginCustomContent();
 
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
+
+if ($message)
+    echo $message -> Show();
 ?>
 <!--Время на сервере:  17.08.2020 16:12:21-->
 <p><? echo GetMessage("SUP_SERVER_TIME") . "&nbsp;" . GetTime(time(), "FULL") ?></p>
@@ -84,11 +93,12 @@ $admin -> getProperty('lAdmin') -> BeginCustomContent();
 <h2><?= GetMessage("SUP_GRAPH_ALT") ?></h2>
 
 <?php
-    $graph->createImageGraph();
+    //TODO: Create lines text status
+    $graph->createImageGraph($tickets->getProperty('show_graph'), $admin -> getProperty('arFilterFields'), $admin->getProperty('defaultFilterValues'));
 ?>
 
 <?php
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
+$admin -> getProperty('lAdmin') -> DisplayList();
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");
 

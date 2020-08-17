@@ -52,12 +52,15 @@ class Graph implements PropertyContainerInterface
     /**
      * @param $show_graph
      * @param $arFilterFields
+     * @param $defaultFilterValues
      */
-    public function createImageGraph($show_graph, $arFilterFields)
+    public function createImageGraph($show_graph, $arFilterFields, $defaultFilterValues)
     {
-        if (!function_exists("ImageCreate")) :
-            CAdminMessage ::ShowMessage(GetMessage("SUP_GD_NOT_INSTALLED"));
-        elseif ($show_graph == "Y") :
+        list('find_open' => $find_open, 'find_close' => $find_close, 'find_all' => $find_all, 'find_mess' => $find_mess, 'find_overdue_mess' => $find_overdue_mess) = $defaultFilterValues;
+
+        if (!function_exists("ImageCreate")) : CAdminMessage ::ShowMessage(GetMessage("SUP_GD_NOT_INSTALLED"));
+        elseif
+        ($show_graph == "Y") :
             $width = "576";
             $height = "400";
             ?>
@@ -65,67 +68,71 @@ class Graph implements PropertyContainerInterface
                 <table border="0" cellspacing="0" cellpadding="0" class="graph">
                     <tr>
                         <td>
-
                             <table border="0" cellspacing="1" cellpadding="0">
                                 <tr>
                                     <td>
                                         <table cellpadding="1" cellspacing="0" border="0">
                                             <tr>
-                                                <td valign="center" nowrap><img
-                                                        src="/bitrix/admin/ticket_graph.php?<?= GetFilterParams($arFilterFields) ?>&width=<?= $width ?>&height=<?= $height ?>&lang=<? echo LANG ?>"
-                                                        width="<?= $width ?>" height="<?= $height ?>"></td>
+                                                <td valign="center" nowrap>
+                                                    <img
+                                                            src="/bitrix/admin/ticket_graph.php?<?= GetFilterParams($arFilterFields) ?>&width=<?= $width ?>&height=<?= $height ?>&lang=<? echo LANG ?>"
+                                                            width="<?= $width ?>"
+                                                            height="<?= $height ?>">
+                                                </td>
                                             </tr>
                                         </table>
                                     </td>
                                 </tr>
                             </table>
-
-
                         </td>
                     </tr>
                     <tr>
                         <td>
                             <table cellpadding="3" cellspacing="1" border="0" class="legend">
-                                <? if ($find_open == "Y"):?>
+                                <? if ($find_open == "Y"): ?>
                                     <tr>
-                                        <td valign="center"><img
-                                                src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OPEN_TICKET"] ?>"
-                                                width="45" height="2"></td>
+                                        <td valign="center">
+                                            <img src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OPEN_TICKET"] ?>"
+                                                    width="45" height="2">
+                                        </td>
                                         <td nowrap><?= GetMessage("SUP_OPEN_TICKET") ?></td>
                                     </tr>
-                                <?endif; ?>
-                                <? if ($find_close == "Y"):?>
+                                <? endif; ?>
+                                <? if ($find_close == "Y"): ?>
                                     <tr>
-                                        <td valign="center"><img
-                                                src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["CLOSE_TICKET"] ?>"
-                                                width="45" height="2"></td>
+                                        <td valign="center">
+                                            <img src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["CLOSE_TICKET"] ?>"
+                                                    width="45" height="2">
+                                        </td>
                                         <td nowrap><?= GetMessage("SUP_CLOSE_TICKET") ?></td>
                                     </tr>
-                                <?endif; ?>
-                                <? if ($find_all == "Y"):?>
+                                <? endif; ?>
+                                <? if ($find_all == "Y"): ?>
                                     <tr>
-                                        <td valign="center"><img
-                                                src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["ALL_TICKET"] ?>"
-                                                width="45" height="2"></td>
+                                        <td valign="center">
+                                            <img src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["ALL_TICKET"] ?>"
+                                                 width="45" height="2">
+                                        </td>
                                         <td nowrap><?= GetMessage("SUP_ALL_TICKET") ?></td>
                                     </tr>
-                                <?endif; ?>
-                                <? if ($find_mess == "Y"):?>
+                                <? endif; ?>
+                                <? if ($find_mess == "Y"): ?>
                                     <tr>
-                                        <td valign="center"><img
-                                                src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["MESSAGES"] ?>"
-                                                width="45" height="2"></td>
+                                        <td valign="center">
+                                            <img src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["MESSAGES"] ?>"
+                                                    width="45" height="2">
+                                        </td>
                                         <td nowrap><?= GetMessage("SUP_MESSAGES") ?></td>
                                     </tr>
-                                <?endif; ?>
-                                <? if ($find_overdue_mess == "Y"):?>
+                                <? endif; ?>
+                                <? if ($find_overdue_mess == "Y"): ?>
                                     <tr>
-                                        <td valign="center"><img
-                                                src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OVERDUE_MESSAGES"] ?>"
-                                                width="45" height="2"></td>
+                                        <td valign="center">
+                                            <img src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OVERDUE_MESSAGES"] ?>"
+                                                    width="45" height="2"></td>
                                         <td nowrap><?= GetMessage("SUP_OVERDUE_MESSAGES") ?></td>
                                     </tr>
-                                <?endif; ?>
+                                <? endif; ?>
                             </table>
                         </td>
                     </tr>

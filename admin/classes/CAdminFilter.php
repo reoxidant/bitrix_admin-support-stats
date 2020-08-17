@@ -15,6 +15,8 @@ class CAdminFilter implements PropertyContainerInterface
 
     private $propertyContainer = [];
 
+    public $error;
+
     public function setValDefaultFilter()
     {
         if ($this -> propertyContainer['lAdmin'] -> IsDefaultFilter()) {
@@ -109,7 +111,7 @@ class CAdminFilter implements PropertyContainerInterface
             $this -> propertyContainer['arFilter'] = $arFilter;
         } else {
             if ($e = $APPLICATION -> GetException())
-                $message = new CAdminMessage(GetMessage("SUP_FILTER_ERROR"), $e);
+                $this->error = new CAdminMessage(GetMessage("SUP_FILTER_ERROR"), $e);
         }
     }
 
