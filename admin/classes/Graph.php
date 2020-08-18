@@ -53,12 +53,19 @@ class Graph implements PropertyContainerInterface
      * @param $show_graph
      * @param $arFilterFields
      * @param $defaultFilterValues
+     * @param $arrColor
      */
-    public function createImageGraph($show_graph, $arFilterFields, $defaultFilterValues)
+    public function createImageGraph($show_graph, $arFilterFields, $defaultFilterValues, $arrColor)
     {
-        list('find_open' => $find_open, 'find_close' => $find_close, 'find_all' => $find_all, 'find_mess' => $find_mess, 'find_overdue_mess' => $find_overdue_mess) = $defaultFilterValues;
+        list(
+                'find_open' => $find_open,
+                'find_close' => $find_close,
+                'find_all' => $find_all,
+                'find_mess' => $find_mess,
+                'find_overdue_mess' => $find_overdue_mess
+            ) = $defaultFilterValues;
 
-        if (!function_exists("ImageCreate")) : CAdminMessage ::ShowMessage(GetMessage("SUP_GD_NOT_INSTALLED"));
+        if (!function_exists("ImageCreate")) : CAdminMessage :: ShowMessage(GetMessage("SUP_GD_NOT_INSTALLED"));
         elseif
         ($show_graph == "Y") :
             $width = "576";
@@ -75,9 +82,9 @@ class Graph implements PropertyContainerInterface
                                             <tr>
                                                 <td valign="center" nowrap>
                                                     <img
-                                                            src="/bitrix/admin/ticket_graph.php?<?= GetFilterParams($arFilterFields) ?>&width=<?= $width ?>&height=<?= $height ?>&lang=<? echo LANG ?>"
-                                                            width="<?= $width ?>"
-                                                            height="<?= $height ?>">
+                                                    src="/bitrix/admin/ticket_graph.php?<?= GetFilterParams($arFilterFields) ?>&width=<?= $width ?>&height=<?= $height ?>&lang=<? echo LANG ?>"
+                                                    width="<?= $width ?>"
+                                                    height="<?= $height ?>">
                                                 </td>
                                             </tr>
                                         </table>
@@ -140,7 +147,7 @@ class Graph implements PropertyContainerInterface
             </div>
         <?
         else:
-            CAdminMessage ::ShowMessage(GetMessage("SUP_NOT_ENOUGH_DATA_FOR_GRAPH"));
+            CAdminMessage :: ShowMessage(GetMessage("SUP_NOT_ENOUGH_DATA_FOR_GRAPH"));
         endif;
     }
 

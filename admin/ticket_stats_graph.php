@@ -61,17 +61,32 @@ $admin -> setArFilterFields();
 
 $admin -> getProperty('lAdmin') -> InitFilter($admin -> getProperty('arFilterFields'));
 
-/*if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
+if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
 
-InitBVar($find_responsible_exact_match);*/
+InitBVar($find_responsible_exact_match);
 
-$admin -> addArrFilter();
+$data_filter = [
+    "find_site" => $find_site ?? null,
+    "find_date1" => $find_date1 ?? null,
+    "find_date2" => $find_date2 ?? null,
+    "find_responsible_id" => $find_responsible_id ?? null,
+    "find_responsible" => $find_responsible ?? null,
+    "find_responsible_exact_match" => $find_responsible_exact_match ?? null,
+    "find_sla_id" => $find_sla_id ?? null,
+    "find_category_id" => $find_category_id ?? null,
+    "find_criticality_id" => $find_criticality_id ?? null,
+    "find_status_id" => $find_status_id ?? null,
+    "find_mark_id" => $find_mark_id ?? null,
+    "find_source_id" => $find_source_id ?? null
+];
+
+$admin -> addArrFilter($data_filter);
 
 $message = ($admin->error ?? null) ? $admin->error : null;
 
 $tickets = new Ticket();
 
-$tickets->addListTicketsByFilterProperty("rsTickets", $admin->getProperty('arFilter'));
+$tickets->addListTicketsByFilterPropertyDB("rsTickets", $admin->getProperty('arFilter'));
 
 $tickets->addDefaultPropertyByKeys("arrTime", ["1", "1_2", "2_3", "3_4", "4_5", "5_6", "6_7", "7"], 0);
 $tickets->addDefaultPropertyByKeys("arrMess", ["2_m", "3_m", "4_m", "5_m", "6_m", "7_m", "8_m", "9_m", "10_m"], 0);
@@ -79,6 +94,7 @@ $tickets->addDefaultPropertyByKeys("arrMess", ["2_m", "3_m", "4_m", "5_m", "6_m"
 $tickets->fillOutTickets('rsTickets');
 
 $user = new SupportUser($tickets->arTicketUsersID);
+$user->addSupportUsers();
 
 $admin -> getProperty('lAdmin') -> BeginCustomContent();
 
@@ -93,13 +109,14 @@ if ($message)
 <h2><?= GetMessage("SUP_GRAPH_ALT") ?></h2>
 
 <?php
-    //TODO: Create lines text status
-    $graph->createImageGraph($tickets->getProperty('show_graph'), $admin -> getProperty('arFilterFields'), $admin->getProperty('defaultFilterValues'));
+    $graph->createImageGraph(
+            $tickets->getProperty('show_graph'),
+            $admin -> getProperty('arFilterFields'),
+            $admin->getProperty('lAdmin')->getFilter() ?? null,
+            $arrColor ?? null
+    );
 ?>
-
 <?php
-$admin -> getProperty('lAdmin') -> DisplayList();
-
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");
 
 ?>

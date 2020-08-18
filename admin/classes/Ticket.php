@@ -49,7 +49,7 @@ class Ticket implements PropertyContainerInterface
      * @param $name
      * @param $filterProperty
      */
-    public function addListTicketsByFilterProperty($name, $filterProperty)
+    public function addListTicketsByFilterPropertyDB($name, $filterProperty)
     {
         $this->propertyContainer[$name] = CTicket ::GetList($by, $order, $filterProperty, $is_filtered, "Y", "N", "N");
     }

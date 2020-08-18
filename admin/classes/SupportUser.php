@@ -8,6 +8,8 @@
 
 namespace admin\classes;
 
+use CUser;
+
 class SupportUser
 {
     private $arrSupportUser;
@@ -22,7 +24,9 @@ class SupportUser
     }
 
     public function addSupportUsers(){
-        $rs = CUser ::GetList("ID", "asc", array("ID" => $this->strUsers), array("FIELDS" => array("NAME", "LAST_NAME", "LOGIN", "ID")));
+        $titleId = "ID";
+        $order = "asc";
+        $rs = CUser ::GetList($titleId, $order, array("ID" => $this->strUsers), array("FIELDS" => array("NAME", "LAST_NAME", "LOGIN", "ID")));
         while ($ar = $rs -> Fetch()) {
             $this->arrSupportUser[$ar["ID"]] = $ar;
         }
