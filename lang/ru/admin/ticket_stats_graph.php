@@ -12,3 +12,5 @@ $MESS["SUP_OPEN_TICKET"] = "открытые обращения";
 $MESS["SUP_CLOSE_TICKET"] = "закрытые обращения";
 $MESS["SUP_MESSAGES"] = "сообщения";
 $MESS["SUP_OVERDUE_MESSAGES"] = "просроченные сообщения";
+$MESS["SUP_NOT_ENOUGH_DATA_FOR_GRAPH"] = "Недостаточно данных для построения графика";
+$MESS["SUP_GD_NOT_INSTALLED"] = "Не установлена GD библиотека.";

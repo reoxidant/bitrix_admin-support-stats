@@ -326,7 +326,6 @@ else:
     //ShowError(GetMessage("SUP_NOT_ENOUGH_DATA_FOR_GRAPH"));
 endif;
 ?>
-
     <h2><?= GetMessage("SUP_DIAGRAM_TIME_TITLE") ?></h2>
 <?
 if (!function_exists("ImageCreate")) :

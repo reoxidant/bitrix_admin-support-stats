@@ -19,19 +19,15 @@ class CAdminFilter implements PropertyContainerInterface
 
     public function setValDefaultFilter()
     {
-        if ($this -> propertyContainer['lAdmin'] -> IsDefaultFilter()) {
-            $this -> propertyContainer['defaultFilterValues'] = [
-                'find_date1_DAYS_TO_BACK' => 1,
-                'find_open' => "Y",
-                'find_close' => "Y",
-                "find_all" => "Y",
-                'find_mess' => "Y",
-                'find_overdue_mess' => "Y",
-                'set_filter' => "Y"
-            ];
-        } else {
-            $this -> propertyContainer['defaultFilterValues'] = null;
-        }
+        $this -> propertyContainer['defaultFilterValues'] = [
+            'find_date1_DAYS_TO_BACK' => 1,
+            'find_open' => "Y",
+            'find_close' => "Y",
+            "find_all" => "Y",
+            'find_mess' => "Y",
+            'find_overdue_mess' => "Y",
+            'set_filter' => "Y"
+        ];
     }
 
     public function setArFilterFields()
@@ -58,13 +54,13 @@ class CAdminFilter implements PropertyContainerInterface
     }
 
     /** @noinspection PhpDeprecationInspection */
-    public function checkFilter()
+    public function checkFilter($find_date1, $find_date2)
     {
         reset($this -> propertyContainer['arFilterFields']);
         foreach ($this -> propertyContainer['arFilterFields'] as $f) global $$f;
         $arMsg = array();
 
-        if (strlen(trim($find_date1 ?? null)) > 0 || strlen(trim($find_date2 ?? null)) > 0) {
+        if (strlen(trim($find_date1)) > 0 || strlen(trim($find_date2)) > 0) {
             $date_1_ok = false;
             /** @noinspection PhpDeprecationInspection */
             $date1_stm = MkDateTime(ConvertDateTime($find_date1, "D.M.Y"), "d.m.Y");
@@ -90,24 +86,39 @@ class CAdminFilter implements PropertyContainerInterface
         return true;
     }
 
-    public function addArrFilter()
+    public function addArrFilter($data_filter)
     {
+        list(
+            'find_site' => $find_site,
+            'find_date1' => $find_date1,
+            'find_date2' => $find_date2,
+            'find_responsible_id' => $find_responsible_id,
+            'find_responsible' => $find_responsible,
+            'find_responsible_exact_match' => $find_responsible_exact_match,
+            'find_sla_id' => $find_sla_id,
+            'find_category_id' => $find_category_id,
+            'find_criticality_id' => $find_criticality_id,
+            'find_status_id' => $find_status_id,
+            'find_mark_id' => $find_mark_id,
+            'find_source_id' =>   $find_source_id
+        ) = $data_filter;
+
         $arFilter = array(
-            "SITE" => $find_site ?? null,
-            "DATE_CREATE_1" => $find_date1 ?? null,
-            "DATE_CREATE_2" => $find_date2 ?? null,
-            "RESPONSIBLE_ID" => $find_responsible_id ?? null,
-            "RESPONSIBLE" => $find_responsible ?? null,
-            "RESPONSIBLE_EXACT_MATCH" => $find_responsible_exact_match ?? null,
-            "SLA" => $find_sla_id ?? null,
-            "CATEGORY" => $find_category_id ?? null,
-            "CRITICALITY" => $find_criticality_id ?? null,
-            "STATUS" => $find_status_id ?? null,
-            "MARK" => $find_mark_id ?? null,
-            "SOURCE" => $find_source_id ?? null,
+            "SITE" => $find_site,
+            "DATE_CREATE_1" => $find_date1,
+            "DATE_CREATE_2" => $find_date2,
+            "RESPONSIBLE_ID" => $find_responsible_id,
+            "RESPONSIBLE" => $find_responsible,
+            "RESPONSIBLE_EXACT_MATCH" => $find_responsible_exact_match,
+            "SLA" => $find_sla_id,
+            "CATEGORY" => $find_category_id,
+            "CRITICALITY" => $find_criticality_id,
+            "STATUS" => $find_status_id,
+            "MARK" => $find_mark_id,
+            "SOURCE" => $find_source_id
         );
 
-        if ($this -> checkFilter()) {
+        if ($this -> checkFilter($find_date1, $find_date2)) {
             $this -> propertyContainer['arFilter'] = $arFilter;
         } else {
             if ($e = $APPLICATION -> GetException())
