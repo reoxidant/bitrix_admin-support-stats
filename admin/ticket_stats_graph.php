@@ -26,6 +26,7 @@ require_once('classes/Graph.php');
 require_once('classes/CAdminFilter.php');
 require_once('classes/Ticket.php');
 require_once('classes/SupportUser.php');
+require_once('classes/FilterForm.php');
 
 use admin\classes\CAdminFilter;
 use admin\classes\Graph;
@@ -98,8 +99,6 @@ $user->addSupportUsers();
 
 $admin -> getProperty('lAdmin') -> BeginCustomContent();
 
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
-
 if ($message)
     echo $message -> Show();
 ?>
@@ -115,8 +114,13 @@ if ($message)
             $admin->getProperty('lAdmin')->getFilter() ?? null,
             $arrColor ?? null
     );
-?>
-<?php
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");
 
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php"); ?>
+
+
+
+<?php
+$admin -> getProperty('lAdmin') -> DisplayList();
+
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");
 ?>
