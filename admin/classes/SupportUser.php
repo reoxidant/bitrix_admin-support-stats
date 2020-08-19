@@ -12,7 +12,7 @@ use CUser;
 
 class SupportUser
 {
-    private $arrSupportUser;
+    public $arrSupportUser;
 
     private $arUsersID;
 

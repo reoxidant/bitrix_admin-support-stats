@@ -96,11 +96,12 @@ class Ticket implements PropertyContainerInterface
 
     /**
      * @param $propName
+     * @param $PREV_CREATE
      */
-    public function fillOutTickets($propName)
+    public function fillOutTickets($propName, $PREV_CREATE)
     {
         while ($arTicket = $this->getProperty($propName) -> Fetch()) {
-            if ($arTicket["DATE_CREATE_SHORT"] !=  $PREV_CREATE??null && strlen($PREV_CREATE??null) > 0) {
+            if ($arTicket["DATE_CREATE_SHORT"] !=  $PREV_CREATE && strlen($PREV_CREATE) > 0) {
                 $this->addProperty('show_graph', "Y");
             }
 

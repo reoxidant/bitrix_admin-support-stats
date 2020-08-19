@@ -8,9 +8,11 @@
 
 namespace admin\classes;
 
+use CAdminException;
+
 require_once('PropertyContainerInterface.php');
 
-class CAdminFilter implements PropertyContainerInterface
+class CAdmin implements PropertyContainerInterface
 {
 
     private $propertyContainer = [];
