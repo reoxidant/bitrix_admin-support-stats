@@ -98,6 +98,7 @@ $tickets->fillOutTickets('rsTickets');
 $user = new SupportUser($tickets->arTicketUsersID);
 $user->addSupportUsers();
 
+//ob_start
 $admin -> getProperty('lAdmin') -> BeginCustomContent();
 
 if ($message)
@@ -108,20 +109,48 @@ if ($message)
 <!--Нагрузка на техподдержку-->
 <h2><?= GetMessage("SUP_GRAPH_ALT") ?></h2>
 
-<?php
-    $graph->createImageGraph(
-            $tickets->getProperty('show_graph'),
-            $admin -> getProperty('arFilterFields'),
-            $admin->getProperty('lAdmin')->getFilter() ?? null,
-            $arrColor ?? null
+<!--Graph-->
+<?php $graph->createImageGraph(
+        $tickets->getProperty('show_graph'), $admin -> getProperty('arFilterFields'),
+        $admin->getProperty('lAdmin')->getFilter() ?? ($admin->getProperty('defaultFilterValues') ?? null),
+$arrColor ?? null
     );
 
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php"); ?>
+//ob_clean
+$admin -> getProperty("lAdmin") -> EndCustomContent();
 
-<?php
+$admin -> getProperty("lAdmin") -> CheckListMode();
 
-$filterForm = new FilterForm();
+$APPLICATION -> SetTitle(GetMessage("SUP_PAGE_TITLE"));
 
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
+
+/*$filterForm = new FilterForm();
+$filterForm->addProperty('filter', $filter);
+$filterForm->addProperty('find_site', $find_site);
+$filterForm->addProperty('find_date1', $find_date1);
+$filterForm->addProperty('find_date2', $find_date2);
+$filterForm->addProperty('bAdmin', $bAdmin);
+$filterForm->addProperty('bDemo', $bDemo);
+$filterForm->addProperty('arrSupportUser', $arrSupportUser);
+$filterForm->addProperty('find_responsible', $find_responsible);
+$filterForm->addProperty('find_responsible_id', $find_responsible_id);
+$filterForm->addProperty('find_responsible_exact_match', $find_responsible_exact_match);
+$filterForm->addProperty('find_criticality_id', $find_criticality_id);
+$filterForm->addProperty('find_status_id', $find_status_id);
+$filterForm->addProperty('find_mark_id', $find_mark_id);
+$filterForm->addProperty('find_source_id', $find_source_id);
+$filterForm->addProperty('find_open', $find_open);
+$filterForm->addProperty('find_close', $find_close);
+$filterForm->addProperty('find_all', $find_all);
+$filterForm->addProperty('find_sla_id', $find_sla_id);
+$filterForm->addProperty('find_mess', $find_mess);
+$filterForm->addProperty('find_overdue_mess', $find_overdue_mess);
+$filterForm->addProperty('find_category_id', $find_category_id);
+$filterForm->addProperty('sTableID', $sTableID);
+$filterForm->createFilterForm();*/
+
+//ob_get_contents
 $admin -> getProperty('lAdmin') -> DisplayList();
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");

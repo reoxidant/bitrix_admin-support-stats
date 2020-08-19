@@ -159,80 +159,37 @@ class FilterForm implements PropertyContainerInterface
         <? }
     }
 
-    /**
-     * @param $filter
-     * @param $find_site
-     * @param $find_date1
-     * @param $find_date2
-     * @param $bAdmin
-     * @param $bDemo
-     * @param $arrSupportUser
-     * @param $find_responsible
-     * @param $find_responsible_id
-     * @param $find_responsible_exact_match
-     * @param $find_sla_id
-     * @param $find_category_id
-     * @param $find_criticality_id
-     * @param $find_status_id
-     * @param $find_mark_id
-     * @param $find_source_id
-     * @param $find_open
-     * @param $find_close
-     * @param $find_all
-     * @param $find_mess
-     * @param $find_overdue_mess
-     * @param $sTableID
-     */
-    public function createFilterForm(){
-
-        list(
-            'filter' => $filter,
-            'find_site' => $find_site,
-            'find_date1' => $find_date1,
-            'find_date2' => $find_date2,
-            'bAdmin' => $bAdmin,
-            'bDemo' => $bDemo,
-            'arrSupportUser' => $arrSupportUser,
-            'find_responsible' => $find_responsible,
-            'find_responsible_id' => $find_responsible_id,
-            'find_responsible_exact_match' => $find_responsible_exact_match,
-            'find_criticality_id' => $find_criticality_id,
-            'find_status_id' => $find_status_id,
-            'find_mark_id' => $find_mark_id,
-            'find_source_id' => $find_source_id,
-            'find_open' => $find_open,
-            'find_close' => $find_close,
-            'find_all' => $find_all,
-            'find_sla_id' => $find_sla_id,
-            'find_mess' => $find_mess,
-            'find_overdue_mess' => $find_overdue_mess,
-            'find_category_id' => $find_category_id,
-            'sTableID' => $sTableID
-        ) = $data;
-
-    ?>
+    public function createFilterForm(){?>
         <form name="form1" method="GET" action="<?= $APPLICATION -> GetCurPage() ?>?">
-            <? $filter -> Begin(); ?>
+            <? $this->getProperty('filter') -> Begin(); ?>
             <tr>
                 <td><? echo GetMessage("SUP_F_PERIOD")."(".FORMAT_DATE."):"?></td>
-                <td><? echo $this->createCalendarPeriod($find_date1, $find_date2) ?></td>
+                <td><? echo $this->createCalendarPeriod($this->getProperty("find_date1"), $this->getProperty("find_date2")) ?></td>
             </tr>
             <tr valign="top">
                 <td valign="top"><?= GetMessage("SUP_F_SITE") ?>:</td>
-                <td><?= $this->createSiteBox($find_site);?></td>
+                <td><?= $this->createSiteBox( $this->getProperty("find_site"));?></td>
             </tr>
             <tr>
                 <td nowrap valign="top"><?= GetMessage("SUP_F_RESPONSIBLE") ?>:</td>
-                <td><? $this->createResponsibleBox($bAdmin, $bDemo, $arrSupportUser, $find_responsible, $find_responsible_id, $find_responsible_exact_match) ?></td>
+                <td><?
+                    $this->createResponsibleBox(
+                        $this->getProperty("bAdmin"),
+                        $this->getProperty("bDemo"),
+                        $this->getProperty("arrSupportUser"),
+                        $this->getProperty("find_responsible"),
+                        $this->getProperty("find_responsible_id"),
+                        $this->getProperty("find_responsible_exact_match")
+                   ) ?></td>
             </tr>
             <?php
                 $dropDownData = [
-                    'find_sla_id' => ['message' => "SUP_F_SLA", "data" => $find_sla_id],
-                    'find_category_id' => ['message' => "SUP_F_CATEGORY", "data" => $find_category_id],
-                    'find_criticality_id'=> ['message' => "SUP_F_CRITICALITY", "data" => $find_criticality_id],
-                    'find_status_id'=> ['message' => "SUP_F_STATUS", "data" => $find_status_id],
-                    'find_mark_id'=> ['message' => "SUP_F_MARK", "data" => $find_mark_id],
-                    'find_source_id'=> ['message' => "SUP_F_SOURCE", "data" => $find_source_id]
+                    'find_sla_id' => ['message' => "SUP_F_SLA", "data" => $this->getProperty("find_sla_id")],
+                    'find_category_id' => ['message' => "SUP_F_CATEGORY", "data" => $this->getProperty("find_category_id")],
+                    'find_criticality_id'=> ['message' => "SUP_F_CRITICALITY", "data" => $this->getProperty("find_criticality_id")],
+                    'find_status_id'=> ['message' => "SUP_F_STATUS", "data" => $this->getProperty("find_status_id")],
+                    'find_mark_id'=> ['message' => "SUP_F_MARK", "data" => $this->getProperty("find_mark_id")],
+                    'find_source_id'=> ['message' => "SUP_F_SOURCE", "data" => $this->getProperty("find_source_id")]
                 ];
 
                 $this->createDropDownList($dropDownData)
@@ -250,11 +207,11 @@ class FilterForm implements PropertyContainerInterface
                                             <table cellpadding="3" cellspacing="1" border="0">
                                                 <?
                                                     $checkBoxData = [
-                                                          "find_open" => ['message' => "SUP_OPEN_TICKET", 'data' => $find_open],
-                                                          "find_close" => ['message' => "SUP_CLOSE_TICKET", 'data' => $find_close],
-                                                          "find_all" => ['message' => "SUP_ALL_TICKET", 'data' => $find_all],
-                                                          "find_mess" => ['message' => "SUP_MESSAGES", 'data' => $find_mess],
-                                                          "find_overdue_mess" => ['message' => "SUP_OVERDUE_MESSAGES", 'data' => $find_overdue_mess],
+                                                          "find_open" => ['message' => "SUP_OPEN_TICKET", 'data' => $this->getProperty("find_open")],
+                                                          "find_close" => ['message' => "SUP_CLOSE_TICKET", 'data' => $this->getProperty("find_close")],
+                                                          "find_all" => ['message' => "SUP_ALL_TICKET", 'data' =>  $this->getProperty("find_all")],
+                                                          "find_mess" => ['message' => "SUP_MESSAGES", 'data' => $this->getProperty("find_mess")],
+                                                          "find_overdue_mess" => ['message' => "SUP_OVERDUE_MESSAGES", 'data' => $this->getProperty("find_overdue_mess")],
                                                     ];
 
                                                     $this->createCheckBoxList($checkBoxData);
@@ -268,7 +225,7 @@ class FilterForm implements PropertyContainerInterface
                     </table>
                 </td>
             </tr>
-            <? $filter -> Buttons(array("table_id" => $sTableID, "url" => $APPLICATION -> GetCurPage(), "form" => "form1")); $filter -> End(); ?>
+            <? $this->getProperty("filter") -> Buttons(array("table_id" => $this->getProperty("sTableID"), "url" => $APPLICATION -> GetCurPage(), "form" => "form1")); $this->getProperty("filter") -> End(); ?>
         </form>
 <?php
     }
