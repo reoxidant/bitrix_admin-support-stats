@@ -23,25 +23,40 @@ include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php");
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
 
 require_once('classes/Graph.php');
-require_once('classes/CAdminFilter.php');
+require_once('classes/CAdmin.php');
 require_once('classes/Ticket.php');
 require_once('classes/SupportUser.php');
 require_once('classes/FilterForm.php');
 
-use admin\classes\CAdminFilter;
+use admin\classes\CAdmin;
 use admin\classes\Graph;
 use admin\classes\Ticket;
 use admin\classes\SupportUser;
 use admin\classes\FilterForm;
 
 $graph = new Graph();
-$graph -> addProperty("sTableId", 't_report_graph');
+$graph -> addProperty("sTableID", 't_report_graph');
 
-list('sTableId' => $sTableId) = $graph -> getAllProperties();
+list('sTableID' => $sTableID) = $graph -> getAllProperties();
 
-$admin = new CAdminFilter();
-$admin -> addProperty('oSort', new CAdminList($sTableId));
-$admin -> addProperty('lAdmin', new CAdminList($sTableId, $admin -> getProperty('oSort')));
+$admin = new CAdmin();
+$admin -> addProperty('oSort', new CAdminSorting($sTableID));
+$admin -> addProperty('lAdmin', new CAdminList($sTableID, $admin -> getProperty('oSort')));
+
+$filter = new CAdminFilter(
+    "filter_id",
+    array(
+        GetMessage("SUP_F_SITE"),
+        GetMessage("SUP_F_RESPONSIBLE"),
+        GetMessage("SUP_F_SLA"),
+        GetMessage("SUP_F_CATEGORY"),
+        GetMessage("SUP_F_CRITICALITY"),
+        GetMessage("SUP_F_STATUS"),
+        GetMessage("SUP_F_MARK"),
+        GetMessage("SUP_F_SOURCE"),
+        GetMessage("SUP_SHOW")
+    )
+);
 
 $arrMessages = array(
     GetMessage("SUP_F_SITE"),
@@ -125,14 +140,24 @@ $APPLICATION -> SetTitle(GetMessage("SUP_PAGE_TITLE"));
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
 
+list(
+        'find_open' => $find_open,
+        'find_close' => $find_close,
+        'find_all' => $find_all,
+        'find_sla_id' => $find_sla_id,
+        'find_mess' => $find_mess,
+        'find_overdue_mess' => $find_overdue_mess
+    ) = $admin->getProperty('lAdmin')->getFilter() ?? ($admin->getProperty('defaultFilterValues') ?? null);
+
 $filterForm = new FilterForm();
-$filterForm->addProperty('filter', $filte ?? null);
+$filterForm->addProperty("APPLICATION", $APPLICATION ?? null);
+$filterForm->addProperty('filter', $filter ?? null);
 $filterForm->addProperty('find_site', $find_site ?? null);
 $filterForm->addProperty('find_date1', $find_date1 ?? null);
 $filterForm->addProperty('find_date2', $find_date2 ?? null);
 $filterForm->addProperty('bAdmin', $bAdmin);
 $filterForm->addProperty('bDemo', $bDemo);
-$filterForm->addProperty('arrSupportUser', $arrSupportUser ?? null);
+$filterForm->addProperty('arrSupportUser', $user->arrSupportUser ?? null);
 $filterForm->addProperty('find_responsible', $find_responsible ?? null);
 $filterForm->addProperty('find_responsible_id', $find_responsible_id ?? null);
 $filterForm->addProperty('find_responsible_exact_match', $find_responsible_exact_match ?? null);

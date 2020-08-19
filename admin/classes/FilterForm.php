@@ -8,7 +8,6 @@
 
 namespace admin\classes;
 
-
 use CSite;
 use CTicket;
 use CTicketSLA;
@@ -160,7 +159,7 @@ class FilterForm implements PropertyContainerInterface
     }
 
     public function createFilterForm(){?>
-        <form name="form1" method="GET" action="<?= $APPLICATION -> GetCurPage() ?>?">
+        <form name="form1" method="GET" action="<?= $this->getProperty('APPLICATION') -> GetCurPage() ?>?">
             <? $this->getProperty('filter') -> Begin(); ?>
             <tr>
                 <td><? echo GetMessage("SUP_F_PERIOD")."(".FORMAT_DATE."):"?></td>
@@ -194,7 +193,6 @@ class FilterForm implements PropertyContainerInterface
 
                 $this->createDropDownList($dropDownData)
             ?>
-
             <tr valign="top">
                 <td width="0%" nowrap><?= GetMessage("SUP_SHOW") ?>:</td>
                 <td width="0%" nowrap valign="top">
