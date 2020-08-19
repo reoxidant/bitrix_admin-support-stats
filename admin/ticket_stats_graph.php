@@ -93,7 +93,7 @@ $tickets->addListTicketsByFilterPropertyDB("rsTickets", $admin->getProperty('arF
 $tickets->addDefaultPropertyByKeys("arrTime", ["1", "1_2", "2_3", "3_4", "4_5", "5_6", "6_7", "7"], 0);
 $tickets->addDefaultPropertyByKeys("arrMess", ["2_m", "3_m", "4_m", "5_m", "6_m", "7_m", "8_m", "9_m", "10_m"], 0);
 
-$tickets->fillOutTickets('rsTickets');
+$tickets->fillOutTickets('rsTickets', $PREV_CREATE ?? null);
 
 $user = new SupportUser($tickets->arTicketUsersID);
 $user->addSupportUsers();
@@ -125,30 +125,30 @@ $APPLICATION -> SetTitle(GetMessage("SUP_PAGE_TITLE"));
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
 
-/*$filterForm = new FilterForm();
-$filterForm->addProperty('filter', $filter);
-$filterForm->addProperty('find_site', $find_site);
-$filterForm->addProperty('find_date1', $find_date1);
-$filterForm->addProperty('find_date2', $find_date2);
+$filterForm = new FilterForm();
+$filterForm->addProperty('filter', $filte ?? null);
+$filterForm->addProperty('find_site', $find_site ?? null);
+$filterForm->addProperty('find_date1', $find_date1 ?? null);
+$filterForm->addProperty('find_date2', $find_date2 ?? null);
 $filterForm->addProperty('bAdmin', $bAdmin);
 $filterForm->addProperty('bDemo', $bDemo);
-$filterForm->addProperty('arrSupportUser', $arrSupportUser);
-$filterForm->addProperty('find_responsible', $find_responsible);
-$filterForm->addProperty('find_responsible_id', $find_responsible_id);
-$filterForm->addProperty('find_responsible_exact_match', $find_responsible_exact_match);
-$filterForm->addProperty('find_criticality_id', $find_criticality_id);
-$filterForm->addProperty('find_status_id', $find_status_id);
-$filterForm->addProperty('find_mark_id', $find_mark_id);
-$filterForm->addProperty('find_source_id', $find_source_id);
-$filterForm->addProperty('find_open', $find_open);
-$filterForm->addProperty('find_close', $find_close);
-$filterForm->addProperty('find_all', $find_all);
-$filterForm->addProperty('find_sla_id', $find_sla_id);
-$filterForm->addProperty('find_mess', $find_mess);
-$filterForm->addProperty('find_overdue_mess', $find_overdue_mess);
-$filterForm->addProperty('find_category_id', $find_category_id);
-$filterForm->addProperty('sTableID', $sTableID);
-$filterForm->createFilterForm();*/
+$filterForm->addProperty('arrSupportUser', $arrSupportUser ?? null);
+$filterForm->addProperty('find_responsible', $find_responsible ?? null);
+$filterForm->addProperty('find_responsible_id', $find_responsible_id ?? null);
+$filterForm->addProperty('find_responsible_exact_match', $find_responsible_exact_match ?? null);
+$filterForm->addProperty('find_criticality_id', $find_criticality_id ?? null);
+$filterForm->addProperty('find_status_id', $find_status_id ?? null);
+$filterForm->addProperty('find_mark_id', $find_mark_id ?? null);
+$filterForm->addProperty('find_source_id', $find_source_id ?? null);
+$filterForm->addProperty('find_open', $find_open ?? null);
+$filterForm->addProperty('find_close', $find_close ?? null);
+$filterForm->addProperty('find_all', $find_all ?? null);
+$filterForm->addProperty('find_sla_id', $find_sla_id ?? null);
+$filterForm->addProperty('find_mess', $find_mess ?? null);
+$filterForm->addProperty('find_overdue_mess', $find_overdue_mess ?? null);
+$filterForm->addProperty('find_category_id', $find_category_id ?? null);
+$filterForm->addProperty('sTableID', $sTableID ?? null);
+$filterForm->createFilterForm();
 
 //ob_get_contents
 $admin -> getProperty('lAdmin') -> DisplayList();
