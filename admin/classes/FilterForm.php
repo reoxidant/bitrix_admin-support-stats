@@ -11,12 +11,21 @@ namespace admin\classes;
 
 use CSite;
 use CTicket;
-use CTicketDictionary;
 use CTicketSLA;
 
-class FilterForm
+/**
+ * Class FilterForm
+ * @package admin\classes
+ */
+class FilterForm implements PropertyContainerInterface
 {
+    private $propertyContainer = [];
 
+    /**
+     * @param $find_date1
+     * @param $find_date2
+     * @return string
+     */
     private function createCalendarPeriod($find_date1, $find_date2){
         return CalendarPeriod(
             "find_date1", $find_date1,
@@ -24,6 +33,10 @@ class FilterForm
             "form1", "Y");
     }
 
+    /**
+     * @param $find_site
+     * @return string
+     */
     private function createSiteBox($find_site){
         $ref = array();
         $ref_id = array();
@@ -44,6 +57,11 @@ class FilterForm
         );
     }
 
+    /**
+     * @param $arrSupportUser
+     * @param $find_responsible_id
+     * @return string
+     */
     private function getSelectBoxSupportTeam($arrSupportUser, $find_responsible_id){
         $ref = array(); $ref_id = array();
         $ref[] = GetMessage("SUP_NO");
@@ -66,6 +84,14 @@ class FilterForm
         return SelectBoxFromArray("find_responsible_id", $arr, htmlspecialcharsbx($find_responsible_id), GetMessage("SUP_ALL"));
     }
 
+    /**
+     * @param $bAdmin
+     * @param $bDemo
+     * @param $arrSupportUser
+     * @param $find_responsible
+     * @param $find_responsible_id
+     * @param $find_responsible_exact_match
+     */
     private function createResponsibleBox($bAdmin, $bDemo, $arrSupportUser, $find_responsible, $find_responsible_id, $find_responsible_exact_match){
         if ($bAdmin == "Y" || $bDemo == "Y"):?>
             <?= $this->getSelectBoxSupportTeam($arrSupportUser, $find_responsible_id)?>
@@ -90,7 +116,11 @@ class FilterForm
     <?endif;
     }
 
-    private function createDropDown($find_name_id, $find_id){
+    /**
+     * @param $find_name_id
+     * @param $find_id
+     */
+    private function createDropDownItem($find_name_id, $find_id){
         $ref = array();
         $ref_id = array();
         $ref[] = GetMessage("SUP_NO");
@@ -105,21 +135,82 @@ class FilterForm
 
     }
 
-    public function createFilterForm(
-            $filter,
-            $find_site,
-            $find_date1,
-            $find_date2,
-            $bAdmin,
-            $bDemo,
-            $arrSupportUser,
-            $find_responsible,
-            $find_responsible_id,
-            $find_responsible_exact_match,
-            $find_sla_id,
-            $find_category_id,
-            $find_criticality_id
-    ){?>
+    /**
+     * @param $arDropDown
+     */
+    private function createDropDownList($arDropDown){
+        foreach ($arDropDown as $nameItemDropDown => $itemDropDown){?>
+            <tr>
+                <td nowrap><?= GetMessage($itemDropDown['message']) ?>:</td>
+                <td><? $this->createDropDownItem($nameItemDropDown, $itemDropDown['data'])?></td>
+            </tr>
+       <? }
+    }
+
+    /**
+     * @param $arCheckBoxData
+     */
+    private function createCheckBoxList($arCheckBoxData){
+        foreach ($arCheckBoxData as $nameCheckBox => $itemCheckBox){?>
+            <tr>
+                <td nowrap><?= GetMessage($itemCheckBox['message']) ?></td>
+                <td align="center"><? echo InputType("checkbox", $nameCheckBox, "Y", $itemCheckBox['data'], false); ?></td>
+            </tr>
+        <? }
+    }
+
+    /**
+     * @param $filter
+     * @param $find_site
+     * @param $find_date1
+     * @param $find_date2
+     * @param $bAdmin
+     * @param $bDemo
+     * @param $arrSupportUser
+     * @param $find_responsible
+     * @param $find_responsible_id
+     * @param $find_responsible_exact_match
+     * @param $find_sla_id
+     * @param $find_category_id
+     * @param $find_criticality_id
+     * @param $find_status_id
+     * @param $find_mark_id
+     * @param $find_source_id
+     * @param $find_open
+     * @param $find_close
+     * @param $find_all
+     * @param $find_mess
+     * @param $find_overdue_mess
+     * @param $sTableID
+     */
+    public function createFilterForm(){
+
+        list(
+            'filter' => $filter,
+            'find_site' => $find_site,
+            'find_date1' => $find_date1,
+            'find_date2' => $find_date2,
+            'bAdmin' => $bAdmin,
+            'bDemo' => $bDemo,
+            'arrSupportUser' => $arrSupportUser,
+            'find_responsible' => $find_responsible,
+            'find_responsible_id' => $find_responsible_id,
+            'find_responsible_exact_match' => $find_responsible_exact_match,
+            'find_criticality_id' => $find_criticality_id,
+            'find_status_id' => $find_status_id,
+            'find_mark_id' => $find_mark_id,
+            'find_source_id' => $find_source_id,
+            'find_open' => $find_open,
+            'find_close' => $find_close,
+            'find_all' => $find_all,
+            'find_sla_id' => $find_sla_id,
+            'find_mess' => $find_mess,
+            'find_overdue_mess' => $find_overdue_mess,
+            'find_category_id' => $find_category_id,
+            'sTableID' => $sTableID
+        ) = $data;
+
+    ?>
         <form name="form1" method="GET" action="<?= $APPLICATION -> GetCurPage() ?>?">
             <? $filter -> Begin(); ?>
             <tr>
@@ -128,82 +219,25 @@ class FilterForm
             </tr>
             <tr valign="top">
                 <td valign="top"><?= GetMessage("SUP_F_SITE") ?>:</td>
-                <td><? echo $this->createSiteBox($find_site);?></td>
+                <td><?= $this->createSiteBox($find_site);?></td>
             </tr>
             <tr>
                 <td nowrap valign="top"><?= GetMessage("SUP_F_RESPONSIBLE") ?>:</td>
                 <td><? $this->createResponsibleBox($bAdmin, $bDemo, $arrSupportUser, $find_responsible, $find_responsible_id, $find_responsible_exact_match) ?></td>
             </tr>
-            <tr>
-                <td nowrap><?= GetMessage("SUP_F_SLA") ?>:</td>
-                <td><?= $this->createDropDown("find_sla_id", $find_sla_id)?></td>
-            </tr>
-            <tr>
-                <td nowrap><?= GetMessage("SUP_F_CATEGORY") ?>:</td>
-                <td>
-                    <? $this->createDropDown('find_category_id', $find_category_id) ?>
-                </td>
-            </tr>
-            <tr>
-                <td nowrap>
-                    <?= GetMessage("SUP_F_CRITICALITY") ?>:
-                </td>
-                <td><? $this -> createDropDown('find_criticality_id', $find_criticality_id) ?></td>
-            </tr>
-            <tr>
-                <td nowrap>
-                    <?= GetMessage("SUP_F_STATUS") ?>:
-                </td>
-                <td><?
-                    $ref = array();
-                    $ref_id = array();
-                    $ref[] = GetMessage("SUP_NO");
-                    $ref_id[] = "0";
-                    $z = CTicketDictionary ::GetDropDown("S");
-                    while ($zr = $z -> Fetch()) {
-                        $ref[] = $zr["REFERENCE"];
-                        $ref_id[] = $zr["REFERENCE_ID"];
-                    }
-                    $arr = array("REFERENCE" => $ref, "REFERENCE_ID" => $ref_id);
-                    echo SelectBoxFromArray("find_status_id", $arr, $find_status_id, GetMessage("SUP_ALL"));
-                    ?></td>
-            </tr>
-            <tr>
-                <td nowrap>
-                    <?= GetMessage("SUP_F_MARK") ?>:
-                </td>
-                <td><?
-                    $ref = array();
-                    $ref_id = array();
-                    $ref[] = GetMessage("SUP_NO");
-                    $ref_id[] = "0";
-                    $z = CTicketDictionary ::GetDropDown("M");
-                    while ($zr = $z -> Fetch()) {
-                        $ref[] = $zr["REFERENCE"];
-                        $ref_id[] = $zr["REFERENCE_ID"];
-                    }
-                    $arr = array("REFERENCE" => $ref, "REFERENCE_ID" => $ref_id);
-                    echo SelectBoxFromArray("find_mark_id", $arr, $find_mark_id, GetMessage("SUP_ALL"));
-                    ?></td>
-            </tr>
-            <tr>
-                <td nowrap>
-                    <?= GetMessage("SUP_F_SOURCE") ?>:
-                </td>
-                <td><?
-                    $ref = array();
-                    $ref_id = array();
-                    $ref[] = "web";
-                    $ref_id[] = "0";
-                    $z = CTicketDictionary ::GetDropDown("SR");
-                    while ($zr = $z -> Fetch()) {
-                        $ref[] = "[" . $zr["ID"] . "] (" . $zr["SID"] . ") " . $zr["NAME"];
-                        $ref_id[] = $zr["REFERENCE_ID"];
-                    }
-                    $arr = array("REFERENCE" => $ref, "REFERENCE_ID" => $ref_id);
-                    echo SelectBoxFromArray("find_source_id", $arr, $find_source_id, GetMessage("SUP_ALL"));
-                    ?></td>
-            </tr>
+            <?php
+                $dropDownData = [
+                    'find_sla_id' => ['message' => "SUP_F_SLA", "data" => $find_sla_id],
+                    'find_category_id' => ['message' => "SUP_F_CATEGORY", "data" => $find_category_id],
+                    'find_criticality_id'=> ['message' => "SUP_F_CRITICALITY", "data" => $find_criticality_id],
+                    'find_status_id'=> ['message' => "SUP_F_STATUS", "data" => $find_status_id],
+                    'find_mark_id'=> ['message' => "SUP_F_MARK", "data" => $find_mark_id],
+                    'find_source_id'=> ['message' => "SUP_F_SOURCE", "data" => $find_source_id]
+                ];
+
+                $this->createDropDownList($dropDownData)
+            ?>
+
             <tr valign="top">
                 <td width="0%" nowrap><?= GetMessage("SUP_SHOW") ?>:</td>
                 <td width="0%" nowrap valign="top">
@@ -214,26 +248,17 @@ class FilterForm
                                     <tr>
                                         <td valign="top">
                                             <table cellpadding="3" cellspacing="1" border="0">
-                                                <tr>
-                                                    <td nowrap><?= GetMessage("SUP_OPEN_TICKET") ?></td>
-                                                    <td align="center"><? echo InputType("checkbox", "find_open", "Y", $find_open, false); ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td nowrap><?= GetMessage("SUP_CLOSE_TICKET") ?></td>
-                                                    <td align="center"><? echo InputType("checkbox", "find_close", "Y", $find_close, false); ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td nowrap><?= GetMessage("SUP_ALL_TICKET") ?></td>
-                                                    <td align="center"><? echo InputType("checkbox", "find_all", "Y", $find_all, false); ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td nowrap><?= GetMessage("SUP_MESSAGES") ?></td>
-                                                    <td align="center"><? echo InputType("checkbox", "find_mess", "Y", $find_mess, false); ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td nowrap><?= GetMessage("SUP_OVERDUE_MESSAGES") ?></td>
-                                                    <td align="center"><? echo InputType("checkbox", "find_overdue_mess", "Y", $find_overdue_mess, false); ?></td>
-                                                </tr>
+                                                <?
+                                                    $checkBoxData = [
+                                                          "find_open" => ['message' => "SUP_OPEN_TICKET", 'data' => $find_open],
+                                                          "find_close" => ['message' => "SUP_CLOSE_TICKET", 'data' => $find_close],
+                                                          "find_all" => ['message' => "SUP_ALL_TICKET", 'data' => $find_all],
+                                                          "find_mess" => ['message' => "SUP_MESSAGES", 'data' => $find_mess],
+                                                          "find_overdue_mess" => ['message' => "SUP_OVERDUE_MESSAGES", 'data' => $find_overdue_mess],
+                                                    ];
+
+                                                    $this->createCheckBoxList($checkBoxData);
+                                                ?>
                                             </table>
                                         </td>
                                     </tr>
@@ -246,6 +271,21 @@ class FilterForm
             <? $filter -> Buttons(array("table_id" => $sTableID, "url" => $APPLICATION -> GetCurPage(), "form" => "form1")); $filter -> End(); ?>
         </form>
 <?php
+    }
+
+    public function addProperty($name, $value)
+    {
+        $this -> propertyContainer[$name] = $value;
+    }
+
+    public function getProperty($name)
+    {
+        return $this -> propertyContainer[$name] ?? null;
+    }
+
+    public function getAllProperties()
+    {
+        return $this -> propertyContainer ?? null;
     }
 }
 ?>

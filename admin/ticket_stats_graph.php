@@ -32,6 +32,7 @@ use admin\classes\CAdminFilter;
 use admin\classes\Graph;
 use admin\classes\Ticket;
 use admin\classes\SupportUser;
+use admin\classes\FilterForm;
 
 $graph = new Graph();
 $graph -> addProperty("sTableId", 't_report_graph');
@@ -117,9 +118,10 @@ if ($message)
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php"); ?>
 
-
-
 <?php
+
+$filterForm = new FilterForm();
+
 $admin -> getProperty('lAdmin') -> DisplayList();
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");
