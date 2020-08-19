@@ -157,21 +157,21 @@ class FilterForm implements PropertyContainerInterface
             </tr>
         <? }
     }
-
+    //TODO: check working the filter form
     public function createFilterForm(){?>
-        <form name="form1" method="GET" action="<?= $this->getProperty('APPLICATION') -> GetCurPage() ?>?">
+       <form name="form1" method="GET" action="<?= $this->getProperty('APPLICATION') -> GetCurPage() ?>?">
             <? $this->getProperty('filter') -> Begin(); ?>
             <tr>
-                <td><? echo GetMessage("SUP_F_PERIOD")."(".FORMAT_DATE."):"?></td>
-                <td><? echo $this->createCalendarPeriod($this->getProperty("find_date1"), $this->getProperty("find_date2")) ?></td>
+                <td><?/* echo GetMessage("SUP_F_PERIOD")."(".FORMAT_DATE."):"*/?></td>
+                <td><?/* echo $this->createCalendarPeriod($this->getProperty("find_date1"), $this->getProperty("find_date2")) */?></td>
             </tr>
             <tr valign="top">
-                <td valign="top"><?= GetMessage("SUP_F_SITE") ?>:</td>
-                <td><?= $this->createSiteBox( $this->getProperty("find_site"));?></td>
+                <td valign="top"><?/*= GetMessage("SUP_F_SITE") */?>:</td>
+                <td><?/*= $this->createSiteBox( $this->getProperty("find_site"));*/?></td>
             </tr>
             <tr>
-                <td nowrap valign="top"><?= GetMessage("SUP_F_RESPONSIBLE") ?>:</td>
-                <td><?
+                <td nowrap valign="top"><?/*= GetMessage("SUP_F_RESPONSIBLE") */?>:</td>
+                <td><?/*
                     $this->createResponsibleBox(
                         $this->getProperty("bAdmin"),
                         $this->getProperty("bDemo"),
@@ -179,10 +179,10 @@ class FilterForm implements PropertyContainerInterface
                         $this->getProperty("find_responsible"),
                         $this->getProperty("find_responsible_id"),
                         $this->getProperty("find_responsible_exact_match")
-                   ) ?></td>
+                   ) */?></td>
             </tr>
             <?php
-                $dropDownData = [
+/*                $dropDownData = [
                     'find_sla_id' => ['message' => "SUP_F_SLA", "data" => $this->getProperty("find_sla_id")],
                     'find_category_id' => ['message' => "SUP_F_CATEGORY", "data" => $this->getProperty("find_category_id")],
                     'find_criticality_id'=> ['message' => "SUP_F_CRITICALITY", "data" => $this->getProperty("find_criticality_id")],
@@ -192,9 +192,9 @@ class FilterForm implements PropertyContainerInterface
                 ];
 
                 $this->createDropDownList($dropDownData)
-            ?>
+            */?>
             <tr valign="top">
-                <td width="0%" nowrap><?= GetMessage("SUP_SHOW") ?>:</td>
+                <td width="0%" nowrap><?/*= GetMessage("SUP_SHOW") */?>:</td>
                 <td width="0%" nowrap valign="top">
                     <table border="0" cellspacing="2" cellpadding="0" width="0%" style="margin-left: 12px">
                         <tr>
@@ -203,7 +203,7 @@ class FilterForm implements PropertyContainerInterface
                                     <tr>
                                         <td valign="top">
                                             <table cellpadding="3" cellspacing="1" border="0">
-                                                <?
+                                                <?/*
                                                     $checkBoxData = [
                                                           "find_open" => ['message' => "SUP_OPEN_TICKET", 'data' => $this->getProperty("find_open")],
                                                           "find_close" => ['message' => "SUP_CLOSE_TICKET", 'data' => $this->getProperty("find_close")],
@@ -213,7 +213,7 @@ class FilterForm implements PropertyContainerInterface
                                                     ];
 
                                                     $this->createCheckBoxList($checkBoxData);
-                                                ?>
+                                                */?>
                                             </table>
                                         </td>
                                     </tr>
@@ -223,7 +223,7 @@ class FilterForm implements PropertyContainerInterface
                     </table>
                 </td>
             </tr>
-            <? $this->getProperty("filter") -> Buttons(array("table_id" => $this->getProperty("sTableID"), "url" => $APPLICATION -> GetCurPage(), "form" => "form1")); $this->getProperty("filter") -> End(); ?>
+            <? $this->getProperty("filter") -> Buttons(array("table_id" => $this->getProperty("sTableID"), "url" => $this->getProperty("APPLICATION") -> GetCurPage(), "form" => "form1")); $this->getProperty("filter") -> End(); ?>
         </form>
 <?php
     }
