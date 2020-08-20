@@ -151,7 +151,7 @@ class SubsystemRole
     /**
      *
      */
-    public function showAuthFormByRole()
+    public function showAuthFormByRole(): array
     {
         global $APPLICATION;
         $bDemo = (CTicket ::IsDemo()) ? "Y" : "N";
@@ -160,7 +160,7 @@ class SubsystemRole
         if ($bAdmin != "Y" && $bSupportTeam != "Y" && $bDemo != "Y") {
             $APPLICATION -> AuthForm(GetMessage("ACCESS_DENIED"));
         }
-        return [$bDemo, $bAdmin];
+        return ['bDemo' => $bDemo, 'bAdmin' => $bAdmin];
     }
 }
 
@@ -193,7 +193,7 @@ class SubsystemGraph
     {
         $this -> graph -> addProperty("sTableID", 't_report_graph');
 
-        return $this->graph->getProperty("sTableID");
+        return ['sTableID' => $this -> graph -> getProperty("sTableID")];
     }
 
     /**
@@ -220,11 +220,6 @@ class SubsystemCAdmin
      * @var CAdmin|null
      */
     private $admin;
-
-    /**
-     * @var
-     */
-    private $filter;
 
     /**
      * SubsystemCAdmin constructor.
@@ -311,10 +306,17 @@ class SubsystemCAdmin
     }
 
     /**
+     * @param $bAdmin
+     * @param $bDemo
      * @return array
      */
-    public function getFindList()
+    public function getFindList($bAdmin, $bDemo)
     {
+        global $USER;
+        if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
+
+        InitBVar($find_responsible_exact_match);
+
         list(
             'find_open' => $find_open,
             'find_close' => $find_close,
@@ -325,6 +327,8 @@ class SubsystemCAdmin
             ) = $this -> admin -> getProperty('lAdmin') -> getFilter() ?? ($this -> admin -> getProperty('defaultFilterValues') ?? null);
 
         return [
+            'find_responsible_id' => $find_responsible_id ?? null,
+            'find_responsible_exact_match' => $find_responsible_exact_match,
             'find_open' => $find_open,
             'find_close' => $find_close,
             'find_all' => $find_all,
@@ -332,6 +336,14 @@ class SubsystemCAdmin
             'find_mess' => $find_mess,
             'find_overdue_mess' => $find_overdue_mess
         ];
+    }
+
+    /**
+     * @return CAdmin|null
+     */
+    public function getAdmin(): ?CAdmin
+    {
+        return $this -> admin;
     }
 }
 
@@ -399,8 +411,8 @@ class SubsystemSupportUser
      */
     public function addUsers($arTicketUsersID)
     {
-        $this->supportUser->setArrSupportUser($arTicketUsersID);
-        $this->supportUser->setSupportsUsersID($arTicketUsersID);
+        $this -> supportUser -> setArrSupportUser($arTicketUsersID);
+        $this -> supportUser -> setSupportsUsersID($arTicketUsersID);
         $this -> supportUser -> addSupportUsers();
     }
 }
