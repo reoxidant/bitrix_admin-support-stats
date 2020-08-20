@@ -158,7 +158,7 @@ class FilterForm implements PropertyContainerInterface
         <? }
     }
     //TODO: check working the filter form
-    public function createFilterForm(){?>
+    public function generateFilterForm(){?>
        <form name="form1" method="GET" action="<?= $this->getProperty('APPLICATION') -> GetCurPage() ?>?">
             <? $this->getProperty('filter') -> Begin(); ?>
             <tr>

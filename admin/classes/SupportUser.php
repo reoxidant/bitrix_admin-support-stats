@@ -12,16 +12,15 @@ use CUser;
 
 class SupportUser
 {
-    public $arrSupportUser;
-
+    private $arrSupportUser;
+    /**
+     * @var array
+     */
     private $arUsersID;
-
+    /**
+     * @var string
+     */
     private $strUsers;
-
-    public function __construct($arTicketUsersID){
-        $this->arUsersID = array_unique($arTicketUsersID);
-        $this->strUsers = implode("|", $arTicketUsersID);
-    }
 
     public function addSupportUsers(){
         $titleId = "ID";
@@ -31,4 +30,18 @@ class SupportUser
             $this->arrSupportUser[$ar["ID"]] = $ar;
         }
     }
+
+    public function setSupportsUsersID($arTicketUsersID){
+        $this->arUsersID = array_unique($arTicketUsersID);
+        $this->strUsers = implode("|", $arTicketUsersID);
+    }
+
+    /**
+     * @param mixed $arrSupportUser
+     */
+    public function setArrSupportUser($arrSupportUser): void
+    {
+        $this -> arrSupportUser = $arrSupportUser;
+    }
+
 }

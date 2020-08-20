@@ -9,6 +9,7 @@
 namespace admin\classes;
 
 use CAdminException;
+use CAdminMessage;
 
 require_once('PropertyContainerInterface.php');
 
@@ -19,7 +20,7 @@ class CAdmin implements PropertyContainerInterface
 
     public $error;
 
-    public function setValDefaultFilter()
+    public function addValDefaultFilter()
     {
         $this -> propertyContainer['defaultFilterValues'] = [
             'find_date1_DAYS_TO_BACK' => 1,
@@ -32,7 +33,7 @@ class CAdmin implements PropertyContainerInterface
         ];
     }
 
-    public function setArFilterFields()
+    public function addArFilterFields()
     {
         $this -> propertyContainer['arFilterFields'] = [
             "find_site",
@@ -88,8 +89,9 @@ class CAdmin implements PropertyContainerInterface
         return true;
     }
 
-    public function addArrFilter($data_filter)
+    public function addArFilterData($data_filter)
     {
+        global $APPLICATION;
         list(
             'find_site' => $find_site,
             'find_date1' => $find_date1,
@@ -138,8 +140,4 @@ class CAdmin implements PropertyContainerInterface
         return $this -> propertyContainer[$name] ?? null;
     }
 
-    public function getAllProperties()
-    {
-        return $this -> propertyContainer ?? null;
-    }
 }
