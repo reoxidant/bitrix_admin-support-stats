@@ -151,7 +151,7 @@ class SubsystemRole
     /**
      *
      */
-    public function showAuthFormByRole()
+    public function showAuthFormByRole(): array
     {
         global $APPLICATION;
         $bDemo = (CTicket ::IsDemo()) ? "Y" : "N";
@@ -160,7 +160,7 @@ class SubsystemRole
         if ($bAdmin != "Y" && $bSupportTeam != "Y" && $bDemo != "Y") {
             $APPLICATION -> AuthForm(GetMessage("ACCESS_DENIED"));
         }
-        return [$bDemo, $bAdmin];
+        return ['bDemo' => $bDemo, 'bAdmin' => $bAdmin];
     }
 }
 
@@ -193,7 +193,7 @@ class SubsystemGraph
     {
         $this -> graph -> addProperty("sTableID", 't_report_graph');
 
-        return $this->graph->getProperty("sTableID");
+        return ['sTableID' => $this -> graph -> getProperty("sTableID")];
     }
 
     /**
@@ -220,11 +220,6 @@ class SubsystemCAdmin
      * @var CAdmin|null
      */
     private $admin;
-
-    /**
-     * @var
-     */
-    private $filter;
 
     /**
      * SubsystemCAdmin constructor.
@@ -342,6 +337,14 @@ class SubsystemCAdmin
             'find_overdue_mess' => $find_overdue_mess
         ];
     }
+
+    /**
+     * @return CAdmin|null
+     */
+    public function getAdmin(): ?CAdmin
+    {
+        return $this -> admin;
+    }
 }
 
 /**
@@ -408,8 +411,8 @@ class SubsystemSupportUser
      */
     public function addUsers($arTicketUsersID)
     {
-        $this->supportUser->setArrSupportUser($arTicketUsersID);
-        $this->supportUser->setSupportsUsersID($arTicketUsersID);
+        $this -> supportUser -> setArrSupportUser($arTicketUsersID);
+        $this -> supportUser -> setSupportsUsersID($arTicketUsersID);
         $this -> supportUser -> addSupportUsers();
     }
 }

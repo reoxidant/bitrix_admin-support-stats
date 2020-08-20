@@ -37,7 +37,10 @@ manageAllOperation($facade);
 
 function manageAllOperation(Facade $facade)
 {
-    list('bDemo' => $bDemo, 'bAdmin' => $bAdmin) = $facade -> getSubsystemRole() -> showAuthFormByRole();
+    list(
+        'bDemo' => $bDemo,
+        'bAdmin' => $bAdmin
+    ) = $facade -> getSubsystemRole() -> showAuthFormByRole();
 
     list('sTableID' => $sTableID) = $facade -> getSubsystemGraph() -> initGraphPropertyAndReturnVal();
 
@@ -59,8 +62,7 @@ function manageAllOperation(Facade $facade)
         'find_overdue_mess' => $find_overdue_mess
     ) = $facade -> getSubsystemCAdmin() -> getFindList($bAdmin, $bDemo);
 
-    $admin = $facade->getSubsystemCAdmin();
-    $arTicketUsersID = $facade -> getSubsystemTicket() -> initTicketPropertyAndReturnVal($admin);
+    $arTicketUsersID = $facade -> getSubsystemTicket() -> initTicketPropertyAndReturnVal($facade->getSubsystemCAdmin()->getAdmin());
 
     $facade-> getSubsystemSupportUser() -> addUsers($arTicketUsersID);
 }
