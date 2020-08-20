@@ -8,6 +8,8 @@
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php");
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/prolog.php");
 
+global $APPLICATION;
+
 require_once('classes/Facade.php');
 
 use admin\classes\Facade;
@@ -68,7 +70,7 @@ function manageAllOperation(Facade $facade)
 }
 
 //ob_start
-//$admin -> getProperty('lAdmin') -> BeginCustomContent();
+$facade->getSubsystemCAdmin()->getAdmin() -> getProperty('lAdmin') -> BeginCustomContent();
 
 ?>
 
@@ -79,16 +81,16 @@ function manageAllOperation(Facade $facade)
 
 <?php
 
-//$admin -> getProperty("lAdmin") -> EndCustomContent();
+$facade->getSubsystemCAdmin()->getAdmin() -> getProperty("lAdmin") -> EndCustomContent();
 
-//$admin -> getProperty("lAdmin") -> CheckListMode();
+$facade->getSubsystemCAdmin()->getAdmin() -> getProperty("lAdmin") -> CheckListMode();
 
 $APPLICATION -> SetTitle(GetMessage("SUP_PAGE_TITLE"));
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
 
 //ob_get_contents
-//$admin -> getProperty('lAdmin') -> DisplayList();
+$facade->getSubsystemCAdmin()->getAdmin() -> getProperty('lAdmin') -> DisplayList();
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");
 ?>
