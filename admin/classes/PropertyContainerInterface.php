@@ -13,6 +13,4 @@ interface PropertyContainerInterface
     function addProperty($name, $value);
 
     function getProperty($name);
-
-    function getAllProperties();
 }

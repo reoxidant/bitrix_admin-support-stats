@@ -40,18 +40,18 @@ class Ticket implements PropertyContainerInterface
      */
     public function __construct()
     {
-        $this->openTickets = 0;
-        $this->closeTickets = 0;
-        $this->arTicketUsersID = [];
+        $this -> openTickets = 0;
+        $this -> closeTickets = 0;
+        $this -> arTicketUsersID = [];
     }
 
     /**
      * @param $name
      * @param $filterProperty
      */
-    public function addListTicketsByFilterPropertyDB($name, $filterProperty)
+    public function addListTicketsDB($name, $filterProperty)
     {
-        $this->propertyContainer[$name] = CTicket ::GetList($by, $order, $filterProperty, $is_filtered, "Y", "N", "N");
+        $this -> propertyContainer[$name] = CTicket ::GetList($by, $order, $filterProperty, $is_filtered, "Y", "N", "N");
     }
 
     /**
@@ -62,10 +62,10 @@ class Ticket implements PropertyContainerInterface
     function addDefaultPropertyByKeys($name, $defaultKeysOfArray, $defaultValueOfArray = null)
     {
         $arr = [];
-        foreach ($defaultKeysOfArray as $val){
+        foreach ($defaultKeysOfArray as $val) {
             $arr += [$val => $defaultValueOfArray];
         }
-        $this->propertyContainer[$name] = $arr??null;
+        $this -> propertyContainer[$name] = $arr ?? null;
     }
 
     /**
@@ -98,22 +98,22 @@ class Ticket implements PropertyContainerInterface
      * @param $propName
      * @param $PREV_CREATE
      */
-    public function fillOutTickets($propName, $PREV_CREATE)
+    public function addAdditionalDataInto($propName, $PREV_CREATE)
     {
-        while ($arTicket = $this->getProperty($propName) -> Fetch()) {
-            if ($arTicket["DATE_CREATE_SHORT"] !=  $PREV_CREATE && strlen($PREV_CREATE) > 0) {
-                $this->addProperty('show_graph', "Y");
+        while ($arTicket = $this -> getProperty($propName) -> Fetch()) {
+            if ($arTicket["DATE_CREATE_SHORT"] != $PREV_CREATE && strlen($PREV_CREATE) > 0) {
+                $this -> addProperty('show_graph', "Y");
             }
 
             if (strlen($arTicket["DATE_CLOSE"]) <= 0) {
-                $this->openTickets++;
+                $this -> openTickets++;
             } else {
-                $this->closeTickets++;
+                $this -> closeTickets++;
                 $day_sec = 86400;
                 $TT = $arTicket["TICKET_TIME"];
 
-                $arrTime = $this->getProperty('arrTime');
-                $arrMess = $this->getProperty('arrMess');
+                $arrTime = $this -> getProperty('arrTime');
+                $arrMess = $this -> getProperty('arrMess');
 
                 if ($TT < $day_sec) $arrTime["1"] += 1;
                 if ($TT > $day_sec && $TT <= 2 * $day_sec) $arrTime["1_2"] += 1;
@@ -134,7 +134,7 @@ class Ticket implements PropertyContainerInterface
             $PREV_CREATE = $arTicket["DATE_CREATE_SHORT"];
 
             if (intval($arTicket["RESPONSIBLE_USER_ID"]) > 0) {
-                $this->arTicketUsersID = intval($arTicket["RESPONSIBLE_USER_ID"]);
+                $this -> arTicketUsersID = intval($arTicket["RESPONSIBLE_USER_ID"]);
             }
         }
     }
