@@ -61,9 +61,9 @@ function manageAllOperation(Facade $facade)
     ) = $facade -> getSubsystemCAdmin() -> getFindList();
 
     $admin = $facade->getSubsystemCAdmin();
-    $facade -> getSubsystemTicket() -> initTicketProperty($admin);
+    $arTicketUsersID = $facade -> getSubsystemTicket() -> initTicketPropertyAndReturnVal($admin);
 
-    $facade ->
+    $facade-> getSubsystemSupportUser() -> addUsers($arTicketUsersID);
 }
 
 //ob_start

@@ -10,11 +10,9 @@ namespace admin\classes;
 
 use CUser;
 
-class SupportUser implements PropertyContainerInterface
+class SupportUser
 {
     private $arrSupportUser;
-
-    private $propertyContainer;
     /**
      * @var array
      */
@@ -33,18 +31,17 @@ class SupportUser implements PropertyContainerInterface
         }
     }
 
-    public function setUsersID($arTicketUsersID){
+    public function setSupportsUsersID($arTicketUsersID){
         $this->arUsersID = array_unique($arTicketUsersID);
         $this->strUsers = implode("|", $arTicketUsersID);
     }
 
-    public function addProperty($name, $value)
+    /**
+     * @param mixed $arrSupportUser
+     */
+    public function setArrSupportUser($arrSupportUser): void
     {
-        $this -> propertyContainer[$name] = $value;
+        $this -> arrSupportUser = $arrSupportUser;
     }
 
-    public function getProperty($name)
-    {
-        return $this -> propertyContainer[$name] ?? null;
-    }
 }

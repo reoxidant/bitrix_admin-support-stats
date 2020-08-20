@@ -21,7 +21,6 @@ IncludeModuleLangFile(__FILE__);
 include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php");
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
 
-use CAdminFilter;
 use CAdminList;
 use CAdminSorting;
 use CTicket;
@@ -124,6 +123,22 @@ class Facade
     public function getSubsystemTicket(): ?SubsystemTicket
     {
         return $this -> subsystemTicket;
+    }
+
+    /**
+     * @return SubsystemSupportUser|SubsystemTicket|null
+     */
+    public function getSubsystemSupportUser()
+    {
+        return $this -> subsystemSupportUser;
+    }
+
+    /**
+     * @return SubsystemFilterForm|SubsystemTicket|null
+     */
+    public function getSubsystemFilterForm()
+    {
+        return $this -> subsystemFilterForm;
     }
 }
 
@@ -345,12 +360,13 @@ class SubsystemTicket
     /**
      * @param $admin
      */
-    public function initTicketProperty($admin)
+    public function initTicketPropertyAndReturnVal($admin)
     {
         $this -> ticket -> addListTicketsDB("rsTickets", $admin -> getProperty('arFilter'));
         $this -> ticket -> addDefaultPropertyByKeys("arrTime", ["1", "1_2", "2_3", "3_4", "4_5", "5_6", "6_7", "7"], 0);
         $this -> ticket -> addDefaultPropertyByKeys("arrMess", ["2_m", "3_m", "4_m", "5_m", "6_m", "7_m", "8_m", "9_m", "10_m"], 0);
         $this -> ticket -> addAdditionalDataInto('rsTickets', $PREV_CREATE ?? null);
+        return $this -> ticket -> arTicketUsersID;
     }
 }
 
@@ -365,8 +381,6 @@ class SubsystemSupportUser
      */
     private $supportUser;
 
-    private $arTicketUsersID;
-
     /**
      * SubsystemSupportUser constructor.
      * @param SupportUser|null $supportUser
@@ -376,15 +390,17 @@ class SubsystemSupportUser
         SupportUser $supportUser = null
     )
     {
-        $this->arTicketUsersID = $ticket -> arTicketUsersID;
-        $this -> supportUser = $supportUser ?: new SupportUser($this->arTicketUsersID);
+        $this -> supportUser = $supportUser ?: new SupportUser();
     }
 
+
     /**
-     *
+     * @param $arTicketUsersID
      */
-    private function addUsers()
+    public function addUsers($arTicketUsersID)
     {
+        $this->supportUser->setArrSupportUser($arTicketUsersID);
+        $this->supportUser->setSupportsUsersID($arTicketUsersID);
         $this -> supportUser -> addSupportUsers();
     }
 }
