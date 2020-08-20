@@ -7,12 +7,6 @@
  */
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php");
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/prolog.php");
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
-
-IncludeModuleLangFile($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
-IncludeModuleLangFile(__FILE__);
-include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php");
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
 
 require_once('classes/Facade.php');
 
@@ -43,8 +37,33 @@ manageAllOperation($facade);
 
 function manageAllOperation(Facade $facade)
 {
-    $facade->subsystemRole->showAuthFormByRole();
+    list('bDemo' => $bDemo, 'bAdmin' => $bAdmin) = $facade -> getSubsystemRole() -> showAuthFormByRole();
 
+    if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
+    InitBVar($find_responsible_exact_match);
+
+    list('sTableID' => $sTableID) = $facade -> getSubsystemGraph() -> initGraphPropertyAndReturnVal();
+
+    $facade -> getSubsystemCAdmin() -> initCAdminPropertyList($sTableID);
+
+    $facade -> getSubsystemCAdmin() -> addToPropertyCommonFilterValues();
+    $facade -> getSubsystemCAdmin() -> initFilter();
+    $facade -> getSubsystemCAdmin() -> addToPropertyArFilter();
+    $facade -> getSubsystemCAdmin() -> showErrorMessageIfExist();
+
+    list(
+        'find_open' => $find_open,
+        'find_close' => $find_close,
+        'find_all' => $find_all,
+        'find_sla_id' => $find_sla_id,
+        'find_mess' => $find_mess,
+        'find_overdue_mess' => $find_overdue_mess
+    ) = $facade -> getSubsystemCAdmin() -> getFindList();
+
+    $admin = $facade->getSubsystemCAdmin();
+    $facade -> getSubsystemTicket() -> initTicketProperty($admin);
+
+    $facade ->
 }
 
 //ob_start

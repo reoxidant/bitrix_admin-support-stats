@@ -9,6 +9,17 @@
 namespace admin\classes;
 
 require_once('Graph.php');
+require_once('CAdmin.php');
+require_once('Ticket.php');
+require_once('SupportUser.php');
+require_once('FilterForm.php');
+
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
+IncludeModuleLangFile($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
+IncludeModuleLangFile(__FILE__);
+
+include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
 
 use CAdminFilter;
 use CAdminList;
@@ -24,7 +35,7 @@ class Facade
     /**
      * @var SubsystemRole|null
      */
-    public $subsystemRole;
+    private $subsystemRole;
     /**
      * @var SubsystemGraph|null
      */
@@ -71,8 +82,8 @@ class Facade
         $this -> subsystemGraph = $subsystemGraph ?: new SubsystemGraph();
         $this -> subsystemCAdmin = $subsystemCAdmin ?: new SubsystemCAdmin();
         $this -> subsystemTicket = $subsystemTicket ?: new SubsystemTicket();
-        $this -> subsystemSupportUser = $subsystemSupportUser ?: new SubsystemTicket();
-        $this -> subsystemFilterForm = $subsystemFilterForm ?: new SubsystemTicket();
+        $this -> subsystemSupportUser = $subsystemSupportUser ?: new SubsystemSupportUser();
+        $this -> subsystemFilterForm = $subsystemFilterForm ?: new SubsystemFilterForm();
     }
 
     /**
@@ -81,6 +92,38 @@ class Facade
     public function operation()
     {
 
+    }
+
+    /**
+     * @return SubsystemRole|null
+     */
+    public function getSubsystemRole(): ?SubsystemRole
+    {
+        return $this -> subsystemRole;
+    }
+
+    /**
+     * @return SubsystemGraph|null
+     */
+    public function getSubsystemGraph(): ?SubsystemGraph
+    {
+        return $this -> subsystemGraph;
+    }
+
+    /**
+     * @return SubsystemCAdmin|null
+     */
+    public function getSubsystemCAdmin(): ?SubsystemCAdmin
+    {
+        return $this -> subsystemCAdmin;
+    }
+
+    /**
+     * @return SubsystemTicket|null
+     */
+    public function getSubsystemTicket(): ?SubsystemTicket
+    {
+        return $this -> subsystemTicket;
     }
 }
 
@@ -102,6 +145,7 @@ class SubsystemRole
         if ($bAdmin != "Y" && $bSupportTeam != "Y" && $bDemo != "Y") {
             $APPLICATION -> AuthForm(GetMessage("ACCESS_DENIED"));
         }
+        return [$bDemo, $bAdmin];
     }
 }
 
@@ -130,9 +174,11 @@ class SubsystemGraph
     /**
      *
      */
-    private function initGraphProperty()
+    public function initGraphPropertyAndReturnVal()
     {
         $this -> graph -> addProperty("sTableID", 't_report_graph');
+
+        return $this->graph->getProperty("sTableID");
     }
 
     /**
@@ -180,8 +226,20 @@ class SubsystemCAdmin
      * @param $sTableID
      * @param $arrMessages
      */
-    private function initCAdminPropertyList($sTableID, $arrMessages)
+    public function initCAdminPropertyList($sTableID)
     {
+        $arrMessages = array(
+            GetMessage("SUP_F_SITE"),
+            GetMessage("SUP_F_RESPONSIBLE"),
+            GetMessage("SUP_F_SLA"),
+            GetMessage("SUP_F_CATEGORY"),
+            GetMessage("SUP_F_CRITICALITY"),
+            GetMessage("SUP_F_STATUS"),
+            GetMessage("SUP_F_MARK"),
+            GetMessage("SUP_F_SOURCE"),
+            GetMessage("SUP_SHOW")
+        );
+
         $this -> admin -> addProperty('oSort', new CAdminSorting($sTableID));
         $this -> admin -> addProperty('lAdmin', new CAdminList($sTableID, $this -> admin -> getProperty('oSort')));
         $this -> admin -> addProperty('filter', new CAdminList("filter_id", $arrMessages));
@@ -190,28 +248,7 @@ class SubsystemCAdmin
     /**
      *
      */
-    private function initAdminFilter()
-    {
-        $this -> filter = new CAdminFilter(
-            "filter_id",
-            array(
-                GetMessage("SUP_F_SITE"),
-                GetMessage("SUP_F_RESPONSIBLE"),
-                GetMessage("SUP_F_SLA"),
-                GetMessage("SUP_F_CATEGORY"),
-                GetMessage("SUP_F_CRITICALITY"),
-                GetMessage("SUP_F_STATUS"),
-                GetMessage("SUP_F_MARK"),
-                GetMessage("SUP_F_SOURCE"),
-                GetMessage("SUP_SHOW")
-            )
-        );
-    }
-
-    /**
-     *
-     */
-    private function addToPropertyCommonFilterValues()
+    public function addToPropertyCommonFilterValues()
     {
         $this -> admin -> addValDefaultFilter();
         $this -> admin -> addArFilterFields();
@@ -220,11 +257,16 @@ class SubsystemCAdmin
     /**
      *
      */
-    private function addToPropertyArFilter()
+    public function initFilter()
     {
+        $this -> admin -> getProperty('lAdmin') -> InitFilter($this -> admin -> getProperty('arFilterFields'));
+    }
 
-        InitBVar($find_responsible_exact_match);
-
+    /**
+     *
+     */
+    public function addToPropertyArFilter()
+    {
         $data_filter = [
             "find_site" => $find_site ?? null,
             "find_date1" => $find_date1 ?? null,
@@ -246,16 +288,7 @@ class SubsystemCAdmin
     /**
      *
      */
-    private function initFilter()
-    {
-        $this -> admin -> getProperty('lAdmin') -> InitFilter($this -> admin -> getProperty('arFilterFields'));
-    }
-
-
-    /**
-     *
-     */
-    private function showErrorMessageIfExist()
+    public function showErrorMessageIfExist()
     {
         if ($this -> admin -> error) {
             $this -> admin -> error -> Show();
@@ -265,7 +298,7 @@ class SubsystemCAdmin
     /**
      * @return array
      */
-    private function getFindList()
+    public function getFindList()
     {
         list(
             'find_open' => $find_open,
@@ -312,7 +345,7 @@ class SubsystemTicket
     /**
      * @param $admin
      */
-    private function initTicketProperty($admin)
+    public function initTicketProperty($admin)
     {
         $this -> ticket -> addListTicketsDB("rsTickets", $admin -> getProperty('arFilter'));
         $this -> ticket -> addDefaultPropertyByKeys("arrTime", ["1", "1_2", "2_3", "3_4", "4_5", "5_6", "6_7", "7"], 0);
@@ -340,8 +373,7 @@ class SubsystemSupportUser
      * @param $ticket
      */
     public function __construct(
-        SupportUser $supportUser = null,
-        $ticket = null
+        SupportUser $supportUser = null
     )
     {
         $this->arTicketUsersID = $ticket -> arTicketUsersID;
