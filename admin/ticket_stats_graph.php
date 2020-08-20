@@ -39,9 +39,6 @@ function manageAllOperation(Facade $facade)
 {
     list('bDemo' => $bDemo, 'bAdmin' => $bAdmin) = $facade -> getSubsystemRole() -> showAuthFormByRole();
 
-    if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
-    InitBVar($find_responsible_exact_match);
-
     list('sTableID' => $sTableID) = $facade -> getSubsystemGraph() -> initGraphPropertyAndReturnVal();
 
     $facade -> getSubsystemCAdmin() -> initCAdminPropertyList($sTableID);
@@ -52,13 +49,15 @@ function manageAllOperation(Facade $facade)
     $facade -> getSubsystemCAdmin() -> showErrorMessageIfExist();
 
     list(
+        'find_responsible_id' => $find_responsible_id,
+        'find_responsible_exact_match' => $find_responsible_exact_match,
         'find_open' => $find_open,
         'find_close' => $find_close,
         'find_all' => $find_all,
         'find_sla_id' => $find_sla_id,
         'find_mess' => $find_mess,
         'find_overdue_mess' => $find_overdue_mess
-    ) = $facade -> getSubsystemCAdmin() -> getFindList();
+    ) = $facade -> getSubsystemCAdmin() -> getFindList($bAdmin, $bDemo);
 
     $admin = $facade->getSubsystemCAdmin();
     $arTicketUsersID = $facade -> getSubsystemTicket() -> initTicketPropertyAndReturnVal($admin);
