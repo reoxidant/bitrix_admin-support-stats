@@ -33,105 +33,106 @@ $facade = new Facade(
     $subsystemSupportUser,
     $subsystemFilterForm
 );
-manageAllOperation($facade);
 
-function manageAllOperation(Facade $facade)
+function cAdminOperation(Facade $facade, $sTableID)
 {
-    list(
-        'bDemo' => $bDemo,
-        'bAdmin' => $bAdmin
-    ) = $facade -> getSubsystemRole() -> showAuthFormByRole();
-
-    list('sTableID' => $sTableID) = $facade -> getSubsystemGraph() -> initGraphPropertyAndReturnVal();
-
     $facade -> getSubsystemCAdmin() -> initCAdminPropertyList($sTableID);
     $facade -> getSubsystemCAdmin() -> addToPropertyCommonFilterValues();
     $facade -> getSubsystemCAdmin() -> initFilter();
     $facade -> getSubsystemCAdmin() -> addToPropertyArFilter();
+}
 
-    list(
-        'find_responsible_id' => $find_responsible_id,
-        'find_responsible_exact_match' => $find_responsible_exact_match,
-        'find_open' => $find_open,
-        'find_close' => $find_close,
-        'find_all' => $find_all,
-        'find_sla_id' => $find_sla_id,
-        'find_mess' => $find_mess,
-        'find_overdue_mess' => $find_overdue_mess,
-        'find_site' => $find_site,
-        'find_date1' => $find_date1,
-        'find_date2' => $find_date2,
-        'find_responsible' => $find_responsible,
-        'find_category_id' => $find_category_id,
-        'find_criticality_id' => $find_criticality_id,
-        'find_status_id' => $find_status_id,
-        'find_mark_id' => $find_mark_id,
-        'find_source_id' =>   $find_source_id
+function userSupportOperations(Facade $facade)
+{
+    $arTicketUsersID = $facade -> getSubsystemTicket() -> initTicketPropertyAndReturnVal($facade -> getSubsystemCAdmin() -> getAdmin());
+    $facade -> getSubsystemSupportUser() -> addUsers($arTicketUsersID);
+}
+
+list('bDemo' => $bDemo, 'bAdmin' => $bAdmin) = $facade -> getSubsystemRole() -> showAuthFormByRole();
+list('sTableID' => $sTableID) = $facade -> getSubsystemGraph() -> initGraphPropertyAndReturnVal();
+
+cAdminOperation($facade, $sTableID);
+
+list(
+    'find_responsible_id' => $find_responsible_id,
+    'find_responsible_exact_match' => $find_responsible_exact_match,
+    'find_open' => $find_open,
+    'find_close' => $find_close,
+    'find_all' => $find_all,
+    'find_sla_id' => $find_sla_id,
+    'find_mess' => $find_mess,
+    'find_overdue_mess' => $find_overdue_mess,
+    'find_site' => $find_site,
+    'find_date1' => $find_date1,
+    'find_date2' => $find_date2,
+    'find_responsible' => $find_responsible,
+    'find_category_id' => $find_category_id,
+    'find_criticality_id' => $find_criticality_id,
+    'find_status_id' => $find_status_id,
+    'find_mark_id' => $find_mark_id,
+    'find_source_id' => $find_source_id
     ) = $facade -> getSubsystemCAdmin() -> getFindList($bAdmin, $bDemo);
 
-    $arTicketUsersID = $facade -> getSubsystemTicket() -> initTicketPropertyAndReturnVal($facade->getSubsystemCAdmin()->getAdmin());
+userSupportOperations($facade);
 
-    $facade-> getSubsystemSupportUser() -> addUsers($arTicketUsersID);
-    $arrSupportUser = $facade->getSubsystemSupportUser()->getArrSupportUser();
+//ob_start
+$facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> BeginCustomContent();
+$facade -> getSubsystemCAdmin() -> showErrorMessageIfExist(); ?>
 
-    //ob_start
-    $facade->getSubsystemCAdmin()->getAdmin() -> getProperty('lAdmin') -> BeginCustomContent();
+    <!--HTML CONTENT-->
 
-    $facade -> getSubsystemCAdmin() -> showErrorMessageIfExist();
-?>
-
-    <!--Время на сервере:  17.08.2020 16:12:21-->
     <p><? echo GetMessage("SUP_SERVER_TIME") . "&nbsp;" . GetTime(time(), "FULL") ?></p>
-    <!--Нагрузка на техподдержку-->
     <h2><?= GetMessage("SUP_GRAPH_ALT") ?></h2>
 
+    <!--HTML CONTENT-->
+
 <?php
-    $facade->getSubsystemGraph()->createImage(
-        $facade->getSubsystemGraph()->getGraph(),
-        $facade->getSubsystemCAdmin()->getAdmin(),
-        "576",
-        "400"
-    );
 
-    $facade->getSubsystemCAdmin()->getAdmin() -> getProperty("lAdmin") -> EndCustomContent();
+//Image
+$facade -> getSubsystemGraph() -> createImage(
+    $facade -> getSubsystemGraph() -> getGraph(),
+    $facade -> getSubsystemCAdmin() -> getAdmin(),
+    "576",
+    "400"
+);
 
-    $facade->getSubsystemCAdmin()->getAdmin() -> getProperty("lAdmin") -> CheckListMode();
+$facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty("lAdmin") -> EndCustomContent();
+$facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty("lAdmin") -> CheckListMode();
 
-    global $APPLICATION;
-    $APPLICATION -> SetTitle(GetMessage("SUP_PAGE_TITLE"));
+global $APPLICATION;
+$APPLICATION -> SetTitle(GetMessage("SUP_PAGE_TITLE"));
 
-    require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
 
-    $arFilterFormProps = [
-        "APPLICATION" => $APPLICATION,
-        "filter" => $facade->getSubsystemCAdmin()->getAdmin()->getProperty('filter'),
-        "find_site" => $find_site,
-        "find_date1" => $find_date1,
-        "find_date2" => $find_date2,
-        "bAdmin" => $bAdmin,
-        "bDemo" => $bDemo,
-        "arrSupportUser" => $arrSupportUser,
-        "find_responsible" => $find_responsible,
-        "find_responsible_id" => $find_responsible_id,
-        "find_responsible_exact_match" => $find_responsible_exact_match,
-        "find_criticality_id" => $find_criticality_id,
-        "find_status_id" => $find_status_id,
-        "find_mark_id" => $find_mark_id,
-        "find_source_id" => $find_source_id,
-        "find_open" => $find_open,
-        "find_close" => $find_close,
-        "find_all" => $find_all,
-        "find_sla_id" => $find_sla_id,
-        "find_mess" => $find_mess,
-        "find_overdue_mess" => $find_overdue_mess,
-        "find_category_id" => $find_category_id,
-        "sTableID" => $sTableID
-    ];
-    $facade->getSubsystemFilterForm()->initFilterFormProperty($arFilterFormProps);
+//form
+$arFilterFormProps = [
+    "APPLICATION" => $APPLICATION,
+    "filter" => $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('filter'),
+    "find_site" => $find_site,
+    "find_date1" => $find_date1,
+    "find_date2" => $find_date2,
+    "bAdmin" => $bAdmin,
+    "bDemo" => $bDemo,
+    "arrSupportUser" => $facade -> getSubsystemSupportUser() -> getArrSupportUser(),
+    "find_responsible" => $find_responsible,
+    "find_responsible_id" => $find_responsible_id,
+    "find_responsible_exact_match" => $find_responsible_exact_match,
+    "find_criticality_id" => $find_criticality_id,
+    "find_status_id" => $find_status_id,
+    "find_mark_id" => $find_mark_id,
+    "find_source_id" => $find_source_id,
+    "find_open" => $find_open,
+    "find_close" => $find_close,
+    "find_all" => $find_all,
+    "find_sla_id" => $find_sla_id,
+    "find_mess" => $find_mess,
+    "find_overdue_mess" => $find_overdue_mess,
+    "find_category_id" => $find_category_id,
+    "sTableID" => $sTableID
+];
+$facade -> getSubsystemFilterForm() -> initFilterFormProperty($arFilterFormProps);
 
-    //ob_get_contents
-    $facade->getSubsystemCAdmin()->getAdmin() -> getProperty('lAdmin') -> DisplayList();
+//ob_get_contents
+$facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> DisplayList();
 
-    require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");
-}
-?>
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");
