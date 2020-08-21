@@ -34,46 +34,18 @@ $facade = new Facade(
     $subsystemFilterForm
 );
 
-function cAdminOperation(Facade $facade, $sTableID)
-{
-    $facade -> getSubsystemCAdmin() -> initCAdminPropertyList($sTableID);
-    $facade -> getSubsystemCAdmin() -> addToPropertyCommonFilterValues();
-    $facade -> getSubsystemCAdmin() -> initFilter();
-    $facade -> getSubsystemCAdmin() -> addToPropertyArFilter();
-}
+$facade -> getSubsystemRole() -> showAuthFormByRole();
+$facade -> getSubsystemGraph() -> initGraphProperty();
 
-function userSupportOperations(Facade $facade)
-{
-    $arTicketUsersID = $facade -> getSubsystemTicket() -> initTicketPropertyAndReturnVal($facade -> getSubsystemCAdmin() -> getAdmin());
-    $facade -> getSubsystemSupportUser() -> addUsers($arTicketUsersID);
-}
+$facade -> getSubsystemCAdmin() -> initCAdminPropertyList($facade -> getSubsystemGraph()->getSystemParams('sTableID'));
+$facade -> getSubsystemCAdmin() -> addToPropertyCommonFilterValues();
+$facade -> getSubsystemCAdmin() -> initFilter();
+$facade -> getSubsystemCAdmin() -> addToPropertyArFilter();
+$facade -> getSubsystemCAdmin() -> recordFindList($facade -> getSubsystemRole()->getSystemParams('authRole'));
 
-list('bDemo' => $bDemo, 'bAdmin' => $bAdmin) = $facade -> getSubsystemRole() -> showAuthFormByRole();
-list('sTableID' => $sTableID) = $facade -> getSubsystemGraph() -> initGraphPropertyAndReturnVal();
+$facade -> getSubsystemTicket() -> initTicketProperty($facade -> getSubsystemCAdmin() -> getAdmin());
 
-cAdminOperation($facade, $sTableID);
-
-list(
-    'find_responsible_id' => $find_responsible_id,
-    'find_responsible_exact_match' => $find_responsible_exact_match,
-    'find_open' => $find_open,
-    'find_close' => $find_close,
-    'find_all' => $find_all,
-    'find_sla_id' => $find_sla_id,
-    'find_mess' => $find_mess,
-    'find_overdue_mess' => $find_overdue_mess,
-    'find_site' => $find_site,
-    'find_date1' => $find_date1,
-    'find_date2' => $find_date2,
-    'find_responsible' => $find_responsible,
-    'find_category_id' => $find_category_id,
-    'find_criticality_id' => $find_criticality_id,
-    'find_status_id' => $find_status_id,
-    'find_mark_id' => $find_mark_id,
-    'find_source_id' => $find_source_id
-    ) = $facade -> getSubsystemCAdmin() -> getFindList($bAdmin, $bDemo);
-
-userSupportOperations($facade);
+$facade -> getSubsystemSupportUser() -> addUsers($facade -> getSubsystemTicket() -> getSystemParams('arTicketUsersID'));
 
 //ob_start
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> BeginCustomContent();
@@ -90,7 +62,7 @@ $facade -> getSubsystemCAdmin() -> showErrorMessageIfExist(); ?>
 
 //Image
 $facade -> getSubsystemGraph() -> createImage(
-    $facade -> getSubsystemGraph() -> getGraph(),
+    $facade->getSubsystemTicket()->getTicket(),
     $facade -> getSubsystemCAdmin() -> getAdmin(),
     "576",
     "400"
