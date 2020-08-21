@@ -192,9 +192,12 @@ class SubsystemGraph implements systemArParams
      */
     private $graph;
 
+    private $arrColorInc;
+
     /**
      * SubsystemGraph constructor.
      * @param Graph|null $graph
+     * @param $arrColor
      */
     public function __construct(
         Graph $graph = null
@@ -219,12 +222,12 @@ class SubsystemGraph implements systemArParams
      * @param $width
      * @param $height
      */
-    public function createImage($ticket, $admin, $width = null, $height = null)
+    public function createImage($ticket, $admin, $arrColorInc, $width = null, $height = null)
     {
         $this -> graph -> createImageGraph(
             $ticket -> getProperty('show_graph'), $admin -> getProperty('arFilterFields'),
             $admin -> getProperty('lAdmin') -> getFilter() ?? ($admin -> getProperty('defaultFilterValues') ?? null),
-            $arrColor ?? null,
+            $arrColorInc ?? null,
             $width,
             $height
         );

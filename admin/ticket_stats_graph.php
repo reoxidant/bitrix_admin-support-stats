@@ -8,6 +8,13 @@
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php");
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/prolog.php");
 
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
+IncludeModuleLangFile($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
+IncludeModuleLangFile(__FILE__);
+
+include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
+
 require_once('classes/Facade.php');
 
 use admin\classes\Facade;
@@ -64,6 +71,7 @@ $facade -> getSubsystemCAdmin() -> showErrorMessageIfExist(); ?>
 $facade -> getSubsystemGraph() -> createImage(
     $facade->getSubsystemTicket()->getTicket(),
     $facade -> getSubsystemCAdmin() -> getAdmin(),
+    $arrColor,
     "576",
     "400"
 );
