@@ -54,8 +54,10 @@ class Graph implements PropertyContainerInterface
      * @param $arFilterFields
      * @param $defaultFilterValues
      * @param $arrColor
+     * @param string $width
+     * @param string $height
      */
-    public function createImageGraph($show_graph, $arFilterFields, $defaultFilterValues, $arrColor)
+    public function createImageGraph($show_graph, $arFilterFields, $defaultFilterValues, $arrColor,  $width = "576", $height = "400")
     {
         list(
                 'find_open' => $find_open,
@@ -67,10 +69,7 @@ class Graph implements PropertyContainerInterface
 
         if (!function_exists("ImageCreate")) : CAdminMessage :: ShowMessage(GetMessage("SUP_GD_NOT_INSTALLED"));
         elseif
-        ($show_graph == "Y") :
-            $width = "576";
-            $height = "400";
-            ?>
+        ($show_graph == "Y") :?>
             <div class="graph">
                 <table border="0" cellspacing="0" cellpadding="0" class="graph">
                     <tr>

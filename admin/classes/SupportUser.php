@@ -44,4 +44,11 @@ class SupportUser
         $this -> arrSupportUser = $arrSupportUser;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getArrSupportUser()
+    {
+        return $this -> arrSupportUser;
+    }
 }

@@ -96,9 +96,8 @@ class Ticket implements PropertyContainerInterface
 
     /**
      * @param $propName
-     * @param $PREV_CREATE
      */
-    public function addAdditionalDataInto($propName, $PREV_CREATE)
+    public function addAdditionalDataInto($propName)
     {
         while ($arTicket = $this -> getProperty($propName) -> Fetch()) {
             if ($arTicket["DATE_CREATE_SHORT"] != $PREV_CREATE && strlen($PREV_CREATE) > 0) {
