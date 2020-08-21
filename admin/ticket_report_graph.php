@@ -249,8 +249,6 @@ elseif ($show_graph == "Y") :
     $height = "400";
     ?>
     <div class="graph">
-
-
         <table border="0" cellspacing="0" cellpadding="0" class="graph">
             <tr>
                 <td>

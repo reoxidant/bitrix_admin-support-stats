@@ -8,8 +8,6 @@
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php");
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/prolog.php");
 
-global $APPLICATION;
-
 require_once('classes/Facade.php');
 
 use admin\classes\Facade;
@@ -47,11 +45,9 @@ function manageAllOperation(Facade $facade)
     list('sTableID' => $sTableID) = $facade -> getSubsystemGraph() -> initGraphPropertyAndReturnVal();
 
     $facade -> getSubsystemCAdmin() -> initCAdminPropertyList($sTableID);
-
     $facade -> getSubsystemCAdmin() -> addToPropertyCommonFilterValues();
     $facade -> getSubsystemCAdmin() -> initFilter();
     $facade -> getSubsystemCAdmin() -> addToPropertyArFilter();
-    $facade -> getSubsystemCAdmin() -> showErrorMessageIfExist();
 
     list(
         'find_responsible_id' => $find_responsible_id,
@@ -61,36 +57,81 @@ function manageAllOperation(Facade $facade)
         'find_all' => $find_all,
         'find_sla_id' => $find_sla_id,
         'find_mess' => $find_mess,
-        'find_overdue_mess' => $find_overdue_mess
+        'find_overdue_mess' => $find_overdue_mess,
+        'find_site' => $find_site,
+        'find_date1' => $find_date1,
+        'find_date2' => $find_date2,
+        'find_responsible' => $find_responsible,
+        'find_category_id' => $find_category_id,
+        'find_criticality_id' => $find_criticality_id,
+        'find_status_id' => $find_status_id,
+        'find_mark_id' => $find_mark_id,
+        'find_source_id' =>   $find_source_id
     ) = $facade -> getSubsystemCAdmin() -> getFindList($bAdmin, $bDemo);
 
     $arTicketUsersID = $facade -> getSubsystemTicket() -> initTicketPropertyAndReturnVal($facade->getSubsystemCAdmin()->getAdmin());
 
     $facade-> getSubsystemSupportUser() -> addUsers($arTicketUsersID);
-}
+    $arrSupportUser = $facade->getSubsystemSupportUser()->getArrSupportUser();
 
-//ob_start
-$facade->getSubsystemCAdmin()->getAdmin() -> getProperty('lAdmin') -> BeginCustomContent();
+    //ob_start
+    $facade->getSubsystemCAdmin()->getAdmin() -> getProperty('lAdmin') -> BeginCustomContent();
 
+    $facade -> getSubsystemCAdmin() -> showErrorMessageIfExist();
 ?>
 
-<!--Время на сервере:  17.08.2020 16:12:21-->
-<p><? echo GetMessage("SUP_SERVER_TIME") . "&nbsp;" . GetTime(time(), "FULL") ?></p>
-<!--Нагрузка на техподдержку-->
-<h2><?= GetMessage("SUP_GRAPH_ALT") ?></h2>
+    <!--Время на сервере:  17.08.2020 16:12:21-->
+    <p><? echo GetMessage("SUP_SERVER_TIME") . "&nbsp;" . GetTime(time(), "FULL") ?></p>
+    <!--Нагрузка на техподдержку-->
+    <h2><?= GetMessage("SUP_GRAPH_ALT") ?></h2>
 
 <?php
+    $facade->getSubsystemGraph()->createImage(
+        $facade->getSubsystemGraph()->getGraph(),
+        $facade->getSubsystemCAdmin()->getAdmin(),
+        "576",
+        "400"
+    );
 
-$facade->getSubsystemCAdmin()->getAdmin() -> getProperty("lAdmin") -> EndCustomContent();
+    $facade->getSubsystemCAdmin()->getAdmin() -> getProperty("lAdmin") -> EndCustomContent();
 
-$facade->getSubsystemCAdmin()->getAdmin() -> getProperty("lAdmin") -> CheckListMode();
+    $facade->getSubsystemCAdmin()->getAdmin() -> getProperty("lAdmin") -> CheckListMode();
 
-$APPLICATION -> SetTitle(GetMessage("SUP_PAGE_TITLE"));
+    global $APPLICATION;
+    $APPLICATION -> SetTitle(GetMessage("SUP_PAGE_TITLE"));
 
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
+    require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_after.php");
 
-//ob_get_contents
-$facade->getSubsystemCAdmin()->getAdmin() -> getProperty('lAdmin') -> DisplayList();
+    $arFilterFormProps = [
+        "APPLICATION" => $APPLICATION,
+        "filter" => $facade->getSubsystemCAdmin()->getAdmin()->getProperty('filter'),
+        "find_site" => $find_site,
+        "find_date1" => $find_date1,
+        "find_date2" => $find_date2,
+        "bAdmin" => $bAdmin,
+        "bDemo" => $bDemo,
+        "arrSupportUser" => $arrSupportUser,
+        "find_responsible" => $find_responsible,
+        "find_responsible_id" => $find_responsible_id,
+        "find_responsible_exact_match" => $find_responsible_exact_match,
+        "find_criticality_id" => $find_criticality_id,
+        "find_status_id" => $find_status_id,
+        "find_mark_id" => $find_mark_id,
+        "find_source_id" => $find_source_id,
+        "find_open" => $find_open,
+        "find_close" => $find_close,
+        "find_all" => $find_all,
+        "find_sla_id" => $find_sla_id,
+        "find_mess" => $find_mess,
+        "find_overdue_mess" => $find_overdue_mess,
+        "find_category_id" => $find_category_id,
+        "sTableID" => $sTableID
+    ];
+    $facade->getSubsystemFilterForm()->initFilterFormProperty($arFilterFormProps);
 
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");
+    //ob_get_contents
+    $facade->getSubsystemCAdmin()->getAdmin() -> getProperty('lAdmin') -> DisplayList();
+
+    require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");
+}
 ?>

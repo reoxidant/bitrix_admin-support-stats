@@ -199,14 +199,26 @@ class SubsystemGraph
     /**
      * @param $ticket
      * @param $admin
+     * @param $width
+     * @param $height
      */
-    private function createImage($ticket, $admin)
+    public function createImage($ticket, $admin, $width = null, $height = null)
     {
         $this -> graph -> createImageGraph(
             $ticket -> getProperty('show_graph'), $admin -> getProperty('arFilterFields'),
             $admin -> getProperty('lAdmin') -> getFilter() ?? ($admin -> getProperty('defaultFilterValues') ?? null),
-            $arrColor ?? null
+            $arrColor ?? null,
+            $width,
+            $height
         );
+    }
+
+    /**
+     * @return Graph|null
+     */
+    public function getGraph(): ?Graph
+    {
+        return $this -> graph;
     }
 }
 
@@ -292,6 +304,7 @@ class SubsystemCAdmin
             "find_source_id" => $find_source_id ?? null
         ];
 
+        $this->admin->addProperty('dataFilter', $data_filter);
         $this -> admin -> addArFilterData($data_filter);
     }
 
@@ -326,6 +339,19 @@ class SubsystemCAdmin
             'find_overdue_mess' => $find_overdue_mess
             ) = $this -> admin -> getProperty('lAdmin') -> getFilter() ?? ($this -> admin -> getProperty('defaultFilterValues') ?? null);
 
+        list(
+            'find_site' => $find_site,
+            'find_date1' => $find_date1,
+            'find_date2' => $find_date2,
+            'find_responsible' => $find_responsible,
+            'find_category_id' => $find_category_id,
+            'find_criticality_id' => $find_criticality_id,
+            'find_status_id' => $find_status_id,
+            'find_mark_id' => $find_mark_id,
+            'find_source_id' =>   $find_source_id
+            ) = $this -> admin -> getProperty('dataFilter');
+
+
         return [
             'find_responsible_id' => $find_responsible_id ?? null,
             'find_responsible_exact_match' => $find_responsible_exact_match,
@@ -334,7 +360,16 @@ class SubsystemCAdmin
             'find_all' => $find_all,
             'find_sla_id' => $find_sla_id,
             'find_mess' => $find_mess,
-            'find_overdue_mess' => $find_overdue_mess
+            'find_overdue_mess' => $find_overdue_mess,
+            'find_site' => $find_site,
+            'find_date1' => $find_date1,
+            'find_date2' => $find_date2,
+            'find_responsible' => $find_responsible,
+            'find_category_id' => $find_category_id,
+            'find_criticality_id' => $find_criticality_id,
+            'find_status_id' => $find_status_id,
+            'find_mark_id' => $find_mark_id,
+            'find_source_id' =>   $find_source_id
         ];
     }
 
@@ -405,7 +440,6 @@ class SubsystemSupportUser
         $this -> supportUser = $supportUser ?: new SupportUser();
     }
 
-
     /**
      * @param $arTicketUsersID
      */
@@ -414,6 +448,11 @@ class SubsystemSupportUser
         $this -> supportUser -> setArrSupportUser($arTicketUsersID);
         $this -> supportUser -> setSupportsUsersID($arTicketUsersID);
         $this -> supportUser -> addSupportUsers();
+    }
+
+    public function getArrSupportUser()
+    {
+        return $this -> supportUser->getArrSupportUser();
     }
 }
 
@@ -442,40 +481,17 @@ class SubsystemFilterForm
     /**
      * @param $arrayProps
      */
-    private function initFilterFormProperty($arrayProps)
+    public function initFilterFormProperty($arrayProps)
     {
         foreach ($arrayProps as $key => $prop) {
             $this -> filterForm -> addProperty($key, $prop ?? null);
         }
-//        $this->filderForm -> addProperty("APPLICATION", $APPLICATION ?? null);
-//        $this->filterForm -> addProperty('filter', $filter ?? null);
-//        $this->filterForm -> addProperty('find_site', $find_site ?? null);
-//        $this->filterForm -> addProperty('find_date1', $find_date1 ?? null);
-//        $this->filterForm -> addProperty('find_date2', $find_date2 ?? null);
-//        $this->filterForm -> addProperty('bAdmin', $bAdmin ?? null);
-//        $this->filterForm -> addProperty('bDemo', $bDemo ?? null);
-//        $this->filterForm -> addProperty('arrSupportUser', $user -> arrSupportUser ?? null);
-//        $this->filterForm -> addProperty('find_responsible', $find_responsible ?? null);
-//        $this->filterForm -> addProperty('find_responsible_id', $find_responsible_id ?? null);
-//        $this->filterForm -> addProperty('find_responsible_exact_match', $find_responsible_exact_match ?? null);
-//        $this->filterForm -> addProperty('find_criticality_id', $find_criticality_id ?? null);
-//        $this->filterForm -> addProperty('find_status_id', $find_status_id ?? null);
-//        $this->filterForm -> addProperty('find_mark_id', $find_mark_id ?? null);
-//        $this->filterForm -> addProperty('find_source_id', $find_source_id ?? null);
-//        $this->filterForm -> addProperty('find_open', $find_open ?? null);
-//        $this->filterForm -> addProperty('find_close', $find_close ?? null);
-//        $this->filterForm -> addProperty('find_all', $find_all ?? null);
-//        $this->filterForm -> addProperty('find_sla_id', $find_sla_id ?? null);
-//        $this->filterForm -> addProperty('find_mess', $find_mess ?? null);
-//        $this->filterForm -> addProperty('find_overdue_mess', $find_overdue_mess ?? null);
-//        $this->filterForm -> addProperty('find_category_id', $find_category_id ?? null);
-//        $this->filterForm -> addProperty('sTableID', $sTableID ?? null);
     }
 
     /**
      *
      */
-    private function createAndShowFilterForm()
+    public function createAndShowFilterForm()
     {
         $this -> filterForm -> generateFilterForm();
     }
