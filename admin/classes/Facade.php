@@ -184,15 +184,12 @@ class SubsystemRole implements systemArParams
  * Class SubsystemGraph
  * @package admin\classes
  */
-class SubsystemGraph implements systemArParams
+class SubsystemGraph
 {
-    private $arSystemParamsGraph = [];
     /**
      * @var Graph|null
      */
     private $graph;
-
-    private $arrColorInc;
 
     /**
      * SubsystemGraph constructor.
@@ -212,8 +209,6 @@ class SubsystemGraph implements systemArParams
     public function initGraphProperty()
     {
         $this -> graph -> addProperty("sTableID", 't_report_graph');
-
-        $this->setSystemParams("sTableID", $this -> graph -> getProperty("sTableID"));
     }
 
     /**
@@ -233,15 +228,14 @@ class SubsystemGraph implements systemArParams
         );
     }
 
-    public function setSystemParams($name, $value)
+    /**
+     * @return Graph|null
+     */
+    public function getGraph(): ?Graph
     {
-        $this->arSystemParamsGraph[$name] = $value;
+        return $this -> graph;
     }
 
-    public function getSystemParams($name)
-    {
-        return $this->arSystemParamsGraph[$name];
-    }
 }
 
 /**
@@ -270,7 +264,6 @@ class SubsystemCAdmin implements systemArParams
 
     /**
      * @param $sTableID
-     * @param $arrMessages
      */
     public function initCAdminPropertyList($sTableID)
     {

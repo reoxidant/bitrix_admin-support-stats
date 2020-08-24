@@ -42,14 +42,6 @@ class Graph implements PropertyContainerInterface
     }
 
     /**
-     * @return array|null
-     */
-    public function getAllProperties()
-    {
-        return $this -> propertyContainer ?? null;
-    }
-
-    /**
      * @param $show_graph
      * @param $arFilterFields
      * @param $defaultFilterValues

@@ -44,7 +44,8 @@ $facade = new Facade(
 $facade -> getSubsystemRole() -> showAuthFormByRole();
 $facade -> getSubsystemGraph() -> initGraphProperty();
 
-$facade -> getSubsystemCAdmin() -> initCAdminPropertyList($facade -> getSubsystemGraph()->getSystemParams('sTableID'));
+$facade -> getSubsystemCAdmin() -> initCAdminPropertyList($facade -> getSubsystemGraph()->getGraph()->getProperty("sTableID"));
+
 $facade -> getSubsystemCAdmin() -> addToPropertyCommonFilterValues();
 $facade -> getSubsystemCAdmin() -> initFilter();
 $facade -> getSubsystemCAdmin() -> addToPropertyArFilter();
