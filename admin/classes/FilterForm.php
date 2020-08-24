@@ -16,8 +16,12 @@ use CTicketSLA;
  * Class FilterForm
  * @package admin\classes
  */
+
+
+
 class FilterForm implements PropertyContainerInterface
 {
+
     private $propertyContainer = [];
 
     /**
@@ -158,8 +162,11 @@ class FilterForm implements PropertyContainerInterface
         <? }
     }
     //TODO: check working the filter form
-    public function generateFilterForm(){?>
-       <form name="form1" method="GET" action="<?= $this->getProperty('APPLICATION') -> GetCurPage() ?>?">
+    public function generateFilterForm(){
+        global $APPLICATION;
+        ?>
+       <form name="form1" method="GET" action="<?= $APPLICATION -> GetCurPage() ?>?">
+            <? $filter = $this->getProperty('filter') ?>
             <? $this->getProperty('filter') -> Begin(); ?>
             <tr>
                 <td><?/* echo GetMessage("SUP_F_PERIOD")."(".FORMAT_DATE."):"*/?></td>
@@ -223,7 +230,13 @@ class FilterForm implements PropertyContainerInterface
                     </table>
                 </td>
             </tr>
-            <? $this->getProperty("filter") -> Buttons(array("table_id" => $this->getProperty("sTableID"), "url" => $this->getProperty("APPLICATION") -> GetCurPage(), "form" => "form1")); $this->getProperty("filter") -> End(); ?>
+            <? $this->getProperty("filter") ->
+            Buttons(array(
+                    "table_id" => $this->getProperty("sTableID"),
+                    "url" => $APPLICATION -> GetCurPage(),
+                    "form" => "form1")
+            );
+            $this->getProperty("filter") -> End(); ?>
         </form>
 <?php
     }
@@ -236,11 +249,6 @@ class FilterForm implements PropertyContainerInterface
     public function getProperty($name)
     {
         return $this -> propertyContainer[$name] ?? null;
-    }
-
-    public function getAllProperties()
-    {
-        return $this -> propertyContainer ?? null;
     }
 }
 ?>

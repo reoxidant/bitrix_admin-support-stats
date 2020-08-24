@@ -25,15 +25,15 @@ class SupportUser
     public function addSupportUsers(){
         $titleId = "ID";
         $order = "asc";
-        $rs = CUser ::GetList($titleId, $order, array("ID" => $this->strUsers), array("FIELDS" => array("NAME", "LAST_NAME", "LOGIN", "ID")));
+        $rs = CUser :: GetList($titleId, $order, array("ID" => $this->strUsers), array("FIELDS" => array("NAME", "LAST_NAME", "LOGIN", "ID")));
         while ($ar = $rs -> Fetch()) {
             $this->arrSupportUser[$ar["ID"]] = $ar;
         }
     }
 
-    public function setSupportsUsersID($arTicketUsersID){
-        $this->arUsersID = array_unique($arTicketUsersID);
-        $this->strUsers = implode("|", $arTicketUsersID);
+    public function setSupportsUsersID($arUsersID){
+        $this->arUsersID = array_unique($arUsersID);
+        $this->strUsers = implode("|", $arUsersID);
     }
 
     /**

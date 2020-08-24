@@ -33,7 +33,7 @@ class CAdmin implements PropertyContainerInterface
         ];
     }
 
-    public function addArFilterFields()
+    public function addArFilterFields($returnValue = false)
     {
         $this -> propertyContainer['arFilterFields'] = [
             "find_site",
@@ -54,6 +54,10 @@ class CAdmin implements PropertyContainerInterface
             "find_mess",
             "find_overdue_mess"
         ];
+
+        if($returnValue){
+            return $this -> getProperty("arFilterFields");
+        }
     }
 
     /** @noinspection PhpDeprecationInspection */

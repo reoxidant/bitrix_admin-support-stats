@@ -26,10 +26,15 @@ class Graph implements PropertyContainerInterface
     /**
      * @param $name
      * @param $value
+     * @param bool $returnValue
      */
-    public function addProperty($name, $value)
+    public function addProperty($name, $value, $returnValue = false)
     {
         $this -> propertyContainer[$name] = $value;
+
+        if($returnValue){
+            return $value;
+        }
     }
 
     /**
@@ -39,14 +44,6 @@ class Graph implements PropertyContainerInterface
     public function getProperty($name)
     {
         return $this -> propertyContainer[$name] ?? null;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function getAllProperties()
-    {
-        return $this -> propertyContainer ?? null;
     }
 
     /**
