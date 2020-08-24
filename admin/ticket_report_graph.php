@@ -87,6 +87,8 @@ $filter = new CAdminFilter(
     )
 );
 
+//Проверил все ок
+
 if ($lAdmin -> IsDefaultFilter()) {
     //$find_date1_DAYS_TO_BACK=90;
     $find_date1_DAYS_TO_BACK = 1;
@@ -124,6 +126,8 @@ $arFilterFields = array_merge($FilterArr1, $FilterArr2);
 
 
 $lAdmin -> InitFilter($arFilterFields);//������������� �������
+
+//Проверил данный этап все ок
 
 
 if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
@@ -175,6 +179,8 @@ $arrMess["8_m"] = 0;
 $arrMess["9_m"] = 0;
 $arrMess["10_m"] = 0;
 $arUsersID = array();
+
+//Проверил, все отлично
 
 while ($arTicket = $rsTickets -> Fetch()) {
     if ($arTicket["DATE_CREATE_SHORT"] != $PREV_CREATE && strlen($PREV_CREATE) > 0) {

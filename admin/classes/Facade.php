@@ -14,21 +14,9 @@ require_once('Ticket.php');
 require_once('SupportUser.php');
 require_once('FilterForm.php');
 
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
-IncludeModuleLangFile($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
-IncludeModuleLangFile(__FILE__);
-
-include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php");
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
-
 use CAdminList;
 use CAdminSorting;
 use CTicket;
-
-interface systemArParams{
-    public function setSystemParams($name, $value);
-    public function getSystemParams($name);
-}
 
 /**
  * Class Facade
@@ -151,13 +139,9 @@ class Facade
  * Class SubsystemRole
  * @package admin\classes
  */
-class SubsystemRole implements systemArParams
+class SubsystemRole
 {
-    public $arSystemParamsRole = [];
-    /**
-     *
-     */
-    public function showAuthFormByRole()
+    public function showAuthFormByRole($returnValue = false)
     {
         global $APPLICATION;
         $bDemo = (CTicket ::IsDemo()) ? "Y" : "N";
@@ -166,17 +150,10 @@ class SubsystemRole implements systemArParams
         if ($bAdmin != "Y" && $bSupportTeam != "Y" && $bDemo != "Y") {
             $APPLICATION -> AuthForm(GetMessage("ACCESS_DENIED"));
         }
-        $this->setSystemParams('authRole', ["bAdmin" => $bAdmin, "bSupportTeam" => $bSupportTeam]);
-    }
 
-    function setSystemParams($name, $value)
-    {
-        $this->arSystemParamsRole[$name] = $value;
-    }
-
-    function getSystemParams($name)
-    {
-        return $this->arSystemParamsRole[$name];
+        if($returnValue){
+            return ["bAdmin" => $bAdmin, "bDemo" => $bDemo];
+        }
     }
 }
 
@@ -201,14 +178,6 @@ class SubsystemGraph
     )
     {
         $this -> graph = $graph ?: new Graph();
-    }
-
-    /**
-     *
-     */
-    public function initGraphProperty()
-    {
-        $this -> graph -> addProperty("sTableID", 't_report_graph');
     }
 
     /**
@@ -242,9 +211,8 @@ class SubsystemGraph
  * Class SubsystemCAdmin
  * @package admin\classes
  */
-class SubsystemCAdmin implements systemArParams
+class SubsystemCAdmin
 {
-    private $arSystemParamsCAdmin = [];
 
     /**
      * @var CAdmin|null
@@ -286,106 +254,11 @@ class SubsystemCAdmin implements systemArParams
     /**
      *
      */
-    public function addToPropertyCommonFilterValues()
-    {
-        $this -> admin -> addValDefaultFilter();
-        $this -> admin -> addArFilterFields();
-    }
-
-    /**
-     *
-     */
-    public function initFilter()
-    {
-        $this -> admin -> getProperty('lAdmin') -> InitFilter($this -> admin -> getProperty('arFilterFields'));
-    }
-
-    /**
-     *
-     */
-    public function addToPropertyArFilter()
-    {
-        $data_filter = [
-            "find_site" => $find_site ?? null,
-            "find_date1" => $find_date1 ?? null,
-            "find_date2" => $find_date2 ?? null,
-            "find_responsible_id" => $find_responsible_id ?? null,
-            "find_responsible" => $find_responsible ?? null,
-            "find_responsible_exact_match" => $find_responsible_exact_match ?? null,
-            "find_sla_id" => $find_sla_id ?? null,
-            "find_category_id" => $finds_category_id ?? null,
-            "find_criticality_id" => $find_criticality_id ?? null,
-            "find_status_id" => $find_status_id ?? null,
-            "find_mark_id" => $find_mark_id ?? null,
-            "find_source_id" => $find_source_id ?? null
-        ];
-
-        $this -> admin -> addArFilterData($data_filter);
-    }
-
-    /**
-     *
-     */
     public function showErrorMessageIfExist()
     {
         if ($this -> admin -> error) {
             $this -> admin -> error -> Show();
         }
-    }
-
-    /**
-     * @param $authRole
-     * @return array
-     */
-    public function recordFindList($authRole)
-    {
-        list($bAdmin, $bDemo) = $authRole;
-
-        global $USER;
-
-        list(
-            'find_date1_DAYS_TO_BACK' => $find_date1_DAYS_TO_BACK,
-            'find_open' => $find_open,
-            'find_close' => $find_close,
-            'find_all' => $find_all,
-            'find_mess' => $find_mess,
-            'find_overdue_mess' => $find_overdue_mess,
-            'set_filter' => $set_filter,
-            'find_site' => $find_site,
-            "find_responsible" => $find_responsible,
-            "find_responsible_id" => $find_responsible_id,
-            "find_responsible_exact_match" => $find_responsible_exact_match,
-            "find_category_id" => $find_category_id,
-            "find_criticality_id" => $find_criticality_id,
-            "find_status_id" => $find_status_id,
-            "find_sla_id" => $find_sla_id,
-            "find_mark_id" => $find_mark_id,
-            "find_source_id" => $find_source_id,
-            "find_date1" => $find_date1,
-            "find_date2" => $find_date2
-            ) = $this -> admin -> getProperty('lAdmin') -> getFilter() ?? ($this -> admin -> getProperty('defaultFilterValues') ?? null);
-
-        $this->setSystemParams('findList', [
-            'find_date1_DAYS_TO_BACK' => $find_date1_DAYS_TO_BACK ?? null,
-            'find_open' => $find_open ?? null,
-            'find_close' => $find_close ?? null,
-            'find_all' => $find_all ?? null,
-            'find_mess' => $find_mess ?? null,
-            'find_overdue_mess' => $find_overdue_mess ?? null,
-            'set_filter' => $set_filter ?? null,
-            'find_site' => $find_site ?? null,
-            "find_responsible" => $find_responsible ?? null,
-            "find_responsible_id" => $find_responsible_id ?? ($bAdmin != "Y" && $bDemo != "Y") ? $find_responsible_id = $USER -> GetID() : null,
-            "find_responsible_exact_match" => $find_responsible_exact_match ?? InitBVar($find_responsible_exact_match),
-            "find_category_id" =>  $find_category_id ?? null,
-            "find_criticality_id" => $find_criticality_id ?? null,
-            "find_status_id" => $find_status_id ?? null,
-            "find_sla_id" => $find_sla_id ?? null,
-            "find_mark_id" => $find_mark_id ?? null,
-            "find_source_id" => $find_source_id ?? null,
-            "find_date1" => $find_date1 ?? null,
-            "find_date2" => $find_date2 ?? null
-        ]);
     }
 
     /**
@@ -395,25 +268,14 @@ class SubsystemCAdmin implements systemArParams
     {
         return $this -> admin;
     }
-
-    public function setSystemParams($name, $value)
-    {
-        $this->arSystemParamsCAdmin[$name] = $value;
-    }
-
-    public function getSystemParams($name)
-    {
-        return $this->arSystemParamsCAdmin[$name];
-    }
 }
 
 /**
  * Class SubsystemTicket
  * @package admin\classes
  */
-class SubsystemTicket implements systemArParams
+class SubsystemTicket
 {
-    private $arSystemParamsTicket = [];
 
     /**
      * @var Ticket|null
@@ -440,17 +302,8 @@ class SubsystemTicket implements systemArParams
         $this -> ticket -> addDefaultPropertyByKeys("arrTime", ["1", "1_2", "2_3", "3_4", "4_5", "5_6", "6_7", "7"], 0);
         $this -> ticket -> addDefaultPropertyByKeys("arrMess", ["2_m", "3_m", "4_m", "5_m", "6_m", "7_m", "8_m", "9_m", "10_m"], 0);
         $this -> ticket -> addAdditionalDataInto('rsTickets');
-        $this->setSystemParams("arTicketUsersID", $this -> ticket -> arTicketUsersID);
-    }
 
-    public function setSystemParams($name, $value)
-    {
-        $this->arSystemParamsTicket[$name] = $value;
-    }
-
-    public function getSystemParams($name)
-    {
-        return $this->arSystemParamsTicket[$name];
+        return  $this -> ticket -> getProperty('arTicketUsersID');
     }
 
     /**
@@ -486,12 +339,12 @@ class SubsystemSupportUser
     }
 
     /**
-     * @param $arTicketUsersID
+     * @param $arUsersID
      */
-    public function addUsers($arTicketUsersID)
+    public function addUsers($arUsersID)
     {
-        $this -> supportUser -> setArrSupportUser($arTicketUsersID);
-        $this -> supportUser -> setSupportsUsersID($arTicketUsersID);
+        $this -> supportUser -> setArrSupportUser($arUsersID);
+        $this -> supportUser -> setSupportsUsersID($arUsersID);
         $this -> supportUser -> addSupportUsers();
     }
 

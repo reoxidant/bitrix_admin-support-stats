@@ -17,6 +17,8 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
 
 require_once('classes/Facade.php');
 
+global $USER, $APPLICATION;
+
 use admin\classes\Facade;
 use admin\classes\SubsystemCAdmin;
 use admin\classes\SubsystemFilterForm;
@@ -41,19 +43,40 @@ $facade = new Facade(
     $subsystemFilterForm
 );
 
-$facade -> getSubsystemRole() -> showAuthFormByRole();
-$facade -> getSubsystemGraph() -> initGraphProperty();
+list('bAdmin' => $bAdmin, 'bDemo' => $bDemo) =  $facade -> getSubsystemRole() -> showAuthFormByRole(true);
 
-$facade -> getSubsystemCAdmin() -> initCAdminPropertyList($facade -> getSubsystemGraph()->getGraph()->getProperty("sTableID"));
+$sTableID = $facade -> getSubsystemGraph() -> getGraph() -> addProperty("sTableID", 't_report_graph', true);
 
-$facade -> getSubsystemCAdmin() -> addToPropertyCommonFilterValues();
-$facade -> getSubsystemCAdmin() -> initFilter();
-$facade -> getSubsystemCAdmin() -> addToPropertyArFilter();
-$facade -> getSubsystemCAdmin() -> recordFindList($facade -> getSubsystemRole()->getSystemParams('authRole'));
+$facade -> getSubsystemCAdmin() -> initCAdminPropertyList($sTableID);
+//проверил до точки
+$arFilterFields = $facade -> getSubsystemCAdmin() -> getAdmin() -> addArFilterFields(true);
 
-$facade -> getSubsystemTicket() -> initTicketProperty($facade -> getSubsystemCAdmin() -> getAdmin());
+$facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> InitFilter($arFilterFields);
+//проверил до точки
+if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
+InitBVar($find_responsible_exact_match);
 
-$facade -> getSubsystemSupportUser() -> addUsers($facade -> getSubsystemTicket() -> getSystemParams('arTicketUsersID'));
+$findData = [
+    "find_site" => $find_site,
+    "find_date1" => $find_date1,
+    "find_date2" => $find_date2,
+    "find_responsible_id" => $find_responsible_id,
+    "find_responsible" => $find_responsible,
+    "find_responsible_exact_match" => $find_responsible_exact_match,
+    "find_sla_id" => $find_sla_id,
+    "find_category_id" => $finds_category_id,
+    "find_criticality_id" => $find_criticality_id,
+    "find_status_id" => $find_status_id,
+    "find_mark_id" => $find_mark_id,
+    "find_source_id" => $find_source_id
+];
+
+$facade -> getSubsystemCAdmin() -> getAdmin() -> addArFilterData($findData);
+//$facade -> getSubsystemCAdmin() -> recordFindList();
+
+$arUsersID = $facade -> getSubsystemTicket() -> initTicketProperty($facade -> getSubsystemCAdmin() -> getAdmin());
+
+$facade -> getSubsystemSupportUser() -> addUsers($arUsersID);
 
 //ob_start
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> BeginCustomContent();
