@@ -72,7 +72,6 @@ $findData = [
 ];
 
 $facade -> getSubsystemCAdmin() -> getAdmin() -> addArFilterData($findData);
-//$facade -> getSubsystemCAdmin() -> recordFindList();
 
 $arUsersID = $facade -> getSubsystemTicket() -> initTicketProperty($facade -> getSubsystemCAdmin() -> getAdmin());
 
