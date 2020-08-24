@@ -183,14 +183,15 @@ class SubsystemGraph
     /**
      * @param $ticket
      * @param $admin
-     * @param $width
-     * @param $height
+     * @param $arrColorInc
+     * @param null $width
+     * @param null $height
      */
     public function createImage($ticket, $admin, $arrColorInc, $width = null, $height = null)
     {
         $this -> graph -> createImageGraph(
             $ticket -> getProperty('show_graph'), $admin -> getProperty('arFilterFields'),
-            $admin -> getProperty('lAdmin') -> getFilter() ?? ($admin -> getProperty('defaultFilterValues') ?? null),
+            $admin -> getProperty('lAdmin') -> getFilter(),
             $arrColorInc ?? null,
             $width,
             $height
