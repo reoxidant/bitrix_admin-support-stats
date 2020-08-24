@@ -47,8 +47,9 @@ list('bAdmin' => $bAdmin, 'bDemo' => $bDemo) =  $facade -> getSubsystemRole() ->
 
 $sTableID = $facade -> getSubsystemGraph() -> getGraph() -> addProperty("sTableID", 't_report_graph', true);
 
-$facade -> getSubsystemCAdmin() -> initCAdminPropertyList($sTableID);
+$defaultFilterValues = $facade -> getSubsystemCAdmin() -> initCAdminPropertyList($sTableID, true);
 //проверил до точки
+if ($facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> IsDefaultFilter()) $facade -> getSubsystemCAdmin() -> getAdmin() -> addValDefaultFilter();
 $arFilterFields = $facade -> getSubsystemCAdmin() -> getAdmin() -> addArFilterFields(true);
 
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> InitFilter($arFilterFields);
@@ -109,31 +110,25 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_ad
 
 //form
 $arFilterFormProps = [
-    "APPLICATION" => $APPLICATION,
     "filter" => $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('filter'),
-    "find_site" => $find_site,
-    "find_date1" => $find_date1,
-    "find_date2" => $find_date2,
     "bAdmin" => $bAdmin,
     "bDemo" => $bDemo,
     "arrSupportUser" => $facade -> getSubsystemSupportUser() -> getArrSupportUser(),
-    "find_responsible" => $find_responsible,
-    "find_responsible_id" => $find_responsible_id,
-    "find_responsible_exact_match" => $find_responsible_exact_match,
-    "find_criticality_id" => $find_criticality_id,
-    "find_status_id" => $find_status_id,
-    "find_mark_id" => $find_mark_id,
-    "find_source_id" => $find_source_id,
+    "sTableID" => $sTableID
+];
+
+$arFilterProps = [
     "find_open" => $find_open,
     "find_close" => $find_close,
     "find_all" => $find_all,
-    "find_sla_id" => $find_sla_id,
     "find_mess" => $find_mess,
     "find_overdue_mess" => $find_overdue_mess,
-    "find_category_id" => $find_category_id,
-    "sTableID" => $sTableID
 ];
+
+$arFilterFormProps = array_merge_recursive($arFilterFormProps, $findData, $defaultFilterValues ?? $arFilterProps);
+
 $facade -> getSubsystemFilterForm() -> initFilterFormProperty($arFilterFormProps);
+$facade -> getSubsystemFilterForm() -> createAndShowFilterForm();
 
 //ob_get_contents
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> DisplayList();

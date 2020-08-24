@@ -79,14 +79,6 @@ class Facade
     }
 
     /**
-     *
-     */
-    public function operation()
-    {
-
-    }
-
-    /**
      * @return SubsystemRole|null
      */
     public function getSubsystemRole(): ?SubsystemRole
@@ -121,7 +113,7 @@ class Facade
     /**
      * @return SubsystemSupportUser|SubsystemTicket|null
      */
-    public function getSubsystemSupportUser()
+    public function getSubsystemSupportUser(): ?SubsystemSupportUser
     {
         return $this -> subsystemSupportUser;
     }
@@ -129,7 +121,7 @@ class Facade
     /**
      * @return SubsystemFilterForm|SubsystemTicket|null
      */
-    public function getSubsystemFilterForm()
+    public function getSubsystemFilterForm(): ?SubsystemFilterForm
     {
         return $this -> subsystemFilterForm;
     }
@@ -141,6 +133,10 @@ class Facade
  */
 class SubsystemRole
 {
+    /**
+     * @param false $returnValue
+     * @return string[]
+     */
     public function showAuthFormByRole($returnValue = false)
     {
         global $APPLICATION;
@@ -151,7 +147,7 @@ class SubsystemRole
             $APPLICATION -> AuthForm(GetMessage("ACCESS_DENIED"));
         }
 
-        if($returnValue){
+        if ($returnValue) {
             return ["bAdmin" => $bAdmin, "bDemo" => $bDemo];
         }
     }
@@ -233,8 +229,9 @@ class SubsystemCAdmin
 
     /**
      * @param $sTableID
+     * @param bool $returnDefaultFilterValue
      */
-    public function initCAdminPropertyList($sTableID)
+    public function initCAdminPropertyList($sTableID, $returnDefaultFilterValue = false)
     {
         $arrMessages = array(
             GetMessage("SUP_F_SITE"),
@@ -250,6 +247,11 @@ class SubsystemCAdmin
         $this -> admin -> addProperty('oSort', new CAdminSorting($sTableID));
         $this -> admin -> addProperty('lAdmin', new CAdminList($sTableID, $this -> admin -> getProperty('oSort')));
         $this -> admin -> addProperty('filter', new CAdminList("filter_id", $arrMessages));
+        if ($this -> admin -> getProperty('lAdmin') -> IsDefaultFilter()) $this -> admin -> addValDefaultFilter();
+
+        if($returnDefaultFilterValue){
+            return $this->getAdmin() -> getProperty('defaultFilterValues') ?? null;
+        }
     }
 
     /**
@@ -304,7 +306,7 @@ class SubsystemTicket
         $this -> ticket -> addDefaultPropertyByKeys("arrMess", ["2_m", "3_m", "4_m", "5_m", "6_m", "7_m", "8_m", "9_m", "10_m"], 0);
         $this -> ticket -> addAdditionalDataInto('rsTickets');
 
-        return  $this -> ticket -> getProperty('arTicketUsersID');
+        return $this -> ticket -> getProperty('arTicketUsersID');
     }
 
     /**
@@ -354,7 +356,7 @@ class SubsystemSupportUser
      */
     public function getArrSupportUser()
     {
-        return $this -> supportUser->getArrSupportUser();
+        return $this -> supportUser -> getArrSupportUser();
     }
 }
 
