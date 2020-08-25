@@ -188,24 +188,36 @@ class FilterForm implements PropertyContainerInterface
                 <td><? echo GetMessage("SUP_F_PERIOD") . "(" . FORMAT_DATE . "):" ?></td>
                 <td><? echo $this -> createCalendarPeriod($this -> getProperty("find_date1"), $this -> getProperty("find_date2")) ?></td>
             </tr>
-            <tr valign="top">
-                <td valign="top"><?= GetMessage("SUP_F_SITE") ?>:</td>
-                <td><?= $this -> createSiteBox($this -> getProperty("find_site")); ?></td>
-            </tr>
-            <tr>
-                <td nowrap valign="top"><?= GetMessage("SUP_F_RESPONSIBLE") ?>:</td>
-                <td><?
-                    $this -> createResponsibleBox(
-                        $this -> getProperty("bAdmin"),
-                        $this -> getProperty("bDemo"),
-                        $this -> getProperty("arrSupportUser"),
-                        $this -> getProperty("find_responsible"),
-                        $this -> getProperty("find_responsible_id"),
-                        $this -> getProperty("find_responsible_exact_match")
-                    ) ?></td>
-            </tr>
+            <!--
+                <tr valign="top">
+                    <td valign="top"><?/*= GetMessage("SUP_F_SITE") */?>:</td>
+                    <td><?/*= $this -> createSiteBox($this -> getProperty("find_site")); */?></td>
+                </tr>
+
+                Сайты: В моем случае это корпоративный сайт
+            -->
+            <!--
+                <tr>
+                    <td nowrap valign="top"><?= GetMessage("SUP_F_RESPONSIBLE") ?>:</td>
+                    <td>
+                        <?
+                        /*
+                            $this -> createResponsibleBox(
+                            $this -> getProperty("bAdmin"),
+                            $this -> getProperty("bDemo"),
+                            $this -> getProperty("arrSupportUser"),
+                            $this -> getProperty("find_responsible"),
+                            $this -> getProperty("find_responsible_id"),
+                            $this -> getProperty("find_responsible_exact_match")
+                        )*/
+                        ?>
+                    </td>
+                </tr>
+
+            Ответственный: Я или кто либо еще
+            -->
             <?php
-            $dropDownData = [
+            /*$dropDownData = [
                 'find_sla_id' => ['message' => "SUP_F_SLA", "data" => $this -> getProperty("find_sla_id")],
                 'find_category_id' => ['message' => "SUP_F_CATEGORY", "data" => $this -> getProperty("find_category_id")],
                 'find_criticality_id' => ['message' => "SUP_F_CRITICALITY", "data" => $this -> getProperty("find_criticality_id")],
@@ -213,8 +225,36 @@ class FilterForm implements PropertyContainerInterface
                 'find_mark_id' => ['message' => "SUP_F_MARK", "data" => $this -> getProperty("find_mark_id")],
                 'find_source_id' => ['message' => "SUP_F_SOURCE", "data" => $this -> getProperty("find_source_id")]
             ];
-            $this -> createDropDownList($dropDownData)
+            $this -> createDropDownList($dropDownData)*/
+            /*
+             * В ряд фильтр по:
+             * Уровень поддержки
+             * Категория
+             * Критичность
+             * Статус
+             * Оценка ответа
+             * Источник
+             * */
             ?>
+
+            <tr>
+                <td>
+                    <?
+                        //TODO: need to show all statuses
+                        $ref = array(); $ref_id = array();
+                        $ref[] = GetMessage("SUP_NO"); $ref_id[] = "0";
+                        $z = CTicketDictionary::GetDropDown("S");
+                        while ($zr = $z->Fetch())
+                        {
+                            $ref[] = $zr["REFERENCE"];
+                            $ref_id[] = $zr["REFERENCE_ID"];
+                        }
+                        $arr = array("REFERENCE" => $ref, "REFERENCE_ID" => $ref_id);
+                        echo SelectBoxFromArray("find_status_id", $arr, $this -> getProperty("find_status_id"), GetMessage("SUP_ALL"));
+                    ?>
+                </td>
+            </tr>
+            <!--
             <tr valign="top">
                 <td width="0%" nowrap><?= GetMessage("SUP_SHOW") ?>:</td>
                 <td width="0%" nowrap valign="top">
@@ -245,6 +285,7 @@ class FilterForm implements PropertyContainerInterface
                     </table>
                 </td>
             </tr>
+            -->
             <? $this -> getProperty("filter") ->
             Buttons(array(
                     "table_id" => $this -> getProperty("sTableID"),
