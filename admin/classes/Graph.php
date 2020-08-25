@@ -27,14 +27,17 @@ class Graph implements PropertyContainerInterface
      * @param $name
      * @param $value
      * @param bool $returnValue
+     * @return null
      */
     public function addProperty($name, $value, $returnValue = false)
     {
         $this -> propertyContainer[$name] = $value;
 
-        if($returnValue){
+        if ($returnValue) {
             return $value;
         }
+
+        return null;
     }
 
     /**
@@ -54,14 +57,14 @@ class Graph implements PropertyContainerInterface
      * @param string $width
      * @param string $height
      */
-    public function createImageGraph($show_graph, $arFilterFields, $defaultFilterValues, $arrColor,  $width = "576", $height = "400")
+    public function createImageGraph($show_graph, $arFilterFields, $defaultFilterValues, $arrColor, $width = "576", $height = "400")
     {
         list(
-                'find_open' => $find_open,
-                'find_close' => $find_close,
-                'find_all' => $find_all,
-                'find_mess' => $find_mess,
-                'find_overdue_mess' => $find_overdue_mess
+            'find_open' => $find_open,
+            'find_close' => $find_close,
+            'find_all' => $find_all,
+            'find_mess' => $find_mess,
+            'find_overdue_mess' => $find_overdue_mess
             ) = $defaultFilterValues;
 
         if (!function_exists("ImageCreate")) : CAdminMessage :: ShowMessage(GetMessage("SUP_GD_NOT_INSTALLED"));
@@ -78,9 +81,11 @@ class Graph implements PropertyContainerInterface
                                             <tr>
                                                 <td valign="center" nowrap>
                                                     <img
-                                                    src="/bitrix/admin/ticket_graph.php?<?= GetFilterParams($arFilterFields) ?>&width=<?= $width ?>&height=<?= $height ?>&lang=<? echo LANG ?>"
-                                                    width="<?= $width ?>"
-                                                    height="<?= $height ?>">
+                                                            src="/bitrix/admin/ticket_graph.php?<?= GetFilterParams($arFilterFields) ?>&width=<?= $width ?>&height=<?= $height ?>&lang=<? echo LANG ?>"
+                                                            width="<?= $width ?>"
+                                                            height="<?= $height ?>"
+                                                            alt="graph-image"
+                                                    >
                                                 </td>
                                             </tr>
                                         </table>
@@ -95,8 +100,13 @@ class Graph implements PropertyContainerInterface
                                 <? if ($find_open == "Y"): ?>
                                     <tr>
                                         <td valign="center">
-                                            <img src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OPEN_TICKET"] ?>"
-                                                    width="45" height="2">
+                                            <img
+                                                    src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OPEN_TICKET"] ?>"
+                                                    width="45"
+                                                    height="2"
+                                                    alt="open-line-image"
+                                            >
+
                                         </td>
                                         <td nowrap><?= GetMessage("SUP_OPEN_TICKET") ?></td>
                                     </tr>
@@ -104,8 +114,13 @@ class Graph implements PropertyContainerInterface
                                 <? if ($find_close == "Y"): ?>
                                     <tr>
                                         <td valign="center">
-                                            <img src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["CLOSE_TICKET"] ?>"
-                                                    width="45" height="2">
+                                            <img
+                                                    src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["CLOSE_TICKET"] ?>"
+                                                    width="45"
+                                                    height="2"
+                                                    alt="close-line-image"
+                                            >
+
                                         </td>
                                         <td nowrap><?= GetMessage("SUP_CLOSE_TICKET") ?></td>
                                     </tr>
@@ -113,8 +128,12 @@ class Graph implements PropertyContainerInterface
                                 <? if ($find_all == "Y"): ?>
                                     <tr>
                                         <td valign="center">
-                                            <img src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["ALL_TICKET"] ?>"
-                                                 width="45" height="2">
+                                            <img
+                                                    src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["ALL_TICKET"] ?>"
+                                                    width="45"
+                                                    height="2"
+                                                    alt="all-line-image"
+                                            >
                                         </td>
                                         <td nowrap><?= GetMessage("SUP_ALL_TICKET") ?></td>
                                     </tr>
@@ -122,8 +141,12 @@ class Graph implements PropertyContainerInterface
                                 <? if ($find_mess == "Y"): ?>
                                     <tr>
                                         <td valign="center">
-                                            <img src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["MESSAGES"] ?>"
-                                                    width="45" height="2">
+                                            <img
+                                                    src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["MESSAGES"] ?>"
+                                                    width="45"
+                                                    height="2"
+                                                    alt="mess-line-image"
+                                            >
                                         </td>
                                         <td nowrap><?= GetMessage("SUP_MESSAGES") ?></td>
                                     </tr>
@@ -131,8 +154,13 @@ class Graph implements PropertyContainerInterface
                                 <? if ($find_overdue_mess == "Y"): ?>
                                     <tr>
                                         <td valign="center">
-                                            <img src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OVERDUE_MESSAGES"] ?>"
-                                                    width="45" height="2"></td>
+                                            <img
+                                                    src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OVERDUE_MESSAGES"] ?>"
+                                                    width="45"
+                                                    height="2"
+                                                    alt="overdue-mess-image"
+                                            >
+                                        </td>
                                         <td nowrap><?= GetMessage("SUP_OVERDUE_MESSAGES") ?></td>
                                     </tr>
                                 <? endif; ?>

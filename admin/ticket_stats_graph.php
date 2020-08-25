@@ -43,7 +43,7 @@ $facade = new Facade(
     $subsystemFilterForm
 );
 
-list('bAdmin' => $bAdmin, 'bDemo' => $bDemo) =  $facade -> getSubsystemRole() -> showAuthFormByRole(true);
+list('bAdmin' => $bAdmin, 'bDemo' => $bDemo) = $facade -> getSubsystemRole() -> showAuthFormByRole(true);
 
 $sTableID = $facade -> getSubsystemGraph() -> getGraph() -> addProperty("sTableID", 't_report_graph', true);
 
@@ -93,7 +93,7 @@ $facade -> getSubsystemCAdmin() -> showErrorMessageIfExist(); ?>
 
 //Image
 $facade -> getSubsystemGraph() -> createImage(
-    $facade->getSubsystemTicket()->getTicket(),
+    $facade -> getSubsystemTicket() -> getTicket(),
     $facade -> getSubsystemCAdmin() -> getAdmin(),
     $arrColor,
     "576",

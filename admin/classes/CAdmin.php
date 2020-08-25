@@ -13,13 +13,26 @@ use CAdminMessage;
 
 require_once('PropertyContainerInterface.php');
 
+/**
+ * Class CAdmin
+ * @package admin\classes
+ */
 class CAdmin implements PropertyContainerInterface
 {
 
+    /**
+     * @var array
+     */
     private $propertyContainer = [];
 
+    /**
+     * @var
+     */
     public $error;
 
+    /**
+     *
+     */
     public function addValDefaultFilter()
     {
         $this -> propertyContainer['defaultFilterValues'] = [
@@ -33,6 +46,10 @@ class CAdmin implements PropertyContainerInterface
         ];
     }
 
+    /**
+     * @param false $returnValue
+     * @return mixed|null
+     */
     public function addArFilterFields($returnValue = false)
     {
         $this -> propertyContainer['arFilterFields'] = [
@@ -55,9 +72,11 @@ class CAdmin implements PropertyContainerInterface
             "find_overdue_mess"
         ];
 
-        if($returnValue){
+        if ($returnValue) {
             return $this -> getProperty("arFilterFields");
         }
+
+        return null;
     }
 
     /** @noinspection PhpDeprecationInspection */
@@ -93,6 +112,9 @@ class CAdmin implements PropertyContainerInterface
         return true;
     }
 
+    /**
+     * @param $data_filter
+     */
     public function addArFilterData($data_filter)
     {
         global $APPLICATION;
@@ -108,8 +130,8 @@ class CAdmin implements PropertyContainerInterface
             'find_criticality_id' => $find_criticality_id,
             'find_status_id' => $find_status_id,
             'find_mark_id' => $find_mark_id,
-            'find_source_id' =>   $find_source_id
-        ) = $data_filter;
+            'find_source_id' => $find_source_id
+            ) = $data_filter;
 
         $arFilter = array(
             "SITE" => $find_site,
@@ -130,15 +152,23 @@ class CAdmin implements PropertyContainerInterface
             $this -> propertyContainer['arFilter'] = $arFilter;
         } else {
             if ($e = $APPLICATION -> GetException())
-                $this->error = new CAdminMessage(GetMessage("SUP_FILTER_ERROR"), $e);
+                $this -> error = new CAdminMessage(GetMessage("SUP_FILTER_ERROR"), $e);
         }
     }
 
+    /**
+     * @param $name
+     * @param $value
+     */
     public function addProperty($name, $value)
     {
         $this -> propertyContainer[$name] = $value;
     }
 
+    /**
+     * @param $name
+     * @return mixed|null
+     */
     public function getProperty($name)
     {
         return $this -> propertyContainer[$name] ?? null;

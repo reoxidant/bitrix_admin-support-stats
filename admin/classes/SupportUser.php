@@ -10,8 +10,15 @@ namespace admin\classes;
 
 use CUser;
 
+/**
+ * Class SupportUser
+ * @package admin\classes
+ */
 class SupportUser
 {
+    /**
+     * @var
+     */
     private $arrSupportUser;
     /**
      * @var array
@@ -22,18 +29,26 @@ class SupportUser
      */
     private $strUsers;
 
-    public function addSupportUsers(){
+    /**
+     *
+     */
+    public function addSupportUsers()
+    {
         $titleId = "ID";
         $order = "asc";
-        $rs = CUser :: GetList($titleId, $order, array("ID" => $this->strUsers), array("FIELDS" => array("NAME", "LAST_NAME", "LOGIN", "ID")));
+        $rs = CUser :: GetList($titleId, $order, array("ID" => $this -> strUsers), array("FIELDS" => array("NAME", "LAST_NAME", "LOGIN", "ID")));
         while ($ar = $rs -> Fetch()) {
-            $this->arrSupportUser[$ar["ID"]] = $ar;
+            $this -> arrSupportUser[$ar["ID"]] = $ar;
         }
     }
 
-    public function setSupportsUsersID($arUsersID){
-        $this->arUsersID = array_unique($arUsersID);
-        $this->strUsers = implode("|", $arUsersID);
+    /**
+     * @param $arUsersID
+     */
+    public function setSupportsUsersID($arUsersID)
+    {
+        $this -> arUsersID = array_unique($arUsersID);
+        $this -> strUsers = implode("|", $arUsersID);
     }
 
     /**
