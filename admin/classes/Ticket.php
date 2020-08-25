@@ -87,14 +87,6 @@ class Ticket implements PropertyContainerInterface
     }
 
     /**
-     *
-     */
-    public function getAllProperties()
-    {
-        return $this -> propertyContainer ?? null;
-    }
-
-    /**
      * @param $propName
      */
     public function addAdditionalDataInto($propName)

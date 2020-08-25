@@ -14,6 +14,7 @@ require_once('Ticket.php');
 require_once('SupportUser.php');
 require_once('FilterForm.php');
 
+use CAdminFilter;
 use CAdminList;
 use CAdminSorting;
 use CTicket;
@@ -150,6 +151,8 @@ class SubsystemRole
         if ($returnValue) {
             return ["bAdmin" => $bAdmin, "bDemo" => $bDemo];
         }
+
+        return null;
     }
 }
 
@@ -167,7 +170,6 @@ class SubsystemGraph
     /**
      * SubsystemGraph constructor.
      * @param Graph|null $graph
-     * @param $arrColor
      */
     public function __construct(
         Graph $graph = null
@@ -230,6 +232,7 @@ class SubsystemCAdmin
     /**
      * @param $sTableID
      * @param bool $returnDefaultFilterValue
+     * @return mixed|null
      */
     public function initCAdminPropertyList($sTableID, $returnDefaultFilterValue = false)
     {
@@ -246,12 +249,14 @@ class SubsystemCAdmin
         );
         $this -> admin -> addProperty('oSort', new CAdminSorting($sTableID));
         $this -> admin -> addProperty('lAdmin', new CAdminList($sTableID, $this -> admin -> getProperty('oSort')));
-        $this -> admin -> addProperty('filter', new CAdminList("filter_id", $arrMessages));
+        $this -> admin -> addProperty('filter', new CAdminFilter("filter_id", $arrMessages));
         if ($this -> admin -> getProperty('lAdmin') -> IsDefaultFilter()) $this -> admin -> addValDefaultFilter();
 
-        if($returnDefaultFilterValue){
-            return $this->getAdmin() -> getProperty('defaultFilterValues') ?? null;
+        if ($returnDefaultFilterValue) {
+            return $this -> getAdmin() -> getProperty('defaultFilterValues') ?? null;
         }
+
+        return null;
     }
 
     /**
@@ -298,6 +303,8 @@ class SubsystemTicket
 
     /**
      * @param $admin
+     * @return mixed|null
+     * @return mixed|null
      */
     public function initTicketProperty($admin)
     {
@@ -332,7 +339,6 @@ class SubsystemSupportUser
     /**
      * SubsystemSupportUser constructor.
      * @param SupportUser|null $supportUser
-     * @param $ticket
      */
     public function __construct(
         SupportUser $supportUser = null
@@ -385,7 +391,7 @@ class SubsystemFilterForm
     /**
      * @param $arrayProps
      */
-    public function initFilterFormProperty($arrayProps)
+    private function initFilterFormProperty($arrayProps)
     {
         foreach ($arrayProps as $key => $prop) {
             $this -> filterForm -> addProperty($key, $prop ?? null);
@@ -393,10 +399,11 @@ class SubsystemFilterForm
     }
 
     /**
-     *
+     * @param $arFilterFormProps
      */
-    public function createAndShowFilterForm()
+    public function createAndShowFilterForm($arFilterFormProps)
     {
+        $this -> initFilterFormProperty($arFilterFormProps);
         $this -> filterForm -> generateFilterForm();
     }
 }

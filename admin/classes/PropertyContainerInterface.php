@@ -8,9 +8,22 @@
 
 namespace admin\classes;
 
+/**
+ * Interface PropertyContainerInterface
+ * @package admin\classes
+ */
 interface PropertyContainerInterface
 {
+    /**
+     * @param $name
+     * @param $value
+     * @return mixed
+     */
     function addProperty($name, $value);
 
+    /**
+     * @param $name
+     * @return mixed
+     */
     function getProperty($name);
 }

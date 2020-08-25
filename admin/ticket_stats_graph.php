@@ -43,23 +43,23 @@ $facade = new Facade(
     $subsystemFilterForm
 );
 
-list('bAdmin' => $bAdmin, 'bDemo' => $bDemo) =  $facade -> getSubsystemRole() -> showAuthFormByRole(true);
+list('bAdmin' => $bAdmin, 'bDemo' => $bDemo) = $facade -> getSubsystemRole() -> showAuthFormByRole(true);
 
 $sTableID = $facade -> getSubsystemGraph() -> getGraph() -> addProperty("sTableID", 't_report_graph', true);
 
 $defaultFilterValues = $facade -> getSubsystemCAdmin() -> initCAdminPropertyList($sTableID, true);
-//проверил до точки
+
 if ($facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> IsDefaultFilter()) $facade -> getSubsystemCAdmin() -> getAdmin() -> addValDefaultFilter();
 $arFilterFields = $facade -> getSubsystemCAdmin() -> getAdmin() -> addArFilterFields(true);
 
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> InitFilter($arFilterFields);
-//проверил до точки
+
 if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
 InitBVar($find_responsible_exact_match);
 
 $findData = [
     "find_site" => $find_site,
-    "find_date1" => $find_date1,
+    "find_date1" => $find_date1 ?? date('d.m.Y', strtotime("-30 day")),
     "find_date2" => $find_date2,
     "find_responsible_id" => $find_responsible_id,
     "find_responsible" => $find_responsible,
@@ -93,7 +93,7 @@ $facade -> getSubsystemCAdmin() -> showErrorMessageIfExist(); ?>
 
 //Image
 $facade -> getSubsystemGraph() -> createImage(
-    $facade->getSubsystemTicket()->getTicket(),
+    $facade -> getSubsystemTicket() -> getTicket(),
     $facade -> getSubsystemCAdmin() -> getAdmin(),
     $arrColor,
     "576",
@@ -127,8 +127,7 @@ $arFilterProps = [
 
 $arFilterFormProps = array_merge_recursive($arFilterFormProps, $findData, $defaultFilterValues ?? $arFilterProps);
 
-$facade -> getSubsystemFilterForm() -> initFilterFormProperty($arFilterFormProps);
-$facade -> getSubsystemFilterForm() -> createAndShowFilterForm();
+$facade -> getSubsystemFilterForm() -> createAndShowFilterForm($arFilterFormProps);
 
 //ob_get_contents
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> DisplayList();
