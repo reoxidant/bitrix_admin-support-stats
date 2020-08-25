@@ -187,35 +187,35 @@ class FilterForm implements PropertyContainerInterface
         <form name="form1" method="GET" action="<?= $APPLICATION -> GetCurPage() ?>?">
             <? $this -> getProperty('filter') -> Begin(); ?>
             <tr>
-                <td><? echo GetMessage("SUP_F_PERIOD")."(".FORMAT_DATE."):" ?></td>
-                <td><? echo $this->createCalendarPeriod($this->getProperty("find_date1"), $this->getProperty("find_date2"))  ?></td>
+                <td><? echo GetMessage("SUP_F_PERIOD") . "(" . FORMAT_DATE . "):" ?></td>
+                <td><? echo $this -> createCalendarPeriod($this -> getProperty("find_date1"), $this -> getProperty("find_date2")) ?></td>
             </tr>
             <tr valign="top">
-                <td valign="top"><?= GetMessage("SUP_F_SITE")  ?>:</td>
-                <td><?= $this->createSiteBox( $this->getProperty("find_site")); ?></td>
+                <td valign="top"><?= GetMessage("SUP_F_SITE") ?>:</td>
+                <td><?= $this -> createSiteBox($this -> getProperty("find_site")); ?></td>
             </tr>
             <tr>
                 <td nowrap valign="top"><?= GetMessage("SUP_F_RESPONSIBLE") ?>:</td>
                 <td><?
-                    $this->createResponsibleBox(
-                        $this->getProperty("bAdmin"),
-                        $this->getProperty("bDemo"),
-                        $this->getProperty("arrSupportUser"),
-                        $this->getProperty("find_responsible"),
-                        $this->getProperty("find_responsible_id"),
-                        $this->getProperty("find_responsible_exact_match")
-                   ) ?></td>
+                    $this -> createResponsibleBox(
+                        $this -> getProperty("bAdmin"),
+                        $this -> getProperty("bDemo"),
+                        $this -> getProperty("arrSupportUser"),
+                        $this -> getProperty("find_responsible"),
+                        $this -> getProperty("find_responsible_id"),
+                        $this -> getProperty("find_responsible_exact_match")
+                    ) ?></td>
             </tr>
             <?php
-                $dropDownData = [
-                                'find_sla_id' => ['message' => "SUP_F_SLA", "data" => $this->getProperty("find_sla_id")],
-                                'find_category_id' => ['message' => "SUP_F_CATEGORY", "data" => $this->getProperty("find_category_id")],
-                                'find_criticality_id'=> ['message' => "SUP_F_CRITICALITY", "data" => $this->getProperty("find_criticality_id")],
-                                'find_status_id'=> ['message' => "SUP_F_STATUS", "data" => $this->getProperty("find_status_id")],
-                                'find_mark_id'=> ['message' => "SUP_F_MARK", "data" => $this->getProperty("find_mark_id")],
-                                'find_source_id'=> ['message' => "SUP_F_SOURCE", "data" => $this->getProperty("find_source_id")]
-                            ];
-                $this->createDropDownList($dropDownData)
+            $dropDownData = [
+                'find_sla_id' => ['message' => "SUP_F_SLA", "data" => $this -> getProperty("find_sla_id")],
+                'find_category_id' => ['message' => "SUP_F_CATEGORY", "data" => $this -> getProperty("find_category_id")],
+                'find_criticality_id' => ['message' => "SUP_F_CRITICALITY", "data" => $this -> getProperty("find_criticality_id")],
+                'find_status_id' => ['message' => "SUP_F_STATUS", "data" => $this -> getProperty("find_status_id")],
+                'find_mark_id' => ['message' => "SUP_F_MARK", "data" => $this -> getProperty("find_mark_id")],
+                'find_source_id' => ['message' => "SUP_F_SOURCE", "data" => $this -> getProperty("find_source_id")]
+            ];
+            $this -> createDropDownList($dropDownData)
             ?>
             <tr valign="top">
                 <td width="0%" nowrap><?= GetMessage("SUP_SHOW") ?>:</td>
@@ -228,15 +228,15 @@ class FilterForm implements PropertyContainerInterface
                                         <td valign="top">
                                             <table cellpadding="3" cellspacing="1" border="0">
                                                 <?
-                                                    $checkBoxData = [
-                                                          "find_open" => ['message' => "SUP_OPEN_TICKET", 'data' => $this->getProperty("find_open")],
-                                                          "find_close" => ['message' => "SUP_CLOSE_TICKET", 'data' => $this->getProperty("find_close")],
-                                                          "find_all" => ['message' => "SUP_ALL_TICKET", 'data' =>  $this->getProperty("find_all")],
-                                                          "find_mess" => ['message' => "SUP_MESSAGES", 'data' => $this->getProperty("find_mess")],
-                                                          "find_overdue_mess" => ['message' => "SUP_OVERDUE_MESSAGES", 'data' => $this->getProperty("find_overdue_mess")],
-                                                    ];
+                                                $checkBoxData = [
+                                                    "find_open" => ['message' => "SUP_OPEN_TICKET", 'data' => $this -> getProperty("find_open")],
+                                                    "find_close" => ['message' => "SUP_CLOSE_TICKET", 'data' => $this -> getProperty("find_close")],
+                                                    "find_all" => ['message' => "SUP_ALL_TICKET", 'data' => $this -> getProperty("find_all")],
+                                                    "find_mess" => ['message' => "SUP_MESSAGES", 'data' => $this -> getProperty("find_mess")],
+                                                    "find_overdue_mess" => ['message' => "SUP_OVERDUE_MESSAGES", 'data' => $this -> getProperty("find_overdue_mess")],
+                                                ];
 
-                                                    $this->createCheckBoxList($checkBoxData);
+                                                $this -> createCheckBoxList($checkBoxData);
                                                 ?>
                                             </table>
                                         </td>
