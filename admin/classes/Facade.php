@@ -14,6 +14,7 @@ require_once('Ticket.php');
 require_once('SupportUser.php');
 require_once('FilterForm.php');
 
+use CAdminFilter;
 use CAdminList;
 use CAdminSorting;
 use CTicket;
@@ -246,7 +247,7 @@ class SubsystemCAdmin
         );
         $this -> admin -> addProperty('oSort', new CAdminSorting($sTableID));
         $this -> admin -> addProperty('lAdmin', new CAdminList($sTableID, $this -> admin -> getProperty('oSort')));
-        $this -> admin -> addProperty('filter', new CAdminList("filter_id", $arrMessages));
+        $this -> admin -> addProperty('filter', new CAdminFilter("filter_id", $arrMessages));
         if ($this -> admin -> getProperty('lAdmin') -> IsDefaultFilter()) $this -> admin -> addValDefaultFilter();
 
         if($returnDefaultFilterValue){
@@ -385,7 +386,7 @@ class SubsystemFilterForm
     /**
      * @param $arrayProps
      */
-    public function initFilterFormProperty($arrayProps)
+    private function initFilterFormProperty($arrayProps)
     {
         foreach ($arrayProps as $key => $prop) {
             $this -> filterForm -> addProperty($key, $prop ?? null);
@@ -393,10 +394,11 @@ class SubsystemFilterForm
     }
 
     /**
-     *
+     * @param $arFilterFormProps
      */
-    public function createAndShowFilterForm()
+    public function createAndShowFilterForm($arFilterFormProps)
     {
+        $this -> initFilterFormProperty($arFilterFormProps);
         $this -> filterForm -> generateFilterForm();
     }
 }

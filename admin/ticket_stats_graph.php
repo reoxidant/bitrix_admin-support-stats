@@ -127,8 +127,7 @@ $arFilterProps = [
 
 $arFilterFormProps = array_merge_recursive($arFilterFormProps, $findData, $defaultFilterValues ?? $arFilterProps);
 
-$facade -> getSubsystemFilterForm() -> initFilterFormProperty($arFilterFormProps);
-$facade -> getSubsystemFilterForm() -> createAndShowFilterForm();
+$facade -> getSubsystemFilterForm() -> createAndShowFilterForm($arFilterFormProps);
 
 //ob_get_contents
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> DisplayList();
