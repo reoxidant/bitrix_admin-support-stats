@@ -175,8 +175,6 @@ class FilterForm implements PropertyContainerInterface
         <? }
     }
 
-    //TODO: check working the filter form
-
     /**
      *
      */
