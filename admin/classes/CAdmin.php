@@ -36,13 +36,14 @@ class CAdmin implements PropertyContainerInterface
     public function addValDefaultFilter()
     {
         $this -> propertyContainer['defaultFilterValues'] = [
-            'find_date1_DAYS_TO_BACK' => 1,
+            'find_date1' => date('d.m.Y', strtotime("-30 day")),
             'find_open' => "Y",
             'find_close' => "Y",
             "find_all" => "Y",
             'find_mess' => "Y",
             'find_overdue_mess' => "Y",
-            'set_filter' => "Y"
+            'set_filter' => "Y",
+            "find_category_id" => 20
         ];
     }
 
@@ -154,6 +155,29 @@ class CAdmin implements PropertyContainerInterface
             if ($e = $APPLICATION -> GetException())
                 $this -> error = new CAdminMessage(GetMessage("SUP_FILTER_ERROR"), $e);
         }
+    }
+
+    public function IsDefaultFilter($sTableID = "t_report_graph")
+    {
+        $set_default = (!is_set($_REQUEST, "find_forum") ? (empty($_SESSION["SESS_STATS"]["LAST_TOPICS_LIST"]) ? "Y" : "N") : "N");;
+        return $set_default=="Y" && (!isset($_SESSION["SESS_ADMIN"][$sTableID]) || empty($_SESSION["SESS_STATS"][$sTableID]));
+    }
+
+    public function InitFilter($arName, $sTableID = "t_report_graph")
+    {
+        $FILTER = $_SESSION["SESS_STATS"][$sTableID];
+
+        foreach ($arName as $name)
+        {
+            global $$name;
+
+            if(isset($$name))
+                $FILTER[$name] = $$name;
+            else
+                $$name = $FILTER[$name];
+        }
+
+        $_SESSION["SESS_STATS"][$sTableID] = $FILTER;
     }
 
     /**
