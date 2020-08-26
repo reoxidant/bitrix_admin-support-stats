@@ -49,22 +49,6 @@ class FilterForm implements PropertyContainerInterface
             </tr>
             <tr>
                 <td nowrap>
-                    <?=GetMessage("SUP_F_CATEGORY")?>:</td>
-                <td><?
-                    $ref = array(); $ref_id = array();
-                    $ref[] = GetMessage("SUP_NO"); $ref_id[] = "0";
-                    $z = CTicketDictionary::GetDropDown("C");
-                    while ($zr = $z->Fetch())
-                    {
-                        $ref[] = $zr["REFERENCE"];
-                        $ref_id[] = $zr["REFERENCE_ID"];
-                    }
-                    $arr = array("REFERENCE" => $ref, "REFERENCE_ID" => $ref_id);
-                    echo SelectBoxFromArray("find_category_id", $arr,$this -> getProperty("find_category_id") , GetMessage("SUP_ALL"));
-                    ?></td>
-            </tr>
-            <tr>
-                <td nowrap>
                     <?=GetMessage("SUP_F_STATUS")?>:</td>
                 <td><?
                     $ref = array(); $ref_id = array();
