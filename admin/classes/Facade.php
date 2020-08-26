@@ -184,6 +184,7 @@ class SubsystemGraph
      * @param $arrColorInc
      * @param null $width
      * @param null $height
+     * @param null $arFilterParam
      */
     public function createImage($ticket, $admin, $arrColorInc, $width = null, $height = null)
     {
@@ -250,7 +251,9 @@ class SubsystemCAdmin
         $this -> admin -> addProperty('oSort', new CAdminSorting($sTableID));
         $this -> admin -> addProperty('lAdmin', new CAdminList($sTableID, $this -> admin -> getProperty('oSort')));
         $this -> admin -> addProperty('filter', new CAdminFilter("filter_id", $arrMessages));
-        if ($this -> admin -> getProperty('lAdmin') -> IsDefaultFilter()) $this -> admin -> addValDefaultFilter();
+        if ($this -> admin -> IsDefaultFilter()):
+            $this -> admin -> addValDefaultFilter();
+        endif;
 
         if ($returnDefaultFilterValue) {
             return $this -> getAdmin() -> getProperty('defaultFilterValues') ?? null;
