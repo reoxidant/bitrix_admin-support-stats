@@ -10,6 +10,7 @@ namespace admin\classes;
 
 use CSite;
 use CTicket;
+use CTicketDictionary;
 use CTicketSLA;
 
 /**
@@ -201,16 +202,16 @@ class FilterForm implements PropertyContainerInterface
                     <td nowrap valign="top"><?= GetMessage("SUP_F_RESPONSIBLE") ?>:</td>
                     <td>
                         <?
-                        /*
-                            $this -> createResponsibleBox(
-                            $this -> getProperty("bAdmin"),
-                            $this -> getProperty("bDemo"),
-                            $this -> getProperty("arrSupportUser"),
-                            $this -> getProperty("find_responsible"),
-                            $this -> getProperty("find_responsible_id"),
-                            $this -> getProperty("find_responsible_exact_match")
-                        )*/
-                        ?>
+            /*
+                $this -> createResponsibleBox(
+                $this -> getProperty("bAdmin"),
+                $this -> getProperty("bDemo"),
+                $this -> getProperty("arrSupportUser"),
+                $this -> getProperty("find_responsible"),
+                $this -> getProperty("find_responsible_id"),
+                $this -> getProperty("find_responsible_exact_match")
+            )*/
+            ?>
                     </td>
                 </tr>
 
@@ -236,25 +237,22 @@ class FilterForm implements PropertyContainerInterface
              * Источник
              * */
             ?>
-
             <tr>
-                <td>
-                    <?
-                        //TODO: need to show all statuses
-                        $ref = array(); $ref_id = array();
-                        $ref[] = GetMessage("SUP_NO"); $ref_id[] = "0";
-                        $z = CTicketDictionary::GetDropDown("S");
-                        while ($zr = $z->Fetch())
-                        {
-                            $ref[] = $zr["REFERENCE"];
-                            $ref_id[] = $zr["REFERENCE_ID"];
-                        }
-                        $arr = array("REFERENCE" => $ref, "REFERENCE_ID" => $ref_id);
-                        echo SelectBoxFromArray("find_status_id", $arr, $this -> getProperty("find_status_id"), GetMessage("SUP_ALL"));
-                    ?>
-                </td>
+                <td nowrap>
+                    <?=GetMessage("SUP_F_STATUS")?>:</td>
+                <td><?
+                    $ref = array(); $ref_id = array();
+                    $ref[] = GetMessage("SUP_NO"); $ref_id[] = "0";
+                    $z = CTicketDictionary::GetDropDown("S");
+                    while ($zr = $z->Fetch())
+                    {
+                        $ref[] = $zr["REFERENCE"];
+                        $ref_id[] = $zr["REFERENCE_ID"];
+                    }
+                    $arr = array("REFERENCE" => $ref, "REFERENCE_ID" => $ref_id);
+                    echo SelectBoxFromArray("find_status_id", $arr, $this -> getProperty("find_status_id"), GetMessage("SUP_ALL"));
+                    ?></td>
             </tr>
-            <!--
             <tr valign="top">
                 <td width="0%" nowrap><?= GetMessage("SUP_SHOW") ?>:</td>
                 <td width="0%" nowrap valign="top">
@@ -285,7 +283,6 @@ class FilterForm implements PropertyContainerInterface
                     </table>
                 </td>
             </tr>
-            -->
             <? $this -> getProperty("filter") ->
             Buttons(array(
                     "table_id" => $this -> getProperty("sTableID"),

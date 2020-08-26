@@ -59,7 +59,7 @@ InitBVar($find_responsible_exact_match);
 
 $findData = [
     "find_site" => $find_site,
-    "find_date1" => $find_date1 ?? date('d.m.Y', strtotime("-30 day")),
+    "find_date1" => $find_date1 ? $find_date1 : date('d.m.Y', strtotime("-30 day")),
     "find_date2" => $find_date2,
     "find_responsible_id" => $find_responsible_id,
     "find_responsible" => $find_responsible,
