@@ -110,6 +110,7 @@ $facade -> getSubsystemGraph() -> createImage(
     $facade -> getSubsystemTicket() -> getTicket(),
     $facade -> getSubsystemCAdmin() -> getAdmin(),
     $arrColor,
+    $defaultFilterValues,
     "576",
     "400"
 );
