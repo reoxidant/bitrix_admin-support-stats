@@ -31,23 +31,6 @@ class CAdmin implements PropertyContainerInterface
     public $error;
 
     /**
-     *
-     */
-    public function addValDefaultFilter()
-    {
-        $this -> propertyContainer['defaultFilterValues'] = [
-            'find_date1' => date('d.m.Y', strtotime("-30 day")),
-            'find_open' => "Y",
-            'find_close' => "Y",
-            "find_all" => "Y",
-            'find_mess' => "Y",
-            'find_overdue_mess' => "Y",
-            'set_filter' => "Y",
-            "find_category_id" => 20
-        ];
-    }
-
-    /**
      * @param false $returnValue
      * @return mixed|null
      */

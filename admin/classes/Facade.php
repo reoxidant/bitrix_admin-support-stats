@@ -235,7 +235,7 @@ class SubsystemCAdmin
      * @param bool $returnDefaultFilterValue
      * @return mixed|null
      */
-    public function initCAdminPropertyList($sTableID, $returnDefaultFilterValue = false)
+    public function initCAdminPropertyList($sTableID)
     {
         $arrMessages = array(
             GetMessage("SUP_F_SITE"),
@@ -251,15 +251,6 @@ class SubsystemCAdmin
         $this -> admin -> addProperty('oSort', new CAdminSorting($sTableID));
         $this -> admin -> addProperty('lAdmin', new CAdminList($sTableID, $this -> admin -> getProperty('oSort')));
         $this -> admin -> addProperty('filter', new CAdminFilter("filter_id", $arrMessages));
-        if ($this -> admin -> IsDefaultFilter()):
-            $this -> admin -> addValDefaultFilter();
-        endif;
-
-        if ($returnDefaultFilterValue) {
-            return $this -> getAdmin() -> getProperty('defaultFilterValues') ?? null;
-        }
-
-        return null;
     }
 
     /**

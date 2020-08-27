@@ -47,9 +47,23 @@ list('bAdmin' => $bAdmin, 'bDemo' => $bDemo) = $facade -> getSubsystemRole() -> 
 
 $sTableID = $facade -> getSubsystemGraph() -> getGraph() -> addProperty("sTableID", 't_report_graph', true);
 
-$defaultFilterValues = $facade -> getSubsystemCAdmin() -> initCAdminPropertyList($sTableID, true);
+$facade -> getSubsystemCAdmin() -> initCAdminPropertyList($sTableID);
 
-if ($facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> IsDefaultFilter()) $facade -> getSubsystemCAdmin() -> getAdmin() -> addValDefaultFilter();
+if ($facade -> getSubsystemCAdmin() -> getAdmin() -> IsDefaultFilter()):
+    $defaultFilterValues = [
+        'find_date1' => date('d.m.Y', strtotime("-30 day")),
+        'find_open' => "Y",
+        'find_close' => "Y",
+        "find_all" => "Y",
+        'find_mess' => "Y",
+        'find_overdue_mess' => "Y",
+        'set_filter' => "Y",
+        "find_category_id" => 20
+    ];
+else:
+    $defaultFilterValues = null;
+endif;
+
 $arFilterFields = $facade -> getSubsystemCAdmin() -> getAdmin() -> addArFilterFields(true);
 
 $facade -> getSubsystemCAdmin() -> getAdmin() -> InitFilter($arFilterFields);
@@ -57,25 +71,15 @@ $facade -> getSubsystemCAdmin() -> getAdmin() -> InitFilter($arFilterFields);
 if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
 InitBVar($find_responsible_exact_match);
 
-list(
-    "find_date1" => $find_date1_default,
-    "find_open" => $find_open_default,
-    "find_close" => $find_close_default,
-    "find_all" => $find_all_default,
-    "find_mess" => $find_mess_default,
-    "find_overdue_mess" => $find_overdue_mess_default,
-    "find_category_id" => $find_category_id_default
-) = $defaultFilterValues;
-
 $findData = [
     "find_site" => $find_site,
-    "find_date1" => $find_date1_default ?? $find_date1,
+    "find_date1" => $defaultFilterValues['find_date1'] ?? $find_date1,
     "find_date2" => $find_date2,
     "find_responsible_id" => $find_responsible_id,
     "find_responsible" => $find_responsible,
     "find_responsible_exact_match" => $find_responsible_exact_match,
     "find_sla_id" => $find_sla_id,
-    "find_category_id" => $find_category_id_default ?? $find_category_id,
+    "find_category_id" =>  $defaultFilterValues['find_category_id'] ?? $find_category_id,
     "find_criticality_id" => $find_criticality_id,
     "find_status_id" => $find_status_id,
     "find_mark_id" => $find_mark_id,
@@ -128,11 +132,11 @@ $arFilterFormProps = [
 ];
 
 $arFilterProps = [
-    "find_open" => $find_open_default ?? $find_open,
-    "find_close" => $find_close_default  ?? $find_close,
-    "find_all" => $find_all_default ?? $find_all,
-    "find_mess" => $find_mess_default ?? $find_mess,
-    "find_overdue_mess" => $find_overdue_mess_default ?? $find_overdue_mess,
+    "find_open" => $defaultFilterValues['find_open'] ?? $find_open,
+    "find_close" => $defaultFilterValues['find_close']  ?? $find_close,
+    "find_all" => $defaultFilterValues['find_all'] ?? $find_all,
+    "find_mess" => $defaultFilterValues['find_mess'] ?? $find_mess,
+    "find_overdue_mess" => $defaultFilterValues['find_overdue_mess']  ?? $find_overdue_mess,
 ];
 
 $arFilterFormProps = array_merge_recursive($arFilterFormProps, $findData, $arFilterProps);
