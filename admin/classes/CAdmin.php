@@ -143,7 +143,7 @@ class CAdmin implements PropertyContainerInterface
     public function IsDefaultFilter($sTableID = "t_report_graph")
     {
         $set_default = (!is_set($_REQUEST, "find_forum") ? (empty($_SESSION["SESS_STATS"]["LAST_TOPICS_LIST"]) ? "Y" : "N") : "N");;
-        return $set_default=="Y" && (!isset($_SESSION["SESS_ADMIN"][$sTableID]) || empty($_SESSION["SESS_STATS"][$sTableID]));
+        return $set_default=="Y" && (!isset($_SESSION["SESS_STATS"][$sTableID]) || empty($_SESSION["SESS_STATS"][$sTableID]));
     }
 
     public function InitFilter($arName, $sTableID = "t_report_graph")

@@ -185,13 +185,14 @@ class SubsystemGraph
      * @param $defaultArFilter
      * @param null $width
      * @param null $height
+     * @throws \Protobuf\Exception
      */
     public function createImage($ticket, $admin, $arrColorInc, $defaultArFilter, $width = null, $height = null)
     {
         $this -> graph -> createImageGraph(
             $ticket -> getProperty('show_graph'),
             $admin -> getProperty('arFilterFields'),
-            $admin -> getProperty('lAdmin') -> getFilter() ?? $defaultArFilter,
+            ["user" => $admin -> getProperty('lAdmin') -> getFilter(), "default" => $defaultArFilter],
             $arrColorInc ?? null,
             $width,
             $height

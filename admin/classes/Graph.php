@@ -95,6 +95,7 @@ class Graph implements PropertyContainerInterface
      * @param $arrColor
      * @param string $width
      * @param string $height
+     * @throws Exception
      */
     public function createImageGraph($show_graph, $arFilterFields, $arFilter, $arrColor, $width = "576", $height = "400")
     {
@@ -104,7 +105,7 @@ class Graph implements PropertyContainerInterface
             'find_all' => $find_all,
             'find_mess' => $find_mess,
             'find_overdue_mess' => $find_overdue_mess
-            ) = $arFilter;
+        ) = ($arFilter['user'] == null) ? $arFilter['default'] : $arFilter['user'];
 
         if (!function_exists("ImageCreate")) : CAdminMessage :: ShowMessage(GetMessage("SUP_GD_NOT_INSTALLED"));
         elseif
@@ -120,7 +121,7 @@ class Graph implements PropertyContainerInterface
                                             <tr>
                                                 <td valign="center" nowrap>
                                                     <img
-                                                            src="/bitrix/admin/ticket_graph.php?<?= ($arFilter ?? null) ? $this->getFilterParams($arFilter) : GetFilterParams($arFilterFields) ?>&width=<?= $width ?>&height=<?= $height ?>&lang=<? echo LANG ?>"
+                                                            src="/bitrix/admin/ticket_graph.php?<?= ($arFilter['default']) ? $this->getFilterParams($arFilter['default']) : GetFilterParams($arFilterFields) ?>&width=<?= $width ?>&height=<?= $height ?>&lang=<? echo LANG ?>"
                                                             width="<?= $width ?>"
                                                             height="<?= $height ?>"
                                                             alt="graph-image"
