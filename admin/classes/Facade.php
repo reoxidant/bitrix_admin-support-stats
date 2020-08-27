@@ -182,17 +182,18 @@ class SubsystemGraph
      * @param $ticket
      * @param $admin
      * @param $arrColorInc
-     * @param $defaultArFilter
+     * @param $imageArFilter
      * @param null $width
      * @param null $height
      * @throws \Protobuf\Exception
      */
-    public function createImage($ticket, $admin, $arrColorInc, $defaultArFilter, $width = null, $height = null)
+    public function createImage($ticket, $admin, $arrColorInc, $imageArFilter, $width = null, $height = null)
     {
-        $this -> graph -> createImageGraph(
+        $this -> graph ->
+        createImageGraph(
             $ticket -> getProperty('show_graph'),
             $admin -> getProperty('arFilterFields'),
-            ["user" => $admin -> getProperty('lAdmin') -> getFilter(), "default" => $defaultArFilter],
+            ['data' => $imageArFilter, 'emergency' => $admin -> getProperty('lAdmin') -> getFilter()],
             $arrColorInc ?? null,
             $width,
             $height
@@ -234,7 +235,6 @@ class SubsystemCAdmin
 
     /**
      * @param $sTableID
-     * @param bool $returnDefaultFilterValue
      * @return mixed|null
      */
     public function initCAdminPropertyList($sTableID)

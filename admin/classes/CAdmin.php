@@ -146,7 +146,7 @@ class CAdmin implements PropertyContainerInterface
         return $set_default=="Y" && (!isset($_SESSION["SESS_STATS"][$sTableID]) || empty($_SESSION["SESS_STATS"][$sTableID]));
     }
 
-    public function InitFilter($arName, $sTableID = "t_report_graph")
+    public function initSessionFilter($arName, $sTableID = "t_report_graph")
     {
         $FILTER = $_SESSION["SESS_STATS"][$sTableID];
 
