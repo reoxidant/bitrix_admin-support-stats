@@ -9,6 +9,7 @@
 namespace admin\classes;
 
 use CAdminMessage;
+use Protobuf\Exception;
 
 require_once('PropertyContainerInterface.php');
 
@@ -49,15 +50,54 @@ class Graph implements PropertyContainerInterface
         return $this -> propertyContainer[$name] ?? null;
     }
 
+    public function getFilterParams($arrVars="filter_", $bDoHtmlEncode=true, $button = array("filter" => "Y", "set_filter" => "Y"))
+    {
+        $res="";
+
+        if(is_array($arrVars) && count($arrVars)>0)
+        {
+            foreach($arrVars as $var_name => $value)
+            {
+                if(is_array($value))
+                {
+                    if(count($value)>0)
+                    {
+                        reset($value);
+                        foreach($value as $v)
+                            $res .= "&".urlencode($var_name)."[]=".urlencode($v);
+                    }
+                }
+                else if(strlen($value)>0 && $value!="NOT_REF")
+                {
+                    $res .= "&".urlencode($var_name)."=".urlencode($value);
+                }
+            }
+        }else{
+            throw new Exception('Error: The first argument function must be type of Array');
+        }
+
+        if(is_array($button))
+        {
+            reset($button); // php bug
+            while(list($key, $value) = each($button))
+                $res .= "&".$key."=".urlencode($value);
+        }
+        else
+            $res .= $button;
+
+        return ($bDoHtmlEncode) ? htmlspecialcharsbx($res) : $res;
+    }
+
     /**
      * @param $show_graph
      * @param $arFilterFields
-     * @param $defaultFilterValues
+     * @param $imageArFilter
      * @param $arrColor
      * @param string $width
      * @param string $height
+     * @throws Exception
      */
-    public function createImageGraph($show_graph, $arFilterFields, $defaultFilterValues, $arrColor, $width = "576", $height = "400")
+    public function createImageGraph($show_graph, $arFilterFields, $imageArFilter, $arrColor, $width = "576", $height = "400")
     {
         list(
             'find_open' => $find_open,
@@ -65,7 +105,7 @@ class Graph implements PropertyContainerInterface
             'find_all' => $find_all,
             'find_mess' => $find_mess,
             'find_overdue_mess' => $find_overdue_mess
-            ) = $defaultFilterValues;
+        ) = ($imageArFilter['data']) ? $imageArFilter['data'] : $imageArFilter['emergency'];
 
         if (!function_exists("ImageCreate")) : CAdminMessage :: ShowMessage(GetMessage("SUP_GD_NOT_INSTALLED"));
         elseif
@@ -81,7 +121,7 @@ class Graph implements PropertyContainerInterface
                                             <tr>
                                                 <td valign="center" nowrap>
                                                     <img
-                                                            src="/bitrix/admin/ticket_graph.php?<?= GetFilterParams($arFilterFields) ?>&width=<?= $width ?>&height=<?= $height ?>&lang=<? echo LANG ?>"
+                                                            src="/bitrix/admin/ticket_graph.php?<?= ($imageArFilter['data']) ? $this->getFilterParams($imageArFilter['data']) : GetFilterParams($arFilterFields) ?>&width=<?= $width ?>&height=<?= $height ?>&lang=<? echo LANG ?>"
                                                             width="<?= $width ?>"
                                                             height="<?= $height ?>"
                                                             alt="graph-image"

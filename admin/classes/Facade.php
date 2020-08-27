@@ -182,15 +182,18 @@ class SubsystemGraph
      * @param $ticket
      * @param $admin
      * @param $arrColorInc
+     * @param $imageArFilter
      * @param null $width
      * @param null $height
-     * @param null $arFilterParam
+     * @throws \Protobuf\Exception
      */
-    public function createImage($ticket, $admin, $arrColorInc, $width = null, $height = null)
+    public function createImage($ticket, $admin, $arrColorInc, $imageArFilter, $width = null, $height = null)
     {
-        $this -> graph -> createImageGraph(
-            $ticket -> getProperty('show_graph'), $admin -> getProperty('arFilterFields'),
-            $admin -> getProperty('lAdmin') -> getFilter(),
+        $this -> graph ->
+        createImageGraph(
+            $ticket -> getProperty('show_graph'),
+            $admin -> getProperty('arFilterFields'),
+            ['data' => $imageArFilter, 'emergency' => $admin -> getProperty('lAdmin') -> getFilter()],
             $arrColorInc ?? null,
             $width,
             $height
@@ -232,10 +235,9 @@ class SubsystemCAdmin
 
     /**
      * @param $sTableID
-     * @param bool $returnDefaultFilterValue
      * @return mixed|null
      */
-    public function initCAdminPropertyList($sTableID, $returnDefaultFilterValue = false)
+    public function initCAdminPropertyList($sTableID)
     {
         $arrMessages = array(
             GetMessage("SUP_F_SITE"),
@@ -251,15 +253,6 @@ class SubsystemCAdmin
         $this -> admin -> addProperty('oSort', new CAdminSorting($sTableID));
         $this -> admin -> addProperty('lAdmin', new CAdminList($sTableID, $this -> admin -> getProperty('oSort')));
         $this -> admin -> addProperty('filter', new CAdminFilter("filter_id", $arrMessages));
-        if ($this -> admin -> IsDefaultFilter()):
-            $this -> admin -> addValDefaultFilter();
-        endif;
-
-        if ($returnDefaultFilterValue) {
-            return $this -> getAdmin() -> getProperty('defaultFilterValues') ?? null;
-        }
-
-        return null;
     }
 
     /**
