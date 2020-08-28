@@ -57,8 +57,6 @@ if ($facade -> getSubsystemCAdmin() -> getAdmin() -> IsDefaultFilter()):
         "find_all" => "Y",
         'find_mess' => "Y",
         'find_overdue_mess' => "Y",
-        'set_filter' => "Y",
-        "find_category_id" => 20
     ];
 else:
     $defaultFilterValues = null;
@@ -68,27 +66,33 @@ $arFilterFields = $facade -> getSubsystemCAdmin() -> getAdmin() -> addArFilterFi
 
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty("lAdmin") -> InitFilter($arFilterFields);
 
-if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
-InitBVar($find_responsible_exact_match);
+
+
+if(!$set_filter && empty($defaultFilterValues)){
+    foreach ($_SESSION["SESS_STATS"][$sTableID] as $key => $val){
+        global $$key;
+        if (isset($$key)) $$key = $val;
+    }
+}
 
 $arFilterProps = [
-    "find_site" => $find_site,
-    "find_date1" => $defaultFilterValues['find_date1'] ?? $find_date1,
-    "find_date2" => $find_date2,
-    "find_responsible_id" => $find_responsible_id,
-    "find_responsible" => $find_responsible,
-    "find_responsible_exact_match" => $find_responsible_exact_match,
-    "find_sla_id" => $find_sla_id,
-    "find_category_id" =>  $defaultFilterValues['find_category_id'] ?? $find_category_id,
-    "find_criticality_id" => $find_criticality_id,
-    "find_status_id" => $find_status_id,
-    "find_mark_id" => $find_mark_id,
-    "find_source_id" => $find_source_id,
-    "find_open" => $defaultFilterValues['find_open'] ?? $find_open,
-    "find_close" => $defaultFilterValues['find_close']  ?? $find_close,
-    "find_all" => $defaultFilterValues['find_all'] ?? $find_all,
-    "find_mess" => $defaultFilterValues['find_mess'] ?? $find_mess,
-    "find_overdue_mess" => $defaultFilterValues['find_overdue_mess'] ?? $find_overdue_mess,
+    "find_site" => $find_site_stats,
+    "find_date1" => $defaultFilterValues['find_date1'] ?? $find_date1_stats,
+    "find_date2" => $find_date2_stats,
+    "find_responsible_id" => ($bAdmin != "Y" && $bDemo != "Y") ? $USER -> GetID() : $find_responsible_id_stats,
+    "find_responsible" => $find_responsible_stats,
+    "find_responsible_exact_match" => $find_responsible_exact_match ?? InitBVar($find_responsible_exact_match),
+    "find_sla_id" => $find_sla_id_stats,
+    "find_category_id" =>  20,
+    "find_criticality_id" => $find_criticality_id_stats,
+    "find_status_id" => $find_status_id_stats,
+    "find_mark_id" => $find_mark_id_stats,
+    "find_source_id" => $find_source_id_stats,
+    "find_open" => $defaultFilterValues['find_open'] ?? $find_open_stats,
+    "find_close" => $defaultFilterValues['find_close'] ?? $find_close_stats,
+    "find_all" => $defaultFilterValues['find_all'] ?? $find_all_stats,
+    "find_mess" => $defaultFilterValues['find_mess'] ?? $find_mess_stats,
+    "find_overdue_mess" => $defaultFilterValues['find_overdue_mess'] ?? $find_overdue_mess_stats,
 ];
 
 $facade -> getSubsystemCAdmin() -> getAdmin() -> initSessionFilter($arFilterFields);

@@ -29,8 +29,8 @@ class FilterForm implements PropertyContainerInterface
     private function createCalendarPeriod($find_date1, $find_date2)
     {
         return CalendarPeriod(
-            "find_date1", $find_date1,
-            "find_date2", $find_date2,
+            "find_date1_stats", $find_date1,
+            "find_date2_stats", $find_date2,
             "form1", "Y");
     }
 
@@ -41,7 +41,7 @@ class FilterForm implements PropertyContainerInterface
     {
         global $APPLICATION;
         ?>
-        <form name="form1" method="GET" action="<?= $APPLICATION -> GetCurPage() ?>?">
+        <form name="form1_stats" method="GET" action="<?= $APPLICATION -> GetCurPage() ?>?">
             <? $this -> getProperty('filter') -> Begin(); ?>
             <tr>
                 <td><? echo GetMessage("SUP_F_PERIOD") . "(" . FORMAT_DATE . "):" ?></td>
@@ -60,7 +60,7 @@ class FilterForm implements PropertyContainerInterface
                         $ref_id[] = $zr["REFERENCE_ID"];
                     }
                     $arr = array("REFERENCE" => $ref, "REFERENCE_ID" => $ref_id);
-                    echo SelectBoxFromArray("find_status_id", $arr, $this -> getProperty("find_status_id"), GetMessage("SUP_ALL"));
+                    echo SelectBoxFromArray("find_status_id_stats", $arr, $this -> getProperty("find_status_id"), GetMessage("SUP_ALL"));
                     ?></td>
             </tr>
             <tr valign="top">
@@ -75,23 +75,23 @@ class FilterForm implements PropertyContainerInterface
                                             <table cellpadding="3" cellspacing="1" border="0">
                                                 <tr>
                                                     <td nowrap><?=GetMessage("SUP_OPEN_TICKET")?></td>
-                                                    <td align="center"><?echo InputType("checkbox","find_open","Y", $this -> getProperty("find_open"),false); ?></td>
+                                                    <td align="center"><?echo InputType("checkbox","find_open_stats","Y", $this -> getProperty("find_open"),false); ?></td>
                                                 </tr>
                                                 <tr>
                                                     <td nowrap><?=GetMessage("SUP_CLOSE_TICKET")?></td>
-                                                    <td align="center"><?echo InputType("checkbox","find_close","Y", $this -> getProperty("find_close"),false); ?></td>
+                                                    <td align="center"><?echo InputType("checkbox","find_close_stats","Y", $this -> getProperty("find_close"),false); ?></td>
                                                 </tr>
                                                 <tr>
                                                     <td nowrap><?=GetMessage("SUP_ALL_TICKET")?></td>
-                                                    <td align="center"><?echo InputType("checkbox","find_all","Y", $this -> getProperty("find_all"),false); ?></td>
+                                                    <td align="center"><?echo InputType("checkbox","find_all_stats","Y", $this -> getProperty("find_all"),false); ?></td>
                                                 </tr>
                                                 <tr>
                                                     <td nowrap><?=GetMessage("SUP_MESSAGES")?></td>
-                                                    <td align="center"><?echo InputType("checkbox","find_mess","Y", $this -> getProperty("find_mess"),false); ?></td>
+                                                    <td align="center"><?echo InputType("checkbox","find_mess_stats","Y", $this -> getProperty("find_mess"),false); ?></td>
                                                 </tr>
                                                 <tr>
                                                     <td nowrap><?=GetMessage("SUP_OVERDUE_MESSAGES")?></td>
-                                                    <td align="center"><?echo InputType("checkbox","find_overdue_mess","Y", $this -> getProperty("find_overdue_mess"),false); ?></td>
+                                                    <td align="center"><?echo InputType("checkbox","find_overdue_mess_stats","Y", $this -> getProperty("find_overdue_mess"),false); ?></td>
                                                 </tr>
                                             </table>
                                         </td>
