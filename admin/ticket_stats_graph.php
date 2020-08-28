@@ -70,21 +70,10 @@ if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
 InitBVar($find_responsible_exact_match);
 
 if(!$set_filter && empty($defaultFilterValues)){
-    $find_site_stats = $_SESSION["SESS_STATS"][$sTableID]['find_site_stats'];
-    $find_date1_stats =  $_SESSION["SESS_STATS"][$sTableID]['find_date1_stats'];
-    $find_date2_stats = $_SESSION["SESS_STATS"][$sTableID]['find_date2_stats'];
-    $find_responsible_id_stats = $_SESSION["SESS_STATS"][$sTableID]['find_responsible_id_stats'];
-    $find_responsible_stats = $_SESSION["SESS_STATS"][$sTableID]['find_responsible_id_stats'];
-    $find_sla_id_stats = $_SESSION["SESS_STATS"][$sTableID]['find_sla_id_stats'];
-    $find_criticality_id_stats = $_SESSION["SESS_STATS"][$sTableID]['find_criticality_id_stats'];
-    $find_status_id_stats = $_SESSION["SESS_STATS"][$sTableID]['find_status_id_stats'];
-    $find_mark_id_stats = $_SESSION["SESS_STATS"][$sTableID]['find_mark_id_stats'];
-    $find_source_id_stats = $_SESSION["SESS_STATS"][$sTableID]['find_source_id_stats'];
-    $find_open_stats = $_SESSION["SESS_STATS"][$sTableID]['find_open_stats'];
-    $find_close_stats = $_SESSION["SESS_STATS"][$sTableID]['find_close_stats'];
-    $find_all_stats = $_SESSION["SESS_STATS"][$sTableID]['find_all_stats'];
-    $find_mess_stats = $_SESSION["SESS_STATS"][$sTableID]['find_mess_stats'];
-    $find_overdue_mess_stats = $_SESSION["SESS_STATS"][$sTableID]['find_overdue_mess_stats'];
+    foreach ($_SESSION["SESS_STATS"][$sTableID] as $key => $val){
+        global $$key;
+        if (isset($$key)) $$key = $val;
+    }
 }
 
 $arFilterProps = [
