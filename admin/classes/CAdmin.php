@@ -37,23 +37,23 @@ class CAdmin implements PropertyContainerInterface
     public function addArFilterFields($returnValue = false)
     {
         $this -> propertyContainer['arFilterFields'] = [
-            "find_site",
-            "find_responsible",
-            "find_responsible_id",
-            "find_responsible_exact_match",
-            "find_category_id",
-            "find_criticality_id",
-            "find_status_id",
-            "find_sla_id",
-            "find_mark_id",
-            "find_source_id",
-            "find_date1",
-            "find_date2",
-            "find_open",
-            "find_close",
-            "find_all",
-            "find_mess",
-            "find_overdue_mess"
+            "find_site_stats",
+            "find_responsible_stats",
+            "find_responsible_id_stats",
+            "find_responsible_exact_match_stats",
+            "find_category_id_stats",
+            "find_criticality_id_stats",
+            "find_status_id_stats",
+            "find_sla_id_stats",
+            "find_mark_id_stats",
+            "find_source_id_stats",
+            "find_date1_stats",
+            "find_date2_stats",
+            "find_open_stats",
+            "find_close_stats",
+            "find_all_stats",
+            "find_mess_stats",
+            "find_overdue_mess_stats"
         ];
 
         if ($returnValue) {
@@ -140,27 +140,48 @@ class CAdmin implements PropertyContainerInterface
         }
     }
 
+    /**
+     * @param string $sTableID
+     * @return bool
+     */
     public function IsDefaultFilter($sTableID = "t_report_graph")
     {
         $set_default = (!is_set($_REQUEST, "find_forum") ? (empty($_SESSION["SESS_STATS"]["LAST_TOPICS_LIST"]) ? "Y" : "N") : "N");;
-        return $set_default=="Y" && (!isset($_SESSION["SESS_STATS"][$sTableID]) || empty($_SESSION["SESS_STATS"][$sTableID]));
+        return $set_default == "Y" && (!isset($_SESSION["SESS_STATS"][$sTableID]) || empty($_SESSION["SESS_STATS"][$sTableID]));
     }
 
+    /**
+     * @param $arName
+     * @param string $sTableID
+     */
     public function initSessionFilter($arName, $sTableID = "t_report_graph")
     {
         $FILTER = $_SESSION["SESS_STATS"][$sTableID];
 
-        foreach ($arName as $name)
-        {
+        foreach ($arName as $name) {
             global $$name;
 
-            if(isset($$name))
+            if (isset($$name))
                 $FILTER[$name] = $$name;
             else
                 $$name = $FILTER[$name];
         }
 
         $_SESSION["SESS_STATS"][$sTableID] = $FILTER;
+    }
+
+    /**
+     * @param $arName
+     * @param string $sTableID
+     */
+    public function DelFilter($arName, $sTableID = "t_report_graph")
+    {
+        unset($_SESSION["SESS_ADMIN"][$sTableID]);
+
+        foreach ($arName as $name) {
+            global $$name;
+            $$name = "";
+        }
     }
 
     /**
