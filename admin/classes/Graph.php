@@ -121,7 +121,7 @@ class Graph implements PropertyContainerInterface
                                             <tr>
                                                 <td valign="center" nowrap>
                                                     <img
-                                                            src="/bitrix/admin/ticket_graph.php?<?= ($imageArFilter['data']) ? $this->getFilterParams($imageArFilter['data']) : GetFilterParams($arFilterFields) ?>&width=<?= $width ?>&height=<?= $height ?>&lang=<? echo LANG ?>"
+                                                            src="/bitrix/admin/ticket_graph_stats.php?<?= ($imageArFilter['data']) ? $this->getFilterParams($imageArFilter['data']) : GetFilterParams($arFilterFields) ?>&width=<?= $width ?>&height=<?= $height ?>&lang=<? echo LANG ?>"
                                                             width="<?= $width ?>"
                                                             height="<?= $height ?>"
                                                             alt="graph-image"

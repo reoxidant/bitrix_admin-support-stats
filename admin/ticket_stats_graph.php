@@ -66,8 +66,7 @@ $arFilterFields = $facade -> getSubsystemCAdmin() -> getAdmin() -> addArFilterFi
 
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty("lAdmin") -> InitFilter($arFilterFields);
 
-if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
-InitBVar($find_responsible_exact_match);
+
 
 if(!$set_filter && empty($defaultFilterValues)){
     foreach ($_SESSION["SESS_STATS"][$sTableID] as $key => $val){
@@ -80,9 +79,9 @@ $arFilterProps = [
     "find_site" => $find_site_stats,
     "find_date1" => $defaultFilterValues['find_date1'] ?? $find_date1_stats,
     "find_date2" => $find_date2_stats,
-    "find_responsible_id" => $find_responsible_id_stats,
+    "find_responsible_id" => ($bAdmin != "Y" && $bDemo != "Y") ? $USER -> GetID() : $find_responsible_id_stats,
     "find_responsible" => $find_responsible_stats,
-    "find_responsible_exact_match" => $find_responsible_exact_match,
+    "find_responsible_exact_match" => $find_responsible_exact_match ?? InitBVar($find_responsible_exact_match),
     "find_sla_id" => $find_sla_id_stats,
     "find_category_id" =>  20,
     "find_criticality_id" => $find_criticality_id_stats,
