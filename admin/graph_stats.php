@@ -34,7 +34,6 @@ $arrX = array(); // массив точек графика по X
 $arrY = array(); // массив точек графика по Y
 $arrayX = array(); // массив точек на оси X (деления)
 $arrayY = array(); // массив точек на оси Y (деления)
-
 /******************************************************
  * Собираем точки графика
  *******************************************************/
@@ -53,6 +52,7 @@ $arFilter = array(
     "MARK" => $find_mark_id_stats,
     "SOURCE" => $find_source_id_stats,
 );
+
 $rsTickets = CTicket ::GetDynamicList($by = "s_date_create", $order = "asc", $arFilter);
 while ($rsTickets -> ExtractFields("f_", false)) {
     $date = mktime(0, 0, 0, $f_CREATE_MONTH, $f_CREATE_DAY, $f_CREATE_YEAR);
@@ -80,7 +80,7 @@ while ($rsTickets -> ExtractFields("f_", false)) {
  * Формируем ось X
  *******************************************************/
 
-$arrayX = GetArrayX($arrX, $MinX, $MaxX);
+/*$arrayX = GetArrayX($arrX, $MinX, $MaxX);
 
 if ($find_mess == "Y" || $find_overdue_mess == "Y") {
     $arFilter = array(
@@ -110,18 +110,18 @@ if ($find_mess == "Y" || $find_overdue_mess == "Y") {
         $arrY_mess[] = intval($arrMessages[$t]);
         $arrY_overdue_mess[] = intval($arrOverdueMessages[$t]);
     }
-}
+}*/
 
 /******************************************************
  * Формируем ось Y
  *******************************************************/
-$arrY = array();
+/*$arrY = array();
 if ($find_all == "Y") $arrY = array_merge($arrY, $arrY_all);
 if ($find_open == "Y") $arrY = array_merge($arrY, $arrY_open);
 if ($find_close == "Y") $arrY = array_merge($arrY, $arrY_close);
 if ($find_mess == "Y") $arrY = array_merge($arrY, $arrY_mess);
 if ($find_overdue_mess == "Y") $arrY = array_merge($arrY, $arrY_overdue_mess);
-$arrayY = GetArrayY($arrY, $MinY, $MaxY);
+$arrayY = GetArrayY($arrY, $MinY, $MaxY);*/
 
 //while (list($key, $value) = each($arrX)) echo date("d.m.Y",$value)." = ".$arrY_all[$key]."<br>";
 //EchoGraphData($arrayX, $MinX, $MaxX, $arrayY, $MinY, $MaxY, $arrX, $arrY);
@@ -130,13 +130,13 @@ $arrayY = GetArrayY($arrY, $MinY, $MaxY);
  * Рисуем координатную сетку
  *******************************************************/
 
-DrawCoordinatGrid($arrayX, $arrayY, $width, $height, $ImageHendle);
+//DrawCoordinatGrid($arrayX, $arrayY, $width, $height, $ImageHendle);
 
 /******************************************************
  * Рисуем графики
  *******************************************************/
 
-if ($find_all == "Y")
+/*if ($find_all == "Y")
     Graf($arrX, $arrY_all, $ImageHendle, $MinX, $MaxX, $MinY, $MaxY, $arrColor["ALL_TICKET"]);
 
 if ($find_open == "Y")
@@ -149,7 +149,7 @@ if ($find_mess == "Y")
     Graf($arrX, $arrY_mess, $ImageHendle, $MinX, $MaxX, $MinY, $MaxY, $arrColor["MESSAGES"]);
 
 if ($find_overdue_mess == "Y")
-    Graf($arrX, $arrY_overdue_mess, $ImageHendle, $MinX, $MaxX, $MinY, $MaxY, $arrColor["OVERDUE_MESSAGES"]);
+    Graf($arrX, $arrY_overdue_mess, $ImageHendle, $MinX, $MaxX, $MinY, $MaxY, $arrColor["OVERDUE_MESSAGES"]);*/
 
 /******************************************************
  * Отображаем изображение
