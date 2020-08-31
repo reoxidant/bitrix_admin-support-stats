@@ -17,7 +17,7 @@
 */
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php");
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
-/*
+
 $bDemo = (CTicket ::IsDemo()) ? "Y" : "N";
 $bAdmin = (CTicket ::IsAdmin()) ? "Y" : "N";
 $bSupportTeam = (CTicket ::IsSupportTeam()) ? "Y" : "N";
@@ -25,21 +25,20 @@ $bSupportTeam = (CTicket ::IsSupportTeam()) ? "Y" : "N";
 if ($bAdmin != "Y" && $bSupportTeam != "Y" && $bDemo != "Y") $APPLICATION -> AuthForm(GetMessage("ACCESS_DENIED"));
 
 include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php");
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");*/
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
 
 // создаем изображение
-/*$ImageHendle = CreateImageHandle($width, $height);
+$ImageHendle = CreateImageHandle($width, $height);
 
 $arrX = array(); // массив точек графика по X
 $arrY = array(); // массив точек графика по Y
 $arrayX = array(); // массив точек на оси X (деления)
-$arrayY = array(); // массив точек на оси Y (деления)*/
-
+$arrayY = array(); // массив точек на оси Y (деления)
 /******************************************************
  * Собираем точки графика
  *******************************************************/
 
-/*$arFilter = array(
+$arFilter = array(
     "SITE" => $find_site_stats,
     "DATE_CREATE_1" => $find_date1_stats,
     "DATE_CREATE_2" => $find_date2_stats,
@@ -52,9 +51,9 @@ $arrayY = array(); // массив точек на оси Y (деления)*/
     "STATUS" => $find_status_id_stats,
     "MARK" => $find_mark_id_stats,
     "SOURCE" => $find_source_id_stats,
-);*/
+);
 
-/*$rsTickets = CTicket ::GetDynamicList($by = "s_date_create", $order = "asc", $arFilter);
+$rsTickets = CTicket ::GetDynamicList($by = "s_date_create", $order = "asc", $arFilter);
 while ($rsTickets -> ExtractFields("f_", false)) {
     $date = mktime(0, 0, 0, $f_CREATE_MONTH, $f_CREATE_DAY, $f_CREATE_YEAR);
     $date_tmp = 0;
@@ -76,7 +75,7 @@ while ($rsTickets -> ExtractFields("f_", false)) {
     if ($find_open == "Y") $arrY_open[] = intval($f_OPEN_TICKETS);
     if ($find_close == "Y") $arrY_close[] = intval($f_CLOSE_TICKETS);
     $prev_date = $date;
-}*/
+}
 /******************************************************
  * Формируем ось X
  *******************************************************/
@@ -156,4 +155,4 @@ if ($find_overdue_mess == "Y")
  * Отображаем изображение
  *******************************************************/
 
-//ShowImageHeader($ImageHendle);
+ShowImageHeader($ImageHendle);

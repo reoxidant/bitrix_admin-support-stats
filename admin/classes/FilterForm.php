@@ -63,45 +63,6 @@ class FilterForm implements PropertyContainerInterface
                     echo SelectBoxFromArray("find_status_id_stats", $arr, $this -> getProperty("find_status_id"), GetMessage("SUP_ALL"));
                     ?></td>
             </tr>
-            <tr valign="top">
-                <td width="0%" nowrap><?= GetMessage("SUP_SHOW") ?>:</td>
-                <td width="0%" nowrap valign="top">
-                    <table border="0" cellspacing="2" cellpadding="0" width="0%" style="margin-left: 12px">
-                        <tr>
-                            <td valign="top" align="center">
-                                <table border="0" cellspacing="0" cellpadding="0">
-                                    <tr>
-                                        <td valign="top">
-                                            <table cellpadding="3" cellspacing="1" border="0">
-                                                <tr>
-                                                    <td nowrap><?=GetMessage("SUP_OPEN_TICKET")?></td>
-                                                    <td align="center"><?echo InputType("checkbox","find_open_stats","Y", $this -> getProperty("find_open"),false); ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td nowrap><?=GetMessage("SUP_CLOSE_TICKET")?></td>
-                                                    <td align="center"><?echo InputType("checkbox","find_close_stats","Y", $this -> getProperty("find_close"),false); ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td nowrap><?=GetMessage("SUP_ALL_TICKET")?></td>
-                                                    <td align="center"><?echo InputType("checkbox","find_all_stats","Y", $this -> getProperty("find_all"),false); ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td nowrap><?=GetMessage("SUP_MESSAGES")?></td>
-                                                    <td align="center"><?echo InputType("checkbox","find_mess_stats","Y", $this -> getProperty("find_mess"),false); ?></td>
-                                                </tr>
-                                                <tr>
-                                                    <td nowrap><?=GetMessage("SUP_OVERDUE_MESSAGES")?></td>
-                                                    <td align="center"><?echo InputType("checkbox","find_overdue_mess_stats","Y", $this -> getProperty("find_overdue_mess"),false); ?></td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </td>
-                        </tr>
-                    </table>
-                </td>
-            </tr>
             <? $this -> getProperty("filter") ->
             Buttons(array(
                     "table_id" => $this -> getProperty("sTableID"),
