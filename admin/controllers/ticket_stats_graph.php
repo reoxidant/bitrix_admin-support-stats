@@ -52,6 +52,7 @@ $sTableID = $facade -> getSubsystemGraph() -> getGraph() -> addProperty("sTableI
 $facade -> getSubsystemCAdmin() -> initCAdminPropertyList($sTableID);
 
 if ($facade -> getSubsystemCAdmin() -> getAdmin() -> IsDefaultFilter()):
+    $set_filter = "Y";
     $defaultFilterValues = [
         'find_date1' => date('d.m.Y', strtotime("-30 day")),
         'find_open' => "Y",
@@ -75,24 +76,28 @@ if(!$set_filter && empty($defaultFilterValues)){
     }
 }
 
+if ($bAdmin!="Y" && $bDemo!="Y") $find_responsible_id = $USER->GetID();
+
+InitBVar($find_responsible_exact_match);
+
 $arFilterProps = [
     "find_site" => $find_site_stats,
     "find_date1" => $defaultFilterValues['find_date1'] ?? $find_date1_stats,
     "find_date2" => $find_date2_stats,
-    "find_responsible_id" => ($bAdmin != "Y" && $bDemo != "Y") ? $USER -> GetID() : $find_responsible_id_stats,
+    "find_responsible_id" => $find_responsible_id,
     "find_responsible" => $find_responsible_stats,
-    "find_responsible_exact_match" => $find_responsible_exact_match ?? InitBVar($find_responsible_exact_match),
+    "find_responsible_exact_match" => $find_responsible_exact_match,
     "find_sla_id" => $find_sla_id_stats,
     "find_category_id" =>  20,
     "find_criticality_id" => $find_criticality_id_stats,
     "find_status_id" => $find_status_id_stats,
     "find_mark_id" => $find_mark_id_stats,
     "find_source_id" => $find_source_id_stats,
-    "find_open" => $defaultFilterValues['find_open'] ?? $find_open_stats,
-    "find_close" => $defaultFilterValues['find_close'] ?? $find_close_stats,
-    "find_all" => $defaultFilterValues['find_all'] ?? $find_all_stats,
-    "find_mess" => $defaultFilterValues['find_mess'] ?? $find_mess_stats,
-    "find_overdue_mess" => $defaultFilterValues['find_overdue_mess'] ?? $find_overdue_mess_stats,
+    "find_open" => $defaultFilterValues['find_open'] ?? ($find_open_stats ?? "Y"),
+    "find_close" => $defaultFilterValues['find_close'] ?? ($find_close_stats ?? "Y"),
+    "find_all" => $defaultFilterValues['find_all'] ?? ($find_all_stats ?? "Y"),
+    "find_mess" => $defaultFilterValues['find_mess'] ?? ($find_mess_stats ?? "Y"),
+    "find_overdue_mess" => $defaultFilterValues['find_overdue_mess'] ?? ($find_overdue_mess_stats ?? "Y"),
 ];
 
 $facade -> getSubsystemCAdmin() -> getAdmin() -> initSessionFilter($arFilterFields);
