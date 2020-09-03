@@ -8,6 +8,9 @@
 
 namespace admin\classes;
 
+use CAdminCalendar;
+use CHotKeys;
+use CHTTP;
 use CTicketDictionary;
 
 /**
@@ -37,6 +40,42 @@ class FilterForm implements PropertyContainerInterface
             "Y");
     }
 
+    public function Begin($clFilter = null)
+    {
+        echo '
+<div id="adm-filter-tab-wrap-'.$clFilter->id.'" class="adm-filter-wrap'.($clFilter =="Y" ? " adm-filter-folded" : "").'" style = "display: none;">
+	<table class="adm-filter-main-table">
+		<tr>
+			<td class="adm-filter-main-table-cell">
+				<div class="adm-filter-tabs-block" id="filter-tabs-'.$clFilter->id.'">
+					<span id="adm-filter-tab-'.$clFilter->id.'-0" class="adm-filter-tab adm-filter-tab-active" onclick="'.$clFilter->id.'.SetActiveTab(this); '.$clFilter->id.'.ApplyFilter(\'0\'); " title="'.GetMessage("admin_lib_filter_goto_dfilter").'">'.GetMessage("admin_lib_filter_filter").'</span>
+					<span id="adm-filter-add-tab-'.$clFilter->id.'" class="adm-filter-tab adm-filter-add-tab" onclick="'.$clFilter->id.'.SaveAs();" title="'.GetMessage("admin_lib_filter_new").'"></span>
+					<span onclick="'.$clFilter->id.'.SetFoldedView();" class="adm-filter-switcher-tab">
+					    <span id="adm-filter-switcher-tab" class="adm-filter-switcher-tab-icon"></span>
+					</span>
+					<span class="adm-filter-tabs-block-underlay"></span>
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td class="adm-filter-main-table-cell">
+				<div class="adm-filter-content" id="'.$this->id.'_content">
+					<div class="adm-filter-content-table-wrap">
+						<table cellspacing="0" class="adm-filter-content-table" id="'.$clFilter->id.'">';
+    }
+
+    private function End()
+    {
+
+        echo '
+                        </table>
+					</div>
+				</div>
+			</td>
+		</tr>
+	</table>
+</div>';
+    }
     /**
      *
      */
@@ -45,35 +84,10 @@ class FilterForm implements PropertyContainerInterface
         global $APPLICATION;
         ?>
         <form name="form1_stats" method="GET" action="<?= $APPLICATION -> GetCurPage() ?>?">
-            <? $this -> getProperty('filter') -> Begin(); ?>
-            <tr>
-                <td><? echo GetMessage("SUP_F_PERIOD") . "(" . FORMAT_DATE . "):" ?></td>
-                <td><? echo $this -> createCalendarPeriod($this -> getProperty("find_date1"), $this -> getProperty("find_date2")) ?></td>
-            </tr>
-            <tr>
-                <td nowrap><?=GetMessage("SUP_F_STATUS")?>:</td>
-                <td>
-                    <?
-                        $ref = array(); $ref_id = array();
-                        $ref[] = GetMessage("SUP_NO"); $ref_id[] = "0";
-                        $z = CTicketDictionary::GetDropDown("S");
-                        while ($zr = $z->Fetch())
-                        {
-                            $ref[] = $zr["REFERENCE"];
-                            $ref_id[] = $zr["REFERENCE_ID"];
-                        }
-                        $arr = array("REFERENCE" => $ref, "REFERENCE_ID" => $ref_id);
-                        echo SelectBoxFromArray("find_status_id_stats", $arr, $this -> getProperty("find_status_id"), GetMessage("SUP_ALL"));
-                    ?>
-                </td>
-            </tr>
-            <? $this -> getProperty("filter") ->
-            Buttons(array(
-                    "table_id" => $this -> getProperty("sTableID"),
-                    "url" => $APPLICATION -> GetCurPage(),
-                    "form" => "form1")
-            );
-            $this -> getProperty("filter") -> End(); ?>
+            <?
+                $this->Begin();
+                $this -> End();
+            ?>
         </form>
         <?php
     }
