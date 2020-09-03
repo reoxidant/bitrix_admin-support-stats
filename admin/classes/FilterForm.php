@@ -29,9 +29,12 @@ class FilterForm implements PropertyContainerInterface
     private function createCalendarPeriod($find_date1, $find_date2)
     {
         return CalendarPeriod(
-            "find_date1_stats", $find_date1,
-            "find_date2_stats", $find_date2,
-            "form1", "Y");
+            "find_date1_stats",
+            $find_date1,
+            "find_date2_stats",
+            $find_date2,
+            "form1",
+            "Y");
     }
 
     /**
@@ -50,18 +53,20 @@ class FilterForm implements PropertyContainerInterface
             <tr>
                 <td nowrap>
                     <?=GetMessage("SUP_F_STATUS")?>:</td>
-                <td><?
-                    $ref = array(); $ref_id = array();
-                    $ref[] = GetMessage("SUP_NO"); $ref_id[] = "0";
-                    $z = CTicketDictionary::GetDropDown("S");
-                    while ($zr = $z->Fetch())
-                    {
-                        $ref[] = $zr["REFERENCE"];
-                        $ref_id[] = $zr["REFERENCE_ID"];
-                    }
-                    $arr = array("REFERENCE" => $ref, "REFERENCE_ID" => $ref_id);
-                    echo SelectBoxFromArray("find_status_id_stats", $arr, $this -> getProperty("find_status_id"), GetMessage("SUP_ALL"));
-                    ?></td>
+                <td>
+                    <?
+                        $ref = array(); $ref_id = array();
+                        $ref[] = GetMessage("SUP_NO"); $ref_id[] = "0";
+                        $z = CTicketDictionary::GetDropDown("S");
+                        while ($zr = $z->Fetch())
+                        {
+                            $ref[] = $zr["REFERENCE"];
+                            $ref_id[] = $zr["REFERENCE_ID"];
+                        }
+                        $arr = array("REFERENCE" => $ref, "REFERENCE_ID" => $ref_id);
+                        echo SelectBoxFromArray("find_status_id_stats", $arr, $this -> getProperty("find_status_id"), GetMessage("SUP_ALL"));
+                    ?>
+                </td>
             </tr>
             <? $this -> getProperty("filter") ->
             Buttons(array(

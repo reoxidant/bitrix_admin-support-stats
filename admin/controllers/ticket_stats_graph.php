@@ -5,17 +5,19 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package PhpStorm
  */
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php");
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/prolog.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php"); // первый общий пролог
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/prolog.php"); // пролог модуля
 
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php"); // инициализация модуля
+
+// подключим языковой файл
 IncludeModuleLangFile($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
 IncludeModuleLangFile(__FILE__);
 
-include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php");
+include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php"); // подключим цвета для графика
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
 
-require_once('classes/Facade.php');
+require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/support/admin/classes/Facade.php"); //смотри паттерн фасад
 
 global $USER, $APPLICATION;
 
@@ -65,8 +67,6 @@ endif;
 $arFilterFields = $facade -> getSubsystemCAdmin() -> getAdmin() -> addArFilterFields(true);
 
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty("lAdmin") -> InitFilter($arFilterFields);
-
-
 
 if(!$set_filter && empty($defaultFilterValues)){
     foreach ($_SESSION["SESS_STATS"][$sTableID] as $key => $val){
