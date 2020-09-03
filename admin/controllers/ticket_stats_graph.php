@@ -5,17 +5,19 @@
  * @license http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  * @package PhpStorm
  */
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php");
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/prolog.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php"); // первый общий пролог
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/prolog.php"); // пролог модуля
 
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php"); // инициализация модуля
+
+// подключим языковой файл
 IncludeModuleLangFile($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
 IncludeModuleLangFile(__FILE__);
 
-include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php");
+include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php"); // подключим цвета для графика
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
 
-require_once('classes/Facade.php');
+require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/support/admin/classes/Facade.php"); //смотри паттерн фасад
 
 global $USER, $APPLICATION;
 
@@ -50,13 +52,13 @@ $sTableID = $facade -> getSubsystemGraph() -> getGraph() -> addProperty("sTableI
 $facade -> getSubsystemCAdmin() -> initCAdminPropertyList($sTableID);
 
 if ($facade -> getSubsystemCAdmin() -> getAdmin() -> IsDefaultFilter()):
+    $set_filter = "Y";
     $defaultFilterValues = [
         'find_date1' => date('d.m.Y', strtotime("-30 day")),
-        'find_open' => "Y",
-        'find_close' => "Y",
-        "find_all" => "Y",
-        'find_mess' => "Y",
-        'find_overdue_mess' => "Y",
+        'find_work_in' => "Y",
+        'find_close_ticket' => "Y",
+        'find_wait_answer_dit' => "Y",
+        'find_wait_answer_user' => "Y",
     ];
 else:
     $defaultFilterValues = null;
@@ -66,8 +68,6 @@ $arFilterFields = $facade -> getSubsystemCAdmin() -> getAdmin() -> addArFilterFi
 
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty("lAdmin") -> InitFilter($arFilterFields);
 
-
-
 if(!$set_filter && empty($defaultFilterValues)){
     foreach ($_SESSION["SESS_STATS"][$sTableID] as $key => $val){
         global $$key;
@@ -75,24 +75,33 @@ if(!$set_filter && empty($defaultFilterValues)){
     }
 }
 
+if ($bAdmin!="Y" && $bDemo!="Y") $find_responsible_id = $USER->GetID();
+
+InitBVar($find_responsible_exact_match);
+
+function showStatusId($statusId = null, $masterId = null){
+    return ($statusId == null) ? "Y" : ($statusId == $masterId) ? "Y" : "N";
+}
+
 $arFilterProps = [
     "find_site" => $find_site_stats,
     "find_date1" => $defaultFilterValues['find_date1'] ?? $find_date1_stats,
     "find_date2" => $find_date2_stats,
-    "find_responsible_id" => ($bAdmin != "Y" && $bDemo != "Y") ? $USER -> GetID() : $find_responsible_id_stats,
+    "find_responsible_id" => $find_responsible_id,
     "find_responsible" => $find_responsible_stats,
-    "find_responsible_exact_match" => $find_responsible_exact_match ?? InitBVar($find_responsible_exact_match),
+    "find_responsible_exact_match" => $find_responsible_exact_match,
     "find_sla_id" => $find_sla_id_stats,
     "find_category_id" =>  20,
     "find_criticality_id" => $find_criticality_id_stats,
     "find_status_id" => $find_status_id_stats,
     "find_mark_id" => $find_mark_id_stats,
     "find_source_id" => $find_source_id_stats,
-    "find_open" => $defaultFilterValues['find_open'] ?? $find_open_stats,
-    "find_close" => $defaultFilterValues['find_close'] ?? $find_close_stats,
-    "find_all" => $defaultFilterValues['find_all'] ?? $find_all_stats,
-    "find_mess" => $defaultFilterValues['find_mess'] ?? $find_mess_stats,
-    "find_overdue_mess" => $defaultFilterValues['find_overdue_mess'] ?? $find_overdue_mess_stats,
+    "find_work_in" => $defaultFilterValues['find_work_in'] ?? showStatusId($find_status_id_stats, 23),
+    "find_close_ticket" => $defaultFilterValues['find_close_ticket'] ?? showStatusId($find_status_id_stats, 24),
+    "find_wait_answer_dit" => $defaultFilterValues['find_wait_answer_dit'] ?? showStatusId($find_status_id_stats, 25),
+    "find_wait_answer_user" => $defaultFilterValues['find_wait_answer_user'] ?? showStatusId($find_status_id_stats, 26),
+    "find_mess" => $defaultFilterValues['find_mess'] ?? ($find_mess_stats ?? "Y"),
+    "find_overdue_mess" => $defaultFilterValues['find_overdue_mess'] ?? ($find_overdue_mess_stats ?? "Y"),
 ];
 
 $facade -> getSubsystemCAdmin() -> getAdmin() -> initSessionFilter($arFilterFields);

@@ -100,11 +100,10 @@ class Graph implements PropertyContainerInterface
     public function createImageGraph($show_graph, $arFilterFields, $imageArFilter, $arrColor, $width = "576", $height = "400")
     {
         list(
-            'find_open' => $find_open,
-            'find_close' => $find_close,
-            'find_all' => $find_all,
-            'find_mess' => $find_mess,
-            'find_overdue_mess' => $find_overdue_mess
+            'find_work_in' => $find_work_in,
+            'find_close_ticket' => $find_close_ticket,
+            'find_wait_answer_dit' => $find_wait_answer_dit,
+            'find_wait_answer_user' => $find_wait_answer_user,
         ) = ($imageArFilter['data']) ? $imageArFilter['data'] : $imageArFilter['emergency'];
 
         if (!function_exists("ImageCreate")) : CAdminMessage :: ShowMessage(GetMessage("SUP_GD_NOT_INSTALLED"));
@@ -137,71 +136,56 @@ class Graph implements PropertyContainerInterface
                     <tr>
                         <td>
                             <table cellpadding="3" cellspacing="1" border="0" class="legend">
-                                <? if ($find_open == "Y"): ?>
+                                <? if ($find_work_in == "Y"): ?>
                                     <tr>
                                         <td valign="center">
                                             <img
                                                     src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OPEN_TICKET"] ?>"
                                                     width="45"
                                                     height="2"
-                                                    alt="open-line-image"
+                                                    alt="find-work-in"
                                             >
-
                                         </td>
-                                        <td nowrap><?= GetMessage("SUP_OPEN_TICKET") ?></td>
+                                        <td nowrap><?= GetMessage("SUP_WORK_IN") ?></td>
                                     </tr>
                                 <? endif; ?>
-                                <? if ($find_close == "Y"): ?>
-                                    <tr>
-                                        <td valign="center">
-                                            <img
-                                                    src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["CLOSE_TICKET"] ?>"
-                                                    width="45"
-                                                    height="2"
-                                                    alt="close-line-image"
-                                            >
-
-                                        </td>
-                                        <td nowrap><?= GetMessage("SUP_CLOSE_TICKET") ?></td>
-                                    </tr>
-                                <? endif; ?>
-                                <? if ($find_all == "Y"): ?>
+                                <? if ($find_close_ticket == "Y"): ?>
                                     <tr>
                                         <td valign="center">
                                             <img
                                                     src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["ALL_TICKET"] ?>"
                                                     width="45"
                                                     height="2"
-                                                    alt="all-line-image"
+                                                    alt="find-close-ticket"
                                             >
                                         </td>
-                                        <td nowrap><?= GetMessage("SUP_ALL_TICKET") ?></td>
+                                        <td nowrap><?= GetMessage("SUP_CLOSE_TICKET") ?></td>
                                     </tr>
                                 <? endif; ?>
-                                <? if ($find_mess == "Y"): ?>
+                                <? if ($find_wait_answer_dit == "Y"): ?>
                                     <tr>
                                         <td valign="center">
                                             <img
                                                     src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["MESSAGES"] ?>"
                                                     width="45"
                                                     height="2"
-                                                    alt="mess-line-image"
+                                                    alt="find-wait-answer-dit "
                                             >
                                         </td>
-                                        <td nowrap><?= GetMessage("SUP_MESSAGES") ?></td>
+                                        <td nowrap><?= GetMessage("SUP_WAIT_ANSWER_DIT") ?></td>
                                     </tr>
                                 <? endif; ?>
-                                <? if ($find_overdue_mess == "Y"): ?>
+                                <? if ($find_wait_answer_user == "Y"): ?>
                                     <tr>
                                         <td valign="center">
                                             <img
                                                     src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OVERDUE_MESSAGES"] ?>"
                                                     width="45"
                                                     height="2"
-                                                    alt="overdue-mess-image"
+                                                    alt="find-wait-answer-user"
                                             >
                                         </td>
-                                        <td nowrap><?= GetMessage("SUP_OVERDUE_MESSAGES") ?></td>
+                                        <td nowrap><?= GetMessage("SUP_WAIT_ANSWER_USER") ?></td>
                                     </tr>
                                 <? endif; ?>
                             </table>
