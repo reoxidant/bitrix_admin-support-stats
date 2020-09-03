@@ -51,8 +51,7 @@ class FilterForm implements PropertyContainerInterface
                 <td><? echo $this -> createCalendarPeriod($this -> getProperty("find_date1"), $this -> getProperty("find_date2")) ?></td>
             </tr>
             <tr>
-                <td nowrap>
-                    <?=GetMessage("SUP_F_STATUS")?>:</td>
+                <td nowrap><?=GetMessage("SUP_F_STATUS")?>:</td>
                 <td>
                     <?
                         $ref = array(); $ref_id = array();

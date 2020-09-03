@@ -49,9 +49,10 @@ class CAdmin implements PropertyContainerInterface
             "find_source_id_stats",
             "find_date1_stats",
             "find_date2_stats",
-            "find_open_stats",
-            "find_close_stats",
-            "find_all_stats",
+            "find_work_in",
+            "find_close_ticket",
+            "find_wait_answer_dit",
+            "find_wait_answer_user",
             "find_mess_stats",
             "find_overdue_mess_stats"
         ];

@@ -55,11 +55,10 @@ if ($facade -> getSubsystemCAdmin() -> getAdmin() -> IsDefaultFilter()):
     $set_filter = "Y";
     $defaultFilterValues = [
         'find_date1' => date('d.m.Y', strtotime("-30 day")),
-        'find_open' => "Y",
-        'find_close' => "Y",
-        "find_all" => "Y",
-        'find_mess' => "Y",
-        'find_overdue_mess' => "Y",
+        'find_work_in' => "Y",
+        'find_close_ticket' => "Y",
+        'find_wait_answer_dit' => "Y",
+        'find_wait_answer_user' => "Y",
     ];
 else:
     $defaultFilterValues = null;
@@ -80,6 +79,10 @@ if ($bAdmin!="Y" && $bDemo!="Y") $find_responsible_id = $USER->GetID();
 
 InitBVar($find_responsible_exact_match);
 
+function showStatusId($statusId = null, $masterId = null){
+    return ($statusId == null) ? "Y" : ($statusId == $masterId) ? "Y" : "N";
+}
+
 $arFilterProps = [
     "find_site" => $find_site_stats,
     "find_date1" => $defaultFilterValues['find_date1'] ?? $find_date1_stats,
@@ -93,9 +96,10 @@ $arFilterProps = [
     "find_status_id" => $find_status_id_stats,
     "find_mark_id" => $find_mark_id_stats,
     "find_source_id" => $find_source_id_stats,
-    "find_open" => $defaultFilterValues['find_open'] ?? ($find_open_stats ?? "Y"),
-    "find_close" => $defaultFilterValues['find_close'] ?? ($find_close_stats ?? "Y"),
-    "find_all" => $defaultFilterValues['find_all'] ?? ($find_all_stats ?? "Y"),
+    "find_work_in" => $defaultFilterValues['find_work_in'] ?? showStatusId($find_status_id_stats, 23),
+    "find_close_ticket" => $defaultFilterValues['find_close_ticket'] ?? showStatusId($find_status_id_stats, 24),
+    "find_wait_answer_dit" => $defaultFilterValues['find_wait_answer_dit'] ?? showStatusId($find_status_id_stats, 25),
+    "find_wait_answer_user" => $defaultFilterValues['find_wait_answer_user'] ?? showStatusId($find_status_id_stats, 26),
     "find_mess" => $defaultFilterValues['find_mess'] ?? ($find_mess_stats ?? "Y"),
     "find_overdue_mess" => $defaultFilterValues['find_overdue_mess'] ?? ($find_overdue_mess_stats ?? "Y"),
 ];
