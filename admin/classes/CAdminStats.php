@@ -17,7 +17,7 @@ require_once('PropertyContainerInterface.php');
  * Class CAdmin
  * @package admin\classes
  */
-class CAdmin implements PropertyContainerInterface
+class CAdminStats implements PropertyContainerInterface
 {
 
     /**

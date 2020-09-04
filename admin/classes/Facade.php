@@ -9,12 +9,12 @@
 namespace admin\classes;
 
 require_once('Graph.php');
-require_once('CAdmin.php');
+require_once('CAdminStats.php');
+require_once('CAdminFilterStats.php');
 require_once('Ticket.php');
 require_once('SupportUser.php');
 require_once('FilterForm.php');
 
-use CAdminFilter;
 use CAdminList;
 use CAdminSorting;
 use CTicket;
@@ -34,9 +34,9 @@ class Facade
      */
     private $subsystemGraph;
     /**
-     * @var SubsystemCAdmin|null
+     * @var SubsystemCAdminStats|null
      */
-    private $subsystemCAdmin;
+    private $subsystemCAdminStats;
 
     /**
      * @var SubsystemTicket|null
@@ -57,7 +57,7 @@ class Facade
      * Facade constructor.
      * @param SubsystemRole|null $subsystemRole
      * @param SubsystemGraph|null $subsystemGraph
-     * @param SubsystemCAdmin|null $subsystemCAdmin
+     * @param SubsystemCAdminStats|null $subsystemCAdminStats
      * @param SubsystemTicket|null $subsystemTicket
      * @param SubsystemSupportUser|null $subsystemSupportUser
      * @param SubsystemFilterForm|null $subsystemFilterForm
@@ -65,7 +65,7 @@ class Facade
     public function __construct(
         SubsystemRole $subsystemRole = null,
         SubsystemGraph $subsystemGraph = null,
-        SubsystemCAdmin $subsystemCAdmin = null,
+        SubsystemCAdminStats $subsystemCAdminStats = null,
         SubsystemTicket $subsystemTicket = null,
         SubsystemSupportUser $subsystemSupportUser = null,
         SubsystemFilterForm $subsystemFilterForm = null
@@ -73,7 +73,7 @@ class Facade
     {
         $this -> subsystemRole = $subsystemRole ?: new SubsystemRole();
         $this -> subsystemGraph = $subsystemGraph ?: new SubsystemGraph();
-        $this -> subsystemCAdmin = $subsystemCAdmin ?: new SubsystemCAdmin();
+        $this -> subsystemCAdminStats = $subsystemCAdminStats ?: new SubsystemCAdmin();
         $this -> subsystemTicket = $subsystemTicket ?: new SubsystemTicket();
         $this -> subsystemSupportUser = $subsystemSupportUser ?: new SubsystemSupportUser();
         $this -> subsystemFilterForm = $subsystemFilterForm ?: new SubsystemFilterForm();
@@ -96,11 +96,11 @@ class Facade
     }
 
     /**
-     * @return SubsystemCAdmin|null
+     * @return SubsystemCAdminStats|null
      */
-    public function getSubsystemCAdmin(): ?SubsystemCAdmin
+    public function getSubsystemCAdminStats(): ?SubsystemCAdminStats
     {
-        return $this -> subsystemCAdmin;
+        return $this -> subsystemCAdminStats;
     }
 
     /**
@@ -211,26 +211,26 @@ class SubsystemGraph
 }
 
 /**
- * Class SubsystemCAdmin
+ * Class SubsystemCAdminStats
  * @package admin\classes
  */
-class SubsystemCAdmin
+class SubsystemCAdminStats
 {
 
     /**
-     * @var CAdmin|null
+     * @var CAdminStats|null
      */
     private $admin;
 
     /**
-     * SubsystemCAdmin constructor.
-     * @param CAdmin|null $admin
+     * SubsystemCAdminStats constructor.
+     * @param CAdminStats|null $admin
      */
     public function __construct(
-        CAdmin $admin = null
+        CAdminStats $admin = null
     )
     {
-        $this -> admin = $admin ?: new CAdmin();
+        $this -> admin = $admin ?: new CAdminStats();
     }
 
     /**
@@ -239,20 +239,8 @@ class SubsystemCAdmin
      */
     public function initCAdminPropertyList($sTableID)
     {
-        $arrMessages = array(
-            GetMessage("SUP_F_SITE"),
-            GetMessage("SUP_F_RESPONSIBLE"),
-            GetMessage("SUP_F_SLA"),
-            GetMessage("SUP_F_CATEGORY"),
-            GetMessage("SUP_F_CRITICALITY"),
-            GetMessage("SUP_F_STATUS"),
-            GetMessage("SUP_F_MARK"),
-            GetMessage("SUP_F_SOURCE"),
-            GetMessage("SUP_SHOW")
-        );
         $this -> admin -> addProperty('oSort', new CAdminSorting($sTableID));
         $this -> admin -> addProperty('lAdmin', new CAdminList($sTableID, $this -> admin -> getProperty('oSort')));
-        $this -> admin -> addProperty('filter', new CAdminFilter("filter_id", $arrMessages));
     }
 
     /**
@@ -266,9 +254,9 @@ class SubsystemCAdmin
     }
 
     /**
-     * @return CAdmin|null
+     * @return CAdminStats|null
      */
-    public function getAdmin(): ?CAdmin
+    public function getAdmin(): ?CAdminStats
     {
         return $this -> admin;
     }
@@ -401,5 +389,27 @@ class SubsystemFilterForm
     {
         $this -> initFilterFormProperty($arFilterFormProps);
         $this -> filterForm -> generateFilterForm();
+    }
+}
+
+class SubsystemCAdminFilterStats{
+    private $cAdminFilterStats;
+
+    public function __construct(
+        CAdminFilterStats $cAdminFilterStats = null
+    ){
+        $arrMessages = array(
+            GetMessage("SUP_F_SITE"),
+            GetMessage("SUP_F_RESPONSIBLE"),
+            GetMessage("SUP_F_SLA"),
+            GetMessage("SUP_F_CATEGORY"),
+            GetMessage("SUP_F_CRITICALITY"),
+            GetMessage("SUP_F_STATUS"),
+            GetMessage("SUP_F_MARK"),
+            GetMessage("SUP_F_SOURCE"),
+            GetMessage("SUP_SHOW")
+        );
+
+        $this -> cAdminFilterStats = $cAdminFilterStats ?: new CAdminFilterStats("filter_id", $arrMessages);
     }
 }
