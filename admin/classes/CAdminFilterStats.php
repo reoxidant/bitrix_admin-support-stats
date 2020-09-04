@@ -8,7 +8,12 @@
 
 namespace admin\classes;
 
+use CHotKeys;
+use CHTTP;
+use CMain;
+use COption;
 use CUserOptions;
+use CUtil;
 
 /**
  * Class CAdminFilterStats
@@ -52,7 +57,7 @@ class CAdminFilterStats
     /**
      *
      */
-    const SESS_PARAMS_NAME = "";
+    const SESS_PARAMS_NAME = "main.adminFilter";
 
     /**
      * CAdminFilterStats constructor.
@@ -136,7 +141,7 @@ class CAdminFilterStats
      */
     private function err_mess()
     {
-        return "<br>Class: CAdmin<br>File: " . __FILE__;
+        return "<br>Class: CAdminFilterStats<br>File: " . __FILE__;
     }
 
     /**
@@ -355,7 +360,7 @@ class CAdminFilterStats
         );
 
         if (isset($arFields["FIELDS"]))
-            $item["FIELDS"] = CAdminFilter ::FieldsExcess($arFields["FIELDS"]);
+            $item["FIELDS"] = self ::FieldsExcess($arFields["FIELDS"]);
         else
             $item["FIELDS"] = array();
 
@@ -417,7 +422,7 @@ class CAdminFilterStats
         $arFields["COMMON"] = "Y";
 
         if (isset($arFields["FIELDS"]))
-            $arFields["FIELDS"] = CAdminFilter ::FieldsExcess($arFields["FIELDS"]);
+            $arFields["FIELDS"] = self ::FieldsExcess($arFields["FIELDS"]);
         else
             $item["FIELDS"] = array();
 
@@ -425,7 +430,7 @@ class CAdminFilterStats
         if (!isset($arFields["SORT"]) || empty($arFields["SORT"]))
             $arFields["SORT"] = self ::$defaultPresetSort;
 
-        return CAdminFilter ::Add($arFields);
+        return self ::Add($arFields);
     }
 
     /**
@@ -436,7 +441,7 @@ class CAdminFilterStats
     {
         global $DB;
 
-        $arFields["FIELDS"] = CAdminFilter ::FieldsDelHiddenEmpty($arFields["FIELDS"]);
+        $arFields["FIELDS"] = self ::FieldsDelHiddenEmpty($arFields["FIELDS"]);
 
         if (!$arFields["FIELDS"])
             return false;
@@ -446,7 +451,7 @@ class CAdminFilterStats
         if (isset($arFields["SORT_FIELD"]))
             $arFields["SORT_FIELD"] = serialize($arFields["SORT_FIELD"]);
 
-        if (!CAdminFilter ::CheckFields($arFields))
+        if (!self ::CheckFields($arFields))
             return false;
 
         $ID = $DB -> Add("b_filters", $arFields, array("FIELDS"));
@@ -474,7 +479,7 @@ class CAdminFilterStats
         global $DB;
         $ID = intval($ID);
 
-        $arFields["FIELDS"] = CAdminFilter ::FieldsDelHiddenEmpty($arFields["FIELDS"]);
+        $arFields["FIELDS"] = self ::FieldsDelHiddenEmpty($arFields["FIELDS"]);
 
         if (!$arFields["FIELDS"])
             return false;
@@ -484,7 +489,7 @@ class CAdminFilterStats
         if (isset($arFields["SORT_FIELD"]))
             $arFields["SORT_FIELD"] = serialize($arFields["SORT_FIELD"]);
 
-        if (!CAdminFilter ::CheckFields($arFields))
+        if (!self ::CheckFields($arFields))
             return false;
 
         $strUpdate = $DB -> PrepareUpdate("b_filters", $arFields);
@@ -638,7 +643,7 @@ class CAdminFilterStats
      */
     public function Begin()
     {
-        uasort($this -> arItems, "CAdminFilter::Cmp");
+        uasort($this -> arItems, "self::Cmp");
 
         echo '
 <div id="adm-filter-tab-wrap-' . $this -> id . '" class="adm-filter-wrap' . ($this -> arOptFlt["styleFolded"] == "Y" ? " adm-filter-folded" : "") . '" style = "display: none;">
@@ -674,7 +679,7 @@ class CAdminFilterStats
         $hkInst = CHotKeys ::getInstance();
 
         echo '
-123213
+
 						</table>
 					</div>
 					<div class="adm-filter-bottom-separate" id="' . $this -> id . '_bottom_separator"></div>
@@ -815,7 +820,7 @@ class CAdminFilterStats
 </script>';
 
         $hkInst = CHotKeys ::getInstance();
-        $Execs = $hkInst -> GetCodeByClassName("CAdmin");
+        $Execs = $hkInst -> GetCodeByClassName("CAdminFilterStats");
         echo $hkInst -> PrintJSExecs($Execs);
     }
 
@@ -892,12 +897,12 @@ class CAdminFilterStats
                         <td align="right" width="40%"><?= GetMessage("admin_lib_filter_sett_name") ?></td>
                         <td><input type="text" name="save_filter_name" value="" size="30" maxlength="255"></td>
                     </tr>
-                    <? if ($isAdmin):?>
+                    <? if ($isAdmin): ?>
                         <tr>
                             <td align="right" width="40%"><?= GetMessage("admin_lib_filter_sett_common") ?></td>
                             <td><input type="checkbox" name="common"></td>
                         </tr>
-                    <?endif; ?>
+                    <? endif; ?>
                 </table>
             </div>
         </div>

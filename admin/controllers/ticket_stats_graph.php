@@ -22,7 +22,6 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/admin/classes/
 global $USER, $APPLICATION;
 
 use admin\classes\Facade;
-use admin\classes\SubsystemCAdminFilterStats;
 use admin\classes\SubsystemCAdminStats;
 use admin\classes\SubsystemFilterForm;
 use admin\classes\SubsystemGraph;
@@ -33,7 +32,6 @@ use admin\classes\SubsystemTicket;
 $subsystemRole = new SubsystemRole();
 $subsystemGraph = new SubsystemGraph();
 $subsystemCAdminStats = new SubsystemCAdminStats();
-$subsystemCAdminFilterStats = new SubsystemCAdminFilterStats();
 $subsystemTicket = new SubsystemTicket();
 $subsystemSupportUser = new SubsystemSupportUser();
 $subsystemFilterForm = new SubsystemFilterForm();
@@ -157,7 +155,6 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_ad
 
 //form
 $arFilterFormProps = [
-    "filter" => $facade -> getSubsystemCAdminStats() -> getAdmin() -> getProperty('filter'),
     "bAdmin" => $bAdmin,
     "bDemo" => $bDemo,
     "arrSupportUser" => $facade -> getSubsystemSupportUser() -> getArrSupportUser(),

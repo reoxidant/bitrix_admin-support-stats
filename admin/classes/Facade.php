@@ -58,6 +58,7 @@ class Facade
      * @param SubsystemRole|null $subsystemRole
      * @param SubsystemGraph|null $subsystemGraph
      * @param SubsystemCAdminStats|null $subsystemCAdminStats
+     * @param SubsystemCAdminFilterStats|null $subsystemCAdminFilterStats
      * @param SubsystemTicket|null $subsystemTicket
      * @param SubsystemSupportUser|null $subsystemSupportUser
      * @param SubsystemFilterForm|null $subsystemFilterForm
@@ -73,7 +74,7 @@ class Facade
     {
         $this -> subsystemRole = $subsystemRole ?: new SubsystemRole();
         $this -> subsystemGraph = $subsystemGraph ?: new SubsystemGraph();
-        $this -> subsystemCAdminStats = $subsystemCAdminStats ?: new SubsystemCAdmin();
+        $this -> subsystemCAdminStats = $subsystemCAdminStats ?: new SubsystemCAdminStats();
         $this -> subsystemTicket = $subsystemTicket ?: new SubsystemTicket();
         $this -> subsystemSupportUser = $subsystemSupportUser ?: new SubsystemSupportUser();
         $this -> subsystemFilterForm = $subsystemFilterForm ?: new SubsystemFilterForm();
@@ -389,40 +390,5 @@ class SubsystemFilterForm
     {
         $this -> initFilterFormProperty($arFilterFormProps);
         $this -> filterForm -> generateFilterForm();
-    }
-}
-
-/**
- * Class SubsystemCAdminFilterStats
- * @package admin\classes
- */
-class SubsystemCAdminFilterStats
-{
-    /**
-     * @var CAdminFilterStats|null
-     */
-    private $cAdminFilterStats;
-
-    /**
-     * SubsystemCAdminFilterStats constructor.
-     * @param CAdminFilterStats|null $cAdminFilterStats
-     */
-    public function __construct(
-        CAdminFilterStats $cAdminFilterStats = null
-    )
-    {
-        $arrMessages = array(
-            GetMessage("SUP_F_SITE"),
-            GetMessage("SUP_F_RESPONSIBLE"),
-            GetMessage("SUP_F_SLA"),
-            GetMessage("SUP_F_CATEGORY"),
-            GetMessage("SUP_F_CRITICALITY"),
-            GetMessage("SUP_F_STATUS"),
-            GetMessage("SUP_F_MARK"),
-            GetMessage("SUP_F_SOURCE"),
-            GetMessage("SUP_SHOW")
-        );
-
-        $this -> cAdminFilterStats = $cAdminFilterStats ?: new CAdminFilterStats("filter_id", $arrMessages);
     }
 }
