@@ -17,13 +17,13 @@ IncludeModuleLangFile(__FILE__);
 include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php"); // подключим цвета для графика
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
 
-require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/support/admin/classes/Facade.php"); //смотри паттерн фасад
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/admin/classes/Facade.php"); //смотри паттерн фасад
 
 global $USER, $APPLICATION;
 
 use admin\classes\Facade;
-use admin\classes\SubsystemCAdminStats;
 use admin\classes\SubsystemCAdminFilterStats;
+use admin\classes\SubsystemCAdminStats;
 use admin\classes\SubsystemFilterForm;
 use admin\classes\SubsystemGraph;
 use admin\classes\SubsystemRole;
@@ -70,18 +70,24 @@ $arFilterFields = $facade -> getSubsystemCAdminStats() -> getAdmin() -> addArFil
 
 $facade -> getSubsystemCAdminStats() -> getAdmin() -> getProperty("lAdmin") -> InitFilter($arFilterFields);
 
-if(!$set_filter && empty($defaultFilterValues)){
-    foreach ($_SESSION["SESS_STATS"][$sTableID] as $key => $val){
+if (!$set_filter && empty($defaultFilterValues)) {
+    foreach ($_SESSION["SESS_STATS"][$sTableID] as $key => $val) {
         global $$key;
         if (isset($$key)) $$key = $val;
     }
 }
 
-if ($bAdmin!="Y" && $bDemo!="Y") $find_responsible_id = $USER->GetID();
+if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
 
 InitBVar($find_responsible_exact_match);
 
-function showStatusId($statusId = null, $masterId = null){
+/**
+ * @param null $statusId
+ * @param null $masterId
+ * @return string
+ */
+function showStatusId($statusId = null, $masterId = null)
+{
     return ($statusId == null) ? "Y" : ($statusId == $masterId) ? "Y" : "N";
 }
 
@@ -93,7 +99,7 @@ $arFilterProps = [
     "find_responsible" => $find_responsible_stats,
     "find_responsible_exact_match" => $find_responsible_exact_match,
     "find_sla_id" => $find_sla_id_stats,
-    "find_category_id" =>  20,
+    "find_category_id" => 20,
     "find_criticality_id" => $find_criticality_id_stats,
     "find_status_id" => $find_status_id_stats,
     "find_mark_id" => $find_mark_id_stats,
@@ -138,7 +144,7 @@ try {
         "400"
     );
 } catch (\Exception $e) {
-    $e->getMessage();
+    $e -> getMessage();
 }
 
 $facade -> getSubsystemCAdminStats() -> getAdmin() -> getProperty("lAdmin") -> EndCustomContent();

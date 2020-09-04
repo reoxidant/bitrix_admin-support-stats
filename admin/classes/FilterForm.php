@@ -68,4 +68,5 @@ class FilterForm implements PropertyContainerInterface
         return $this -> propertyContainer[$name] ?? null;
     }
 }
+
 ?>

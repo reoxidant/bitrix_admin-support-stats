@@ -392,12 +392,25 @@ class SubsystemFilterForm
     }
 }
 
-class SubsystemCAdminFilterStats{
+/**
+ * Class SubsystemCAdminFilterStats
+ * @package admin\classes
+ */
+class SubsystemCAdminFilterStats
+{
+    /**
+     * @var CAdminFilterStats|null
+     */
     private $cAdminFilterStats;
 
+    /**
+     * SubsystemCAdminFilterStats constructor.
+     * @param CAdminFilterStats|null $cAdminFilterStats
+     */
     public function __construct(
         CAdminFilterStats $cAdminFilterStats = null
-    ){
+    )
+    {
         $arrMessages = array(
             GetMessage("SUP_F_SITE"),
             GetMessage("SUP_F_RESPONSIBLE"),
