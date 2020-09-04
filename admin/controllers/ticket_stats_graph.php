@@ -17,12 +17,12 @@ IncludeModuleLangFile(__FILE__);
 include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php"); // подключим цвета для графика
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
 
-require_once($_SERVER["DOCUMENT_ROOT"]."/bitrix/modules/support/admin/classes/Facade.php"); //смотри паттерн фасад
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/admin/classes/Facade.php"); //смотри паттерн фасад
 
 global $USER, $APPLICATION;
 
 use admin\classes\Facade;
-use admin\classes\SubsystemCAdmin;
+use admin\classes\SubsystemCAdminStats;
 use admin\classes\SubsystemFilterForm;
 use admin\classes\SubsystemGraph;
 use admin\classes\SubsystemRole;
@@ -31,7 +31,7 @@ use admin\classes\SubsystemTicket;
 
 $subsystemRole = new SubsystemRole();
 $subsystemGraph = new SubsystemGraph();
-$subsystemCAdmin = new SubsystemCAdmin();
+$subsystemCAdminStats = new SubsystemCAdminStats();
 $subsystemTicket = new SubsystemTicket();
 $subsystemSupportUser = new SubsystemSupportUser();
 $subsystemFilterForm = new SubsystemFilterForm();
@@ -39,7 +39,7 @@ $subsystemFilterForm = new SubsystemFilterForm();
 $facade = new Facade(
     $subsystemRole,
     $subsystemGraph,
-    $subsystemCAdmin,
+    $subsystemCAdminStats,
     $subsystemTicket,
     $subsystemSupportUser,
     $subsystemFilterForm
@@ -49,9 +49,9 @@ list('bAdmin' => $bAdmin, 'bDemo' => $bDemo) = $facade -> getSubsystemRole() -> 
 
 $sTableID = $facade -> getSubsystemGraph() -> getGraph() -> addProperty("sTableID", 't_report_graph', true);
 
-$facade -> getSubsystemCAdmin() -> initCAdminPropertyList($sTableID);
+$facade -> getSubsystemCAdminStats() -> initCAdminPropertyList($sTableID);
 
-if ($facade -> getSubsystemCAdmin() -> getAdmin() -> IsDefaultFilter()):
+if ($facade -> getSubsystemCAdminStats() -> getAdmin() -> IsDefaultFilter()):
     $set_filter = "Y";
     $defaultFilterValues = [
         'find_date1' => date('d.m.Y', strtotime("-30 day")),
@@ -64,22 +64,28 @@ else:
     $defaultFilterValues = null;
 endif;
 
-$arFilterFields = $facade -> getSubsystemCAdmin() -> getAdmin() -> addArFilterFields(true);
+$arFilterFields = $facade -> getSubsystemCAdminStats() -> getAdmin() -> addArFilterFields(true);
 
-$facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty("lAdmin") -> InitFilter($arFilterFields);
+$facade -> getSubsystemCAdminStats() -> getAdmin() -> getProperty("lAdmin") -> InitFilter($arFilterFields);
 
-if(!$set_filter && empty($defaultFilterValues)){
-    foreach ($_SESSION["SESS_STATS"][$sTableID] as $key => $val){
+if (!$set_filter && empty($defaultFilterValues)) {
+    foreach ($_SESSION["SESS_STATS"][$sTableID] as $key => $val) {
         global $$key;
         if (isset($$key)) $$key = $val;
     }
 }
 
-if ($bAdmin!="Y" && $bDemo!="Y") $find_responsible_id = $USER->GetID();
+if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
 
 InitBVar($find_responsible_exact_match);
 
-function showStatusId($statusId = null, $masterId = null){
+/**
+ * @param null $statusId
+ * @param null $masterId
+ * @return string
+ */
+function showStatusId($statusId = null, $masterId = null)
+{
     return ($statusId == null) ? "Y" : ($statusId == $masterId) ? "Y" : "N";
 }
 
@@ -91,7 +97,7 @@ $arFilterProps = [
     "find_responsible" => $find_responsible_stats,
     "find_responsible_exact_match" => $find_responsible_exact_match,
     "find_sla_id" => $find_sla_id_stats,
-    "find_category_id" =>  20,
+    "find_category_id" => 20,
     "find_criticality_id" => $find_criticality_id_stats,
     "find_status_id" => $find_status_id_stats,
     "find_mark_id" => $find_mark_id_stats,
@@ -104,17 +110,17 @@ $arFilterProps = [
     "find_overdue_mess" => $defaultFilterValues['find_overdue_mess'] ?? ($find_overdue_mess_stats ?? "Y"),
 ];
 
-$facade -> getSubsystemCAdmin() -> getAdmin() -> initSessionFilter($arFilterFields);
+$facade -> getSubsystemCAdminStats() -> getAdmin() -> initSessionFilter($arFilterFields);
 
-$facade -> getSubsystemCAdmin() -> getAdmin() -> addArFilterData($arFilterProps);
+$facade -> getSubsystemCAdminStats() -> getAdmin() -> addArFilterData($arFilterProps);
 
-$arUsersID = $facade -> getSubsystemTicket() -> initTicketProperty($facade -> getSubsystemCAdmin() -> getAdmin());
+$arUsersID = $facade -> getSubsystemTicket() -> initTicketProperty($facade -> getSubsystemCAdminStats() -> getAdmin());
 
 $facade -> getSubsystemSupportUser() -> addUsers($arUsersID);
 
 //ob_start
-$facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> BeginCustomContent();
-$facade -> getSubsystemCAdmin() -> showErrorMessageIfExist(); ?>
+$facade -> getSubsystemCAdminStats() -> getAdmin() -> getProperty('lAdmin') -> BeginCustomContent();
+$facade -> getSubsystemCAdminStats() -> showErrorMessageIfExist(); ?>
 
     <!--HTML CONTENT-->
 
@@ -129,18 +135,18 @@ $facade -> getSubsystemCAdmin() -> showErrorMessageIfExist(); ?>
 try {
     $facade -> getSubsystemGraph() -> createImage(
         $facade -> getSubsystemTicket() -> getTicket(),
-        $facade -> getSubsystemCAdmin() -> getAdmin(),
+        $facade -> getSubsystemCAdminStats() -> getAdmin(),
         $arrColor,
         $defaultFilterValues ?? $arFilterProps,
         "576",
         "400"
     );
 } catch (\Exception $e) {
-    $e->getMessage();
+    $e -> getMessage();
 }
 
-$facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty("lAdmin") -> EndCustomContent();
-$facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty("lAdmin") -> CheckListMode();
+$facade -> getSubsystemCAdminStats() -> getAdmin() -> getProperty("lAdmin") -> EndCustomContent();
+$facade -> getSubsystemCAdminStats() -> getAdmin() -> getProperty("lAdmin") -> CheckListMode();
 
 global $APPLICATION;
 $APPLICATION -> SetTitle(GetMessage("SUP_PAGE_TITLE"));
@@ -149,7 +155,6 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_ad
 
 //form
 $arFilterFormProps = [
-    "filter" => $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('filter'),
     "bAdmin" => $bAdmin,
     "bDemo" => $bDemo,
     "arrSupportUser" => $facade -> getSubsystemSupportUser() -> getArrSupportUser(),
@@ -161,6 +166,6 @@ $arFilterFormProps = array_merge($arFilterFormProps, $arFilterProps);
 $facade -> getSubsystemFilterForm() -> createAndShowFilterForm($arFilterFormProps);
 
 //ob_get_contents
-$facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> DisplayList();
+$facade -> getSubsystemCAdminStats() -> getAdmin() -> getProperty('lAdmin') -> DisplayList();
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");
