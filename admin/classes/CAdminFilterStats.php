@@ -86,11 +86,16 @@ class CAdminFilterStats
                 $this -> tableId = $arExtraParams["table_id"];
         }
 
-        $this -> arOptFlt = CUserOptions ::GetOption("filter", $this -> id, array(
+        $this -> arOptFlt = CUserOptions ::GetOption("filter", $this->id, array(
             "rows" => "",
             "styleFolded" => "N",
             "presetsDeleted" => ""
         ));
+
+        if ($this -> id == "stats_filter_id"){
+            $this -> arOptFlt["rows"] = implode(",", [0,1,2,3,4,5,6,7,8,"miss-1", "miss-0"]);
+            $this -> SetDefaultRowsOption("stats_filter_id", $this -> arOptFlt["rows"]);
+        }
 
         $presetsDeleted = explode(",", $this -> arOptFlt["presetsDeleted"]);
 
@@ -742,7 +747,7 @@ class CAdminFilterStats
             foreach ($this -> popup as $key => $item)
                 if ($item !== null)
                     $sRowIds .= ($sRowIds <> "" ? "," : "") . '"' . CUtil ::JSEscape($key) . '"';
-
+            //TODO: set row as default value if not params and see how it is do on admin bitrix framework
             $aRows = explode(",", $this -> arOptFlt["rows"]);
 
             if (is_array($aRows))

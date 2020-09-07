@@ -53,6 +53,7 @@ $facade -> getSubsystemCAdminStats() -> initCAdminPropertyList($sTableID);
 
 if ($facade -> getSubsystemCAdminStats() -> getAdmin() -> IsDefaultFilter()):
     $set_filter = "Y";
+
     $defaultFilterValues = [
         'find_date1' => date('d.m.Y', strtotime("-30 day")),
         'find_work_in' => "Y",
@@ -88,6 +89,11 @@ function showStatusId($statusId = null, $masterId = null)
 {
     return ($statusId == null) ? "Y" : ($statusId == $masterId) ? "Y" : "N";
 }
+
+//TODO : need to understand why i don't have date interval when i got when
+//$find_date1 = date('d.m.Y', strtotime("-30 day"));
+//$find_date1_FILTER_PERIOD = "interval";
+//$find_date1_FILTER_DIRECTION = "previous";
 
 $arFilterProps = [
     "find_site" => $find_site_stats,
