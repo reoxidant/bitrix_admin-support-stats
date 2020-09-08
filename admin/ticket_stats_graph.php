@@ -108,10 +108,10 @@ $arFilterProps = [
     "find_status_id" => $find_status_id_stats,
     "find_mark_id" => $find_mark_id_stats,
     "find_source_id" => $find_source_id_stats,
-    "find_work_in" => $defaultFilterValues['find_work_in'] ?? showStatusId($find_status_id_stats, 23),
-    "find_close_ticket" => $defaultFilterValues['find_close_ticket'] ?? showStatusId($find_status_id_stats, 24),
-    "find_wait_answer_dit" => $defaultFilterValues['find_wait_answer_dit'] ?? showStatusId($find_status_id_stats, 25),
-    "find_wait_answer_user" => $defaultFilterValues['find_wait_answer_user'] ?? showStatusId($find_status_id_stats, 26),
+    "find_work_in" => $defaultFilterValues['find_work_in'] ?? showStatusId($find_status_id_stats, 7),
+    "find_close_ticket" => $defaultFilterValues['find_close_ticket'] ?? showStatusId($find_status_id_stats, 8),
+    "find_wait_answer_dit" => $defaultFilterValues['find_wait_answer_dit'] ?? showStatusId($find_status_id_stats, 9),
+    "find_wait_answer_user" => $defaultFilterValues['find_wait_answer_user'] ?? showStatusId($find_status_id_stats, 10),
     "find_mess" => $defaultFilterValues['find_mess'] ?? ($find_mess_stats ?? "Y"),
     "find_overdue_mess" => $defaultFilterValues['find_overdue_mess'] ?? ($find_overdue_mess_stats ?? "Y"),
 ];
@@ -170,6 +170,17 @@ $arFilterFormProps = [
 $arFilterFormProps = array_merge($arFilterFormProps, $arFilterProps);
 
 $facade -> getSubsystemFilterForm() -> createAndShowFilterForm($arFilterFormProps);
+
+echo '
+<script type="text/javascript">
+	BX.ready(function(){
+	    const elements = document.getElementsByClassName("adm-filter-item-delete");
+        while (elements.length > 0) {
+            elements[0].remove();
+        }
+	});';
+echo '
+</script>';
 
 //ob_get_contents
 $facade -> getSubsystemCAdminStats() -> getAdmin() -> getProperty('lAdmin') -> DisplayList();
