@@ -42,10 +42,6 @@ class CAdminFilterStats
      */
     private static $defaultSort = 100;
     /**
-     * @var int
-     */
-    private static $defaultPresetSort = 50;
-    /**
      * @var bool|mixed
      */
     private $url = false;
@@ -69,8 +65,8 @@ class CAdminFilterStats
     {
         global $USER;
 
-        $uid = $USER -> GetID();
-        $isAdmin = $USER -> CanDoOperation('edit_other_settings');
+        $uid = $USER -> GetID(); // for getList
+        //$isAdmin = $USER -> CanDoOperation('edit_other_settings'); //Get Edit or not
 
         if (empty($popup) || !is_array($popup))
             $popup = false;
@@ -86,15 +82,8 @@ class CAdminFilterStats
                 $this -> tableId = $arExtraParams["table_id"];
         }
 
-        $this -> arOptFlt = CUserOptions ::GetOption("filter", $this->id, array(
-            "rows" => "",
-            "styleFolded" => "N",
-            "presetsDeleted" => ""
-        ));
-
-        if ($this -> id == "stats_filter_id"){
-            $this -> arOptFlt["rows"] = implode(",", [0,1,2,3,4,5,6,7,8,"miss-1", "miss-0"]);
-            $this -> SetDefaultRowsOption("stats_filter_id", $this -> arOptFlt["rows"]);
+        if ($this -> id == "stats_filter_id") {
+            $this -> arOptFlt["rows"] = implode(",", [0, 1, 2, 3, 4, 5, 6, 7, 8, "miss-1", "miss-0"]);
         }
 
         $presetsDeleted = explode(",", $this -> arOptFlt["presetsDeleted"]);
@@ -135,7 +124,7 @@ class CAdminFilterStats
                 }
             }
 
-            $arItem["EDITABLE"] = ((($isAdmin || $arFilter["USER_ID"] == $uid) && $arFilter["PRESET"] != "Y") ? true : false);
+//            $arItem["EDITABLE"] = ((($isAdmin || $arFilter["USER_ID"] == $uid) && $arFilter["PRESET"] != "Y") ? true : false);
 
             $this -> AddItem($arItem);
         }
@@ -198,248 +187,6 @@ class CAdminFilterStats
 
     /**
      * @param $arFields
-     * @return bool
-     */
-    private function CheckFields($arFields)
-    {
-        /** @global CMain $APPLICATION */
-        global $APPLICATION;
-
-        $aMsg = array();
-
-        if (!is_set($arFields, "FILTER_ID") || (is_set($arFields, "FILTER_ID") && trim($arFields["FILTER_ID"]) == ""))
-            $aMsg[] = array("id" => "FILTER_ID", "text" => GetMessage("filters_error_table_name"));
-
-        if (!is_set($arFields, "NAME") || (is_set($arFields, "NAME") && trim($arFields["NAME"]) == ""))
-            $aMsg[] = array("id" => "NAME", "text" => GetMessage("filters_error_name"));
-
-        if (!is_set($arFields, "FIELDS") || (is_set($arFields, "FIELDS") && trim($arFields["FIELDS"]) == ""))
-            $aMsg[] = array("id" => "FIELDS", "text" => GetMessage("filters_error_fields"));
-
-        if ((!is_set($arFields, "USER_ID") && $arFields["COMMON"] != "Y") || (is_set($arFields, "USER_ID") && trim($arFields["USER_ID"]) == ""))
-            $aMsg[] = array("id" => "USER_ID", "text" => GetMessage("filters_error_user"));
-
-        if (is_set($arFields, "USER_ID")) {
-            if (intval($arFields["USER_ID"]) > 0) {
-                $res = CUser ::GetByID(intval($arFields["USER_ID"]));
-                if (!$res -> Fetch())
-                    $aMsg[] = array("id" => "USER_ID", "text" => GetMessage("filters_error_user"));
-            }
-        }
-
-        if (!empty($aMsg)) {
-            $e = new CAdminException($aMsg);
-            $APPLICATION -> ThrowException($e);
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * @param $arFields
-     * @return array
-     */
-    private function FieldsExcess($arFields)
-    {
-        $arResult = array();
-
-        if (is_array($arFields))
-            foreach ($arFields as $key => $field)
-                $arResult[$key] = array(
-                    "value" => $field,
-                    "hidden" => "false",
-                );
-        return $arResult;
-    }
-
-    /**
-     * @param $arFields
-     * @return array|false
-     */
-    private function FieldsDelHiddenEmpty($arFields)
-    {
-        $arResult = array();
-
-        if (!is_array($arFields))
-            return false;
-
-        foreach ($arFields as $key => $field) {
-            if (!empty($field["value"]) || $field["hidden"] == "false")
-                $arResult[$key] = array(
-                    "value" => $field["value"],
-                    "hidden" => $field["hidden"],
-                );
-        }
-        return $arResult;
-    }
-
-    /**
-     * Sets default rows, witch will be shown to user when he comes to page for the first time/
-     * This function must be called on admin page with the filter initialization.
-     * For example: $oFilter->SetDefaultRows("find_created, find_menu_id");
-     *
-     * @param str rows - rows identificators separated by commas ("rowid_1, rowid_2, ...")
-     * @return bool
-     */
-    public function SetDefaultRows($rows)
-    {
-        if (is_array($rows))
-            $outRows = implode(",", $rows);
-        else
-            $outRows = $rows;
-
-        if (!$outRows)
-            return false;
-
-        if (!empty($this -> arOptFlt["rows"]))
-            return true;
-
-        $this -> arOptFlt["rows"] = $outRows;
-
-        return true;
-    }
-
-    /**
-     * @param $filterId
-     * @param $rows
-     * @return bool
-     */
-    public static function SetDefaultRowsOption($filterId, $rows)
-    {
-        if (!$filterId)
-            return false;
-
-        if (is_array($rows))
-            $outRows = implode(",", $rows);
-        else
-            $outRows = $rows;
-
-        if (!$outRows)
-            return false;
-
-        return CUserOptions ::SetOption("filter", $filterId, array("rows" => $outRows), true);
-    }
-
-    /**
-     * Sets new filter tab with collection of fields and values
-     * This function must be called on admin page with the filter initialization.
-     * For example: $oFilter->AddPreset(array(
-     *                                    "ID" => "preset1",
-     *                                    "NAME" => "Test filter",
-     *                                    "SORT" => 100,
-     *                                    "SORT_FIELD" => array ("name" => "asc"),
-     *                                    "FIELDS" => array(
-     *                                        "find_name"=>"Smith",
-     *                                        "find_id"=>"15"
-     *                                        )
-     *                                    ));
-     *
-     * @param array $arFields = array(
-     *                                "ID" =>  filter id,
-     *                                "NAME" => filter name,
-     *                                "SORT" = > filter sorting order. Default value - 100, for presets - 50;
-     *                                "SORT_FIELD" => array("Table column name" => "sort order"),
-     *                                "FIELDS" => array(
-     *                                            "field1_name" => "field1_value",
-     *                                            "field2_name" => "field2_value",
-     *                                            ...
-     *                                                )
-     *                            )
-     * @return bool
-     */
-    public function AddPreset($arFields)
-    {
-        if (!isset($arFields["NAME"]) || empty($arFields["NAME"]))
-            return false;
-
-        if (!isset($arFields["ID"]) || empty($arFields["ID"]))
-            return false;
-
-        $item = array(
-            "ID" => "page-" . $arFields["ID"],
-            "FILTER_ID" => $this -> id,
-            "NAME" => $arFields["NAME"],
-            "EDITABLE" => false,
-            "PRESET" => "Y"
-        );
-
-        if (isset($arFields["FIELDS"]))
-            $item["FIELDS"] = self ::FieldsExcess($arFields["FIELDS"]);
-        else
-            $item["FIELDS"] = array();
-
-        if (isset($arFields["SORT"]) && !empty($arFields["SORT"]))
-            $item["SORT"] = intval($arFields["SORT"]);
-        else
-            $item["SORT"] = self ::$defaultPresetSort + count($this -> arItems) * 10;
-
-        if (isset($arFields["SORT_FIELD"]) && is_array($arFields["SORT_FIELD"]) && !empty($arFields["SORT_FIELD"]))
-            $item["SORT_FIELD"] = $arFields["SORT_FIELD"];
-
-        return $this -> AddItem($item, false);
-    }
-
-
-    /**
-     * @param $strID
-     * @return false|int|string
-     */
-    private function FindItemByPresetId($strID)
-    {
-
-        if (!is_array($this -> arItems))
-            return false;
-
-        foreach ($this -> arItems as $key => $item)
-            if ($item["PRESET_ID"] == $strID)
-                return $key;
-
-        return false;
-    }
-
-    /**
-     * @param $strID
-     * @return false|int|string
-     */
-    private function FindItemByID($strID)
-    {
-        if (!is_array($this -> arItems))
-            return false;
-
-        foreach ($this -> arItems as $key => $item)
-            if ($item["ID"] == $strID)
-                return $key;
-
-        return false;
-    }
-
-    /**
-     * @param $arFields
-     * @return false
-     */
-    public function AddPresetToBase($arFields)
-    {
-        if (!isset($arFields["NAME"]) || empty($arFields["NAME"]))
-            return false;
-
-        $arFields["PRESET"] = "Y";
-        $arFields["COMMON"] = "Y";
-
-        if (isset($arFields["FIELDS"]))
-            $arFields["FIELDS"] = self ::FieldsExcess($arFields["FIELDS"]);
-        else
-            $item["FIELDS"] = array();
-
-
-        if (!isset($arFields["SORT"]) || empty($arFields["SORT"]))
-            $arFields["SORT"] = self ::$defaultPresetSort;
-
-        return self ::Add($arFields);
-    }
-
-    /**
-     * @param $arFields
      * @return false
      */
     public static function Add($arFields)
@@ -461,58 +208,6 @@ class CAdminFilterStats
 
         $ID = $DB -> Add("b_filters", $arFields, array("FIELDS"));
         return $ID;
-    }
-
-    /**
-     * @param $ID
-     * @return \CDBResult|false
-     */
-    public static function Delete($ID)
-    {
-        global $DB;
-
-        return ($DB -> Query("DELETE FROM b_filters WHERE ID='" . intval($ID) . "'", false, "File: " . __FILE__ . "<br>Line: " . __LINE__));
-    }
-
-    /**
-     * @param $ID
-     * @param $arFields
-     * @return \CDBResult|false
-     */
-    public static function Update($ID, $arFields)
-    {
-        global $DB;
-        $ID = intval($ID);
-
-        $arFields["FIELDS"] = self ::FieldsDelHiddenEmpty($arFields["FIELDS"]);
-
-        if (!$arFields["FIELDS"])
-            return false;
-
-        $arFields["FIELDS"] = serialize($arFields["FIELDS"]);
-
-        if (isset($arFields["SORT_FIELD"]))
-            $arFields["SORT_FIELD"] = serialize($arFields["SORT_FIELD"]);
-
-        if (!self ::CheckFields($arFields))
-            return false;
-
-        $strUpdate = $DB -> PrepareUpdate("b_filters", $arFields);
-
-        $arBinds = array();
-        if (is_set($arFields, "FIELDS"))
-            $arBinds["FIELDS"] = $arFields["FIELDS"];
-
-
-        if (strlen($strUpdate) > 0) {
-            $strSql = "UPDATE b_filters SET " . $strUpdate . " WHERE ID=" . $ID;
-            return $DB -> QueryBind($strSql, $arBinds);
-
-            //if(!$DB->Query($strSql))
-            //	return false;
-        }
-
-        return false;
     }
 
     /**
@@ -631,19 +326,6 @@ class CAdminFilterStats
     }
 
     /**
-     * @param $a
-     * @param $b
-     * @return int
-     */
-    private static function Cmp($a, $b)
-    {
-        if ($a["SORT"] == $b["SORT"])
-            return ($a["ID"] < $b["ID"]) ? -1 : 1;
-
-        return ($a["SORT"] < $b["SORT"]) ? -1 : 1;
-    }
-
-    /**
      *
      */
     public function Begin()
@@ -756,9 +438,6 @@ class CAdminFilterStats
                         $sVisRowsIds .= ($sVisRowsIds <> "" ? "," : "") . '"' . CUtil ::JSEscape(trim($row)) . '":true';
         }
 
-        $this -> PrintSaveOptionsDIV();
-        $this -> GetParamsFromCookie();
-
         $openedTabUri = false;
         $openedTabSes = $filteredTab = null;
 
@@ -823,108 +502,5 @@ class CAdminFilterStats
         echo '
 	});
 </script>';
-
-        $hkInst = CHotKeys ::getInstance();
-        $Execs = $hkInst -> GetCodeByClassName("CAdminFilterStats");
-        echo $hkInst -> PrintJSExecs($Execs);
-    }
-
-
-    //experemental
-    //extracting filter params from cookie and transfer them to session
-    /**
-     * @return bool
-     */
-    private function GetParamsFromCookie()
-    {
-        $cookieName = COption ::GetOptionString("main", "cookie_name", "BITRIX_SM") . "_ADM_FLT_PARAMS";
-        if (!isset($_COOKIE[$cookieName]) || $_COOKIE[$cookieName] == "")
-            return false;
-
-        $aParams = explode(",", $_COOKIE[$cookieName]);
-        SetCookie($cookieName, '');
-
-        if (empty($aParams))
-            return false;
-
-        $filterId = "";
-
-        foreach ($aParams as $key => $aValue) {
-            $aParam = explode(":", $aValue);
-            unset($aParams[$key]);
-
-            if (!empty($aParam) && $aParam[0] != "filter_id")
-                $aParams[$aParam[0]] = $aParam[1];
-            elseif ($aParam[0] == "filter_id")
-                $filterId = $aParam[1];
-        }
-
-        if ($filterId == "")
-            return false;
-
-        foreach ($aParams as $paramName => $value)
-            $_SESSION[self::SESS_PARAMS_NAME][$filterId][$paramName] = $value;
-
-        return true;
-    }
-
-    //experemental
-
-    /**
-     * @return bool
-     */
-    private function IsFiltered()
-    {
-        $fltTable = $_SESSION["SESS_ADMIN"][$this -> tableId];
-
-        if (!isset($fltTable) || !is_array($fltTable))
-            return false;
-
-        foreach ($fltTable as $value)
-            if (!is_null($value))
-                return true;
-
-        return false;
-    }
-
-    /**
-     *
-     */
-    private function PrintSaveOptionsDIV()
-    {
-        global $USER;
-        $isAdmin = $USER -> CanDoOperation('edit_other_settings');
-        ?>
-        <div style="display:none">
-            <div id="filter_save_opts_<?= $this -> id ?>">
-                <table width="100%">
-                    <tr>
-                        <td align="right" width="40%"><?= GetMessage("admin_lib_filter_sett_name") ?></td>
-                        <td><input type="text" name="save_filter_name" value="" size="30" maxlength="255"></td>
-                    </tr>
-                    <? if ($isAdmin): ?>
-                        <tr>
-                            <td align="right" width="40%"><?= GetMessage("admin_lib_filter_sett_common") ?></td>
-                            <td><input type="checkbox" name="common"></td>
-                        </tr>
-                    <? endif; ?>
-                </table>
-            </div>
-        </div>
-        <?
-    }
-
-    /**
-     * @param $aFilter
-     */
-    public static function UnEscape($aFilter)
-    {
-        if (defined("BX_UTF"))
-            return;
-        if (!is_array($aFilter))
-            return;
-        foreach ($aFilter as $flt)
-            if (is_string($GLOBALS[$flt]) && CUtil ::DetectUTF8($GLOBALS[$flt]))
-                CUtil ::decodeURIComponent($GLOBALS[$flt]);
     }
 }
