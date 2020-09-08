@@ -10,6 +10,7 @@ namespace admin\classes;
 
 use CAdminCalendar;
 use CTicketDictionary;
+use CUtil;
 
 /**
  * Class FilterForm
@@ -23,13 +24,11 @@ class FilterForm implements PropertyContainerInterface
     private $propertyContainer = [];
 
     private function initCalendarPeriod($sFromName, $sFromVal, $sToName, $sToVal, $sFormName="skform", $show_select="N", $field_select="class=\"typeselect\"", $field_input="class=\"typeinput\"", $size="10"){
-//        if(defined("ADMIN_SECTION") && ADMIN_SECTION == true)
-//            return CAdminCalendar::CalendarPeriod($sFromName, $sToName, $sFromVal, $sToVal, ($show_select=="Y"), $size, ($size > 10));
+        if(defined("ADMIN_SECTION") && ADMIN_SECTION == true)
+            return CAdminCalendar::CalendarPeriod($sFromName, $sToName, $sFromVal, $sToVal, ($show_select=="Y"), $size, ($size > 10));
 
         $str = "";
         $ds = "";
-
-//            $sFromName
         $str .=
             '<input '.$ds.' '.$field_input.' type="text" name="'.$sFromName.'" id="'.$sFromName.'" size="'.$size.'" value="'.htmlspecialcharsbx($sFromVal).'" /> '."\n".
             Calendar($sFromName, $sFormName, $sFromName, $sToName).' ... '."\n".
@@ -92,7 +91,6 @@ class FilterForm implements PropertyContainerInterface
                 </td>
                 <td>
                     <?
-
                     //Create status content
                     $ref = array(); $ref_id = array();
                     $ref[] = GetMessage("SUP_NO"); $ref_id[] = "0";

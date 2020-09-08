@@ -193,7 +193,6 @@ class CAdminFilterStats
     {
         global $DB;
 
-        $arFields["FIELDS"] = self ::FieldsDelHiddenEmpty($arFields["FIELDS"]);
 
         if (!$arFields["FIELDS"])
             return false;
@@ -203,8 +202,6 @@ class CAdminFilterStats
         if (isset($arFields["SORT_FIELD"]))
             $arFields["SORT_FIELD"] = serialize($arFields["SORT_FIELD"]);
 
-        if (!self ::CheckFields($arFields))
-            return false;
 
         $ID = $DB -> Add("b_filters", $arFields, array("FIELDS"));
         return $ID;
@@ -340,14 +337,7 @@ class CAdminFilterStats
 				<div class="adm-filter-tabs-block" id="filter-tabs-' . $this -> id . '">
 					<span id="adm-filter-tab-' . $this -> id . '-0" class="adm-filter-tab adm-filter-tab-active" onclick="' . $this -> id . '.SetActiveTab(this); ' . $this -> id . '.ApplyFilter(\'0\'); " title="' . GetMessage("admin_lib_filter_goto_dfilter") . '">' . GetMessage("admin_lib_filter_filter") . '</span>';
 
-        if (is_array($this -> arItems) && !empty($this -> arItems)) {
-            foreach ($this -> arItems as $filter_id => $filter) {
-                $name = ($filter["NAME"] <> '' ? $filter["NAME"] : GetMessage("admin_lib_filter_no_name"));
-                echo '<span id="adm-filter-tab-' . $this -> id . '-' . $filter_id . '" class="adm-filter-tab" onclick="' . $this -> id . '.SetActiveTab(this); ' . $this -> id . '.ApplyFilter(\'' . $filter_id . '\');" title="' . GetMessage("admin_lib_filter_goto_filter") . ": &quot;" . htmlspecialcharsbx($name) . '&quot;">' . htmlspecialcharsbx($name) . '</span>';
-            }
-        }
-
-        echo '<span id="adm-filter-add-tab-' . $this -> id . '" class="adm-filter-tab adm-filter-add-tab" onclick="' . $this -> id . '.SaveAs();" title="' . GetMessage("admin_lib_filter_new") . '"></span><span onclick="' . $this -> id . '.SetFoldedView();" class="adm-filter-switcher-tab"><span id="adm-filter-switcher-tab" class="adm-filter-switcher-tab-icon"></span></span><span class="adm-filter-tabs-block-underlay"></span>
+        echo '<span onclick="' . $this -> id . '.SetFoldedView();" class="adm-filter-switcher-tab"><span id="adm-filter-switcher-tab" class="adm-filter-switcher-tab-icon"></span></span><span class="adm-filter-tabs-block-underlay"></span>
 				</div>
 			</td>
 		</tr>
@@ -396,15 +386,6 @@ class CAdminFilterStats
                 echo '
 						<input type="submit" class="adm-btn" id="' . $this -> id . 'set_filter" name="set_filter" title="' . GetMessage("admin_lib_filter_set_butt") . $hkInst -> GetTitle("set_filter") . '" onclick="return ' . htmlspecialcharsbx($this -> id . '.OnSet(\'' . CUtil ::AddSlashes($aParams["table_id"]) . '\', \'' . CUtil ::AddSlashes($url) . '\', this);') . '" value="' . GetMessage("admin_lib_filter_set_butt") . '">
 						<input type="submit" class="adm-btn" id="' . $this -> id . 'del_filter" name="del_filter" title="' . GetMessage("admin_lib_filter_clear_butt") . $hkInst -> GetTitle("del_filter") . '" onclick="return ' . htmlspecialcharsbx($this -> id . '.OnClear(\'' . CUtil ::AddSlashes($aParams["table_id"]) . '\', \'' . CUtil ::AddSlashes($url) . '\', this);') . '" value="' . GetMessage("admin_lib_filter_clear_butt") . '">';
-
-        }
-        if ($this -> popup) {
-
-            echo '
-						<div class="adm-filter-setting-block">
-							<span class="adm-filter-setting" onClick="this.blur();' . $this -> id . '.SaveMenuShow(this);return false;" hidefocus="true" title="' . GetMessage("admin_lib_filter_savedel_title") . '"></span>
-							<span class="adm-filter-add-button" onClick="this.blur();' . $this -> id . '.SettMenuShow(this);return false;" hidefocus="true" title="' . GetMessage("admin_lib_filter_more_title") . '"></span>
-						</div>';
         }
     }
 
@@ -457,6 +438,7 @@ class CAdminFilterStats
 		{
 			BX.adminMenu = new BX.adminMenu();
 		}
+		
 		' . $this -> id . '.state.init = true;
 		' . $this -> id . '.state.folded = ' . ($this -> arOptFlt["styleFolded"] == "Y" ? "true" : "false") . ';
 		' . $this -> id . '.InitFilter({' . $sVisRowsIds . '});
