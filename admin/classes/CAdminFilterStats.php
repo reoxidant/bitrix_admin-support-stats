@@ -10,9 +10,6 @@ namespace admin\classes;
 
 use CHotKeys;
 use CHTTP;
-use CMain;
-use COption;
-use CUserOptions;
 use CUtil;
 
 /**
@@ -378,14 +375,7 @@ class CAdminFilterStats
             if (!$this -> tableId)
                 $this -> tableId = $aParams["table_id"];
 
-            if (isset($aParams['report']) && $aParams['report']) {
-                echo '
-						<input type="submit" class="adm-btn" id="' . $this -> id . 'set_filter" name="set_filter" title="' . GetMessage("admin_lib_filter_set_rep_title") . $hkInst -> GetTitle("set_filter") . '" onclick="return ' . htmlspecialcharsbx($this -> id . '.OnSet(\'' . CUtil ::AddSlashes($aParams["table_id"]) . '\', \'' . CUtil ::AddSlashes($url) . '\', this);') . '" value="' . GetMessage("admin_lib_filter_set_rep") . '">
-						<input type="submit" class="adm-btn" id="' . $this -> id . 'del_filter" name="del_filter" title="' . GetMessage("admin_lib_filter_clear_butt_title") . $hkInst -> GetTitle("del_filter") . '" onclick="return ' . htmlspecialcharsbx($this -> id . '.OnClear(\'' . CUtil ::AddSlashes($aParams["table_id"]) . '\', \'' . CUtil ::AddSlashes($url) . '\', this);') . '" value="' . GetMessage("admin_lib_filter_clear_butt") . '">';
-            } else
-                echo '
-						<input type="submit" class="adm-btn" id="' . $this -> id . 'set_filter" name="set_filter" title="' . GetMessage("admin_lib_filter_set_butt") . $hkInst -> GetTitle("set_filter") . '" onclick="return ' . htmlspecialcharsbx($this -> id . '.OnSet(\'' . CUtil ::AddSlashes($aParams["table_id"]) . '\', \'' . CUtil ::AddSlashes($url) . '\', this);') . '" value="' . GetMessage("admin_lib_filter_set_butt") . '">
-						<input type="submit" class="adm-btn" id="' . $this -> id . 'del_filter" name="del_filter" title="' . GetMessage("admin_lib_filter_clear_butt") . $hkInst -> GetTitle("del_filter") . '" onclick="return ' . htmlspecialcharsbx($this -> id . '.OnClear(\'' . CUtil ::AddSlashes($aParams["table_id"]) . '\', \'' . CUtil ::AddSlashes($url) . '\', this);') . '" value="' . GetMessage("admin_lib_filter_clear_butt") . '">';
+            echo '<input type="submit" class="adm-btn" id="' . $this -> id . 'set_filter" name="set_filter" title="' . GetMessage("admin_lib_filter_set_butt") . $hkInst -> GetTitle("set_filter") . '" onclick="return ' . htmlspecialcharsbx($this -> id . '.OnSet(\'' . CUtil ::AddSlashes($aParams["table_id"]) . '\', \'' . CUtil ::AddSlashes($url) . '\', this);') . '" value="' . GetMessage("admin_lib_filter_set_butt") . '">';
         }
     }
 
@@ -480,7 +470,6 @@ class CAdminFilterStats
 		BX.adminMenu.registerItem('adm-filter-tab-" . $this -> id . '-' . $filter_id . "', {URL:'" . $filterUrl . "', TITLE: true});";
             }
         }
-
         echo '
 	});
 </script>';
