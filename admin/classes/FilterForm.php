@@ -8,9 +8,7 @@
 
 namespace admin\classes;
 
-use CAdminCalendar;
 use CTicketDictionary;
-use CUtil;
 
 /**
  * Class FilterForm
@@ -23,21 +21,6 @@ class FilterForm implements PropertyContainerInterface
      */
     private $propertyContainer = [];
 
-    private function initCalendarPeriod($sFromName, $sFromVal, $sToName, $sToVal, $sFormName="skform", $show_select="N", $field_select="class=\"typeselect\"", $field_input="class=\"typeinput\"", $size="10"){
-        if(defined("ADMIN_SECTION") && ADMIN_SECTION == true)
-            return CAdminCalendar::CalendarPeriod($sFromName, $sToName, $sFromVal, $sToVal, ($show_select=="Y"), $size, ($size > 10));
-
-        $str = "";
-        $ds = "";
-        $str .=
-            '<input '.$ds.' '.$field_input.' type="text" name="'.$sFromName.'" id="'.$sFromName.'" size="'.$size.'" value="'.htmlspecialcharsbx($sFromVal).'" /> '."\n".
-            Calendar($sFromName, $sFormName, $sFromName, $sToName).' ... '."\n".
-            '<input '.$field_input.' type="text" name="'.$sToName.'" id="'.$sToName.'" size="'.$size.'" value="'.htmlspecialcharsbx($sToVal).'" /> '."\n".
-            Calendar($sToName, $sFormName, $sFromName, $sToName)."\n";
-
-        return '<span style="white-space: nowrap;">'.$str.'</span>';
-    }
-
     /**
      * @param $find_date1
      * @param $find_date2
@@ -45,13 +28,10 @@ class FilterForm implements PropertyContainerInterface
      */
     private function createCalendarPeriod($find_date1, $find_date2)
     {
-        return $this->initCalendarPeriod(
-            "find_date1_stats",
-            $find_date1,
-            "find_date2_stats",
-            $find_date2,
-            "form_stats",
-            "Y");
+        return CalendarPeriod(
+            "find_date1", $find_date1,
+            "find_date2", $find_date2,
+            "muiv_form", "Y");
     }
 
     private function initClassAdminFilter(){
@@ -67,7 +47,7 @@ class FilterForm implements PropertyContainerInterface
             GetMessage("SUP_SHOW")
         );
 
-        return new CAdminFilterStats("stats_filter_id", $arrMessages);
+        return new \CAdminFilter("muiv_filter_id", $arrMessages);
     }
 
     /**
@@ -79,7 +59,7 @@ class FilterForm implements PropertyContainerInterface
 
         global $APPLICATION;
         ?>
-        <form name="form_stats" method="GET" action="<?= $APPLICATION -> GetCurPage() ?>?">
+        <form name="muiv_form" method="GET" action="<?= $APPLICATION -> GetCurPage() ?>?">
             <? $filter->Begin(); ?>
             <tr>
                 <td><? echo GetMessage("SUP_F_PERIOD") . "(" . FORMAT_DATE . "):" ?></td>
@@ -101,7 +81,7 @@ class FilterForm implements PropertyContainerInterface
                         $ref_id[] = $zr["REFERENCE_ID"];
                     }
                     $arr = array("REFERENCE" => $ref, "REFERENCE_ID" => $ref_id);
-                    echo SelectBoxFromArray("find_status_id_stats", $arr, $this -> getProperty("find_status_id"), GetMessage("SUP_ALL"));
+                    echo SelectBoxFromArray("find_status_id", $arr, $this -> getProperty("find_status_id"), GetMessage("SUP_ALL"));
                     ?>
                 </td>
             </tr>
@@ -109,7 +89,7 @@ class FilterForm implements PropertyContainerInterface
             Buttons(array(
                 "table_id" => $this -> getProperty("sTableID"),
                 "url" => $APPLICATION -> GetCurPage(),
-                "form" => "form_stats")
+                "form" => "form")
             );
             $filter->End();?>
         </form>
