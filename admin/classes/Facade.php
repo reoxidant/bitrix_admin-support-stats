@@ -9,10 +9,8 @@
 namespace admin\classes;
 
 require_once('Graph.php');
-require_once('CAdminStats.php');
-require_once('CAdminFilterStats.php');
+require_once('CAdmin.php');
 require_once('Ticket.php');
-require_once('SupportUser.php');
 require_once('FilterForm.php');
 
 use CAdminList;
@@ -34,19 +32,14 @@ class Facade
      */
     private $subsystemGraph;
     /**
-     * @var SubsystemCAdminStats|null
+     * @var SubsystemCAdmin|null
      */
-    private $subsystemCAdminStats;
+    private $subsystemCAdmin;
 
     /**
      * @var SubsystemTicket|null
      */
     private $subsystemTicket;
-
-    /**
-     * @var SubsystemSupportUser|SubsystemTicket|null
-     */
-    private $subsystemSupportUser;
 
     /**
      * @var SubsystemFilterForm|SubsystemTicket|null
@@ -57,26 +50,22 @@ class Facade
      * Facade constructor.
      * @param SubsystemRole|null $subsystemRole
      * @param SubsystemGraph|null $subsystemGraph
-     * @param SubsystemCAdminStats|null $subsystemCAdminStats
-     * @param SubsystemCAdminFilterStats|null $subsystemCAdminFilterStats
+     * @param SubsystemCAdmin|null $subsystemCAdmin
      * @param SubsystemTicket|null $subsystemTicket
-     * @param SubsystemSupportUser|null $subsystemSupportUser
      * @param SubsystemFilterForm|null $subsystemFilterForm
      */
     public function __construct(
         SubsystemRole $subsystemRole = null,
         SubsystemGraph $subsystemGraph = null,
-        SubsystemCAdminStats $subsystemCAdminStats = null,
+        SubsystemCAdmin $subsystemCAdmin= null,
         SubsystemTicket $subsystemTicket = null,
-        SubsystemSupportUser $subsystemSupportUser = null,
         SubsystemFilterForm $subsystemFilterForm = null
     )
     {
         $this -> subsystemRole = $subsystemRole ?: new SubsystemRole();
         $this -> subsystemGraph = $subsystemGraph ?: new SubsystemGraph();
-        $this -> subsystemCAdminStats = $subsystemCAdminStats ?: new SubsystemCAdminStats();
+        $this -> subsystemCAdmin = $subsystemCAdmin ?: new subsystemCAdmin();
         $this -> subsystemTicket = $subsystemTicket ?: new SubsystemTicket();
-        $this -> subsystemSupportUser = $subsystemSupportUser ?: new SubsystemSupportUser();
         $this -> subsystemFilterForm = $subsystemFilterForm ?: new SubsystemFilterForm();
     }
 
@@ -97,11 +86,11 @@ class Facade
     }
 
     /**
-     * @return SubsystemCAdminStats|null
+     * @return SubsystemCAdmin|null
      */
-    public function getSubsystemCAdminStats(): ?SubsystemCAdminStats
+    public function getSubsystemCAdmin(): ?SubsystemCAdmin
     {
-        return $this -> subsystemCAdminStats;
+        return $this -> subsystemCAdmin;
     }
 
     /**
@@ -215,23 +204,23 @@ class SubsystemGraph
  * Class SubsystemCAdminStats
  * @package admin\classes
  */
-class SubsystemCAdminStats
+class SubsystemCAdmin
 {
 
     /**
-     * @var CAdminStats|null
+     * @var CAdmin|null
      */
     private $admin;
 
     /**
-     * SubsystemCAdminStats constructor.
-     * @param CAdminStats|null $admin
+     * SubsystemCAdmin constructor.
+     * @param CAdmin|null $admin
      */
     public function __construct(
-        CAdminStats $admin = null
+        CAdmin $admin = null
     )
     {
-        $this -> admin = $admin ?: new CAdminStats();
+        $this -> admin = $admin ?: new CAdmin();
     }
 
     /**
@@ -255,9 +244,9 @@ class SubsystemCAdminStats
     }
 
     /**
-     * @return CAdminStats|null
+     * @return CAdmin|null
      */
-    public function getAdmin(): ?CAdminStats
+    public function getAdmin(): ?CAdmin
     {
         return $this -> admin;
     }
@@ -307,47 +296,6 @@ class SubsystemTicket
     public function getTicket(): ?Ticket
     {
         return $this -> ticket;
-    }
-}
-
-/**
- * Class SubsystemSupportUser
- * @package admin\classes
- */
-class SubsystemSupportUser
-{
-    /**
-     * @var SupportUser|null
-     */
-    private $supportUser;
-
-    /**
-     * SubsystemSupportUser constructor.
-     * @param SupportUser|null $supportUser
-     */
-    public function __construct(
-        SupportUser $supportUser = null
-    )
-    {
-        $this -> supportUser = $supportUser ?: new SupportUser();
-    }
-
-    /**
-     * @param $arUsersID
-     */
-    public function addUsers($arUsersID)
-    {
-        $this -> supportUser -> setArrSupportUser($arUsersID);
-        $this -> supportUser -> setSupportsUsersID($arUsersID);
-        $this -> supportUser -> addSupportUsers();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getArrSupportUser()
-    {
-        return $this -> supportUser -> getArrSupportUser();
     }
 }
 

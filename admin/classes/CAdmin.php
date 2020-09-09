@@ -17,7 +17,7 @@ require_once('PropertyContainerInterface.php');
  * Class CAdmin
  * @package admin\classes
  */
-class CAdminStats implements PropertyContainerInterface
+class CAdmin implements PropertyContainerInterface
 {
 
     /**
@@ -37,24 +37,24 @@ class CAdminStats implements PropertyContainerInterface
     public function addArFilterFields($returnValue = false)
     {
         $this -> propertyContainer['arFilterFields'] = [
-            "find_site_stats",
-            "find_responsible_stats",
-            "find_responsible_id_stats",
-            "find_responsible_exact_match_stats",
-            "find_category_id_stats",
-            "find_criticality_id_stats",
-            "find_status_id_stats",
-            "find_sla_id_stats",
-            "find_mark_id_stats",
-            "find_source_id_stats",
-            "find_date1_stats",
-            "find_date2_stats",
+            "find_site",
+            "find_responsible",
+            "find_responsible_id",
+            "find_responsible_exact_match",
+            "find_category_id",
+            "find_criticality_id",
+            "find_status_id",
+            "find_sla_id",
+            "find_mark_id",
+            "find_source_id",
+            "find_date1",
+            "find_date2",
             "find_work_in",
             "find_close_ticket",
             "find_wait_answer_dit",
             "find_wait_answer_user",
-            "find_mess_stats",
-            "find_overdue_mess_stats"
+            "find_mess",
+            "find_overdue_mess"
         ];
 
         if ($returnValue) {
@@ -157,7 +157,7 @@ class CAdminStats implements PropertyContainerInterface
      */
     public function initSessionFilter($arName, $sTableID = "t_report_graph")
     {
-        $FILTER = $_SESSION["SESS_STATS"][$sTableID];
+        $FILTER = $_SESSION["SESS_MUIV"][$sTableID];
 
         foreach ($arName as $name) {
             global $$name;
@@ -168,14 +168,14 @@ class CAdminStats implements PropertyContainerInterface
                 $$name = $FILTER[$name];
         }
 
-        $_SESSION["SESS_STATS"][$sTableID] = $FILTER;
+        $_SESSION["SESS_MUIV"][$sTableID] = $FILTER;
     }
 
     /**
      * @param $arName
      * @param string $sTableID
      */
-    public function DelFilter($arName, $sTableID = "t_report_graph")
+/*    public function DelFilter($arName, $sTableID = "t_report_graph")
     {
         unset($_SESSION["SESS_ADMIN"][$sTableID]);
 
@@ -183,7 +183,7 @@ class CAdminStats implements PropertyContainerInterface
             global $$name;
             $$name = "";
         }
-    }
+    }*/
 
     /**
      * @param $name
