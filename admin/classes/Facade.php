@@ -169,28 +169,6 @@ class SubsystemGraph
     }
 
     /**
-     * @param $ticket
-     * @param $admin
-     * @param $arrColorInc
-     * @param $imageArFilter
-     * @param null $width
-     * @param null $height
-     * @throws \Protobuf\Exception
-     */
-    public function createImage($ticket, $admin, $arrColorInc, $imageArFilter, $width = null, $height = null)
-    {
-        $this -> graph ->
-        createImageGraph(
-            $ticket -> getProperty('show_graph'),
-            $admin -> getProperty('arFilterFields'),
-            ['data' => $imageArFilter, 'emergency' => $admin -> getProperty('lAdmin') -> getFilter()],
-            $arrColorInc ?? null,
-            $width,
-            $height
-        );
-    }
-
-    /**
      * @return Graph|null
      */
     public function getGraph(): ?Graph

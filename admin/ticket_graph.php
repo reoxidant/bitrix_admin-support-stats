@@ -79,20 +79,15 @@ $arFilterProps = [
 
 $facade -> getSubsystemCAdmin() -> getAdmin() -> initSessionFilter($arFilterFields);
 
-if (empty($defaultDate)) {
-    foreach ($_SESSION["SESS_MUIV"][$sTableID] as $key => $val) {
-        global $$key;
-//        $$key = $val;
-    }
-}
-
 $facade -> getSubsystemCAdmin() -> getAdmin() -> addArFilterData($arFilterProps);
 
 $facade -> getSubsystemTicket() -> initTicketProperty($facade -> getSubsystemCAdmin() -> getAdmin());
 
 //ob_start
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> BeginCustomContent();
-$facade -> getSubsystemCAdmin() -> showErrorMessageIfExist(); ?>
+$facade -> getSubsystemCAdmin() -> showErrorMessageIfExist();
+
+?>
 
     <!--HTML CONTENT-->
 
@@ -105,19 +100,20 @@ $facade -> getSubsystemCAdmin() -> showErrorMessageIfExist(); ?>
 
 //Image
 try {
-    $facade -> getSubsystemGraph() -> createImage(
-        $facade -> getSubsystemTicket() -> getTicket(),
-        $facade -> getSubsystemCAdmin() -> getAdmin(),
-        $arrColor,
-          $arFilterProps,
-        "576",
-        "400"
+    $facade -> getSubsystemGraph() -> getGraph() ->
+    createImageGraph(
+        $facade -> getSubsystemTicket() -> getTicket() -> getProperty('show_graph'),
+        $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('arFilterFields'),
+        $arrColor ?? null,
+        '600',
+        '400'
     );
 } catch (\Exception $e) {
     $e -> getMessage();
 }
 
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty("lAdmin") -> EndCustomContent();
+$facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty("lAdmin") -> CheckListMode();
 
 global $APPLICATION;
 $APPLICATION -> SetTitle(GetMessage("SUP_PAGE_TITLE"));
@@ -130,5 +126,4 @@ $facade -> getSubsystemFilterForm() -> createAndShowFilterForm($arFilterFormProp
 
 //ob_get_contents
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> DisplayList();
-
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");

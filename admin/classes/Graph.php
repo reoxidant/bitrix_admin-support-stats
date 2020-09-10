@@ -51,59 +51,14 @@ class Graph implements PropertyContainerInterface
     }
 
     /**
-     * @param string $arrVars
-     * @param bool $bDoHtmlEncode
-     * @param string[] $button
-     * @return mixed|string
-     * @throws Exception
-     */
-    public function getFilterParams($arrVars = "filter_", $bDoHtmlEncode = true, $button = array("filter" => "Y", "set_filter" => "Y"))
-    {
-        $res = "";
-
-        if (is_array($arrVars) && count($arrVars) > 0) {
-            foreach ($arrVars as $var_name => $value) {
-                if (is_array($value)) {
-                    if (count($value) > 0) {
-                        reset($value);
-                        foreach ($value as $v)
-                            $res .= "&" . urlencode($var_name) . "[]=" . urlencode($v);
-                    }
-                } else if (strlen($value) > 0 && $value != "NOT_REF") {
-                    $res .= "&" . urlencode($var_name) . "=" . urlencode($value);
-                }
-            }
-        } else {
-            throw new Exception('Error: The first argument function must be type of Array');
-        }
-
-        if (is_array($button)) {
-            reset($button); // php bug
-            while (list($key, $value) = each($button))
-                $res .= "&" . $key . "=" . urlencode($value);
-        } else
-            $res .= $button;
-
-        return ($bDoHtmlEncode) ? htmlspecialcharsbx($res) : $res;
-    }
-
-    /**
      * @param $show_graph
      * @param $arFilterFields
-     * @param $imageArFilter
      * @param $arrColor
      * @param string $width
      * @param string $height
-     * @throws Exception
      */
-    public function createImageGraph($show_graph, $arFilterFields, $imageArFilter, $arrColor, $width = "576", $height = "400")
+    public function createImageGraph($show_graph, $arFilterFields, $arrColor, $width = "576", $height = "400")
     {
-        list(
-            'find_work_in' => $find_work_in,
-            'find_close_ticket' => $find_close_ticket,
-            'find_wait_answer_dit' => $find_wait_answer_dit,
-            'find_wait_answer_user' => $find_wait_answer_user,
-            ) = ($imageArFilter['data']) ? $imageArFilter['data'] : $imageArFilter['emergency'];
 
         if (!function_exists("ImageCreate")) : CAdminMessage :: ShowMessage(GetMessage("SUP_GD_NOT_INSTALLED"));
         elseif
@@ -119,7 +74,7 @@ class Graph implements PropertyContainerInterface
                                             <tr>
                                                 <td valign="center" nowrap>
                                                     <img
-                                                            src="/bitrix/admin/muiv_graph.php?<?= ($imageArFilter['data']) ? $this -> getFilterParams($imageArFilter['data']) : GetFilterParams($arFilterFields) ?>&width=<?= $width ?>&height=<?= $height ?>&lang=<? echo LANG ?>"
+                                                            src="/bitrix/admin/muiv_graph.php?<?= GetFilterParams($arFilterFields) ?>&width=<?= $width ?>&height=<?= $height ?>&lang=<? echo LANG ?>"
                                                             width="<?= $width ?>"
                                                             height="<?= $height ?>"
                                                             alt="graph-image"
