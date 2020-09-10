@@ -48,27 +48,28 @@ $arFilter = Array(
 $rsTickets = CTicket::GetDynamicList($by="s_date_create", $order="asc", $arFilter);
 while ($rsTickets->ExtractFields("f_",false))
 {
+    // Получаем текущее время
     $date = mktime(0,0,0,$f_CREATE_MONTH,$f_CREATE_DAY,$f_CREATE_YEAR);
     $date_tmp = 0;
     // если даты пропущены (идут не по порядку) то
     $next_date = AddTime($prev_date,1,"D");
     if ($date>$next_date && intval($prev_date)>0)
     {
-        // заполняем пропущенные даты
+        // заполняем пропущенные даты, если они есть
         $date_tmp = $next_date;
         while ($date_tmp<$date)
         {
             $arrX[] = $date_tmp;
-            if ($find_all=="Y")		$arrY_all[] = 0;
-            if ($find_open=="Y")	$arrY_open[] = 0;
-            if ($find_close=="Y")	$arrY_close[] = 0;
+            $arrY_all[] = 0;
+            $arrY_open[] = 0;
+            $arrY_close[] = 0;
             $date_tmp = AddTime($date_tmp,1,"D");
         }
     }
     $arrX[] = $date;
-    if ($find_all=="Y")		$arrY_all[] = intval($f_ALL_TICKETS);
-    if ($find_open=="Y")	$arrY_open[] = intval($f_OPEN_TICKETS);
-    if ($find_close=="Y")	$arrY_close[] = intval($f_CLOSE_TICKETS);
+    //Сколько заявок на оси Y
+    //Всех
+    $arrY_all[] = intval($f_ALL_TICKETS);
     $prev_date = $date;
 }
 /******************************************************
@@ -114,11 +115,7 @@ if ($find_mess=="Y" || $find_overdue_mess=="Y")
 Формируем ось Y
  *******************************************************/
 $arrY = array();
-if ($find_all=="Y")				$arrY = array_merge($arrY,$arrY_all);
-if ($find_open=="Y")			$arrY = array_merge($arrY,$arrY_open);
-if ($find_close=="Y")			$arrY = array_merge($arrY,$arrY_close);
-if ($find_mess=="Y")			$arrY = array_merge($arrY,$arrY_mess);
-if ($find_overdue_mess=="Y")	$arrY = array_merge($arrY,$arrY_overdue_mess);
+$arrY = array_merge($arrY,$arrY_all);
 $arrayY = GetArrayY($arrY, $MinY, $MaxY);
 
 //while (list($key, $value) = each($arrX)) echo date("d.m.Y",$value)." = ".$arrY_all[$key]."<br>";
@@ -134,20 +131,9 @@ DrawCoordinatGrid($arrayX, $arrayY, $width, $height, $ImageHendle);
 Рисуем графики
  *******************************************************/
 
-if ($find_all=="Y")
-    Graf($arrX, $arrY_all, $ImageHendle, $MinX, $MaxX, $MinY, $MaxY, $arrColor["ALL_TICKET"]);
+$arrColor = ["8080C0", "FF0000", "0000FF", "00CE67", "F2BE0D", "FB0600"];
 
-if ($find_open=="Y")
-    Graf($arrX, $arrY_open, $ImageHendle, $MinX, $MaxX, $MinY, $MaxY, $arrColor["OPEN_TICKET"]);
-
-if ($find_close=="Y")
-    Graf($arrX, $arrY_close, $ImageHendle, $MinX, $MaxX, $MinY, $MaxY, $arrColor["CLOSE_TICKET"]);
-
-if ($find_mess=="Y")
-    Graf($arrX, $arrY_mess, $ImageHendle, $MinX, $MaxX, $MinY, $MaxY, $arrColor["MESSAGES"]);
-
-if ($find_overdue_mess=="Y")
-    Graf($arrX, $arrY_overdue_mess, $ImageHendle, $MinX, $MaxX, $MinY, $MaxY, $arrColor["OVERDUE_MESSAGES"]);
+Graf($arrX, $arrY_all, $ImageHendle, $MinX, $MaxX, $MinY, $MaxY, $arrColor[$indexOfStatus]);
 
 /******************************************************
 Отображаем изображение

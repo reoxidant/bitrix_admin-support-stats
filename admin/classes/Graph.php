@@ -9,6 +9,7 @@
 namespace admin\classes;
 
 use CAdminMessage;
+use CTicketDictionary;
 use Protobuf\Exception;
 
 require_once('PropertyContainerInterface.php');
@@ -57,7 +58,7 @@ class Graph implements PropertyContainerInterface
      * @param string $width
      * @param string $height
      */
-    public function createImageGraph($show_graph, $arFilterFields, $arrColor, $width = "576", $height = "400")
+    public function createImageGraph($show_graph, $arFilterFields, $status_id, $arrColor, $width = "576", $height = "400")
     {
 
         if (!function_exists("ImageCreate")) : CAdminMessage :: ShowMessage(GetMessage("SUP_GD_NOT_INSTALLED"));
@@ -90,58 +91,39 @@ class Graph implements PropertyContainerInterface
                     <tr>
                         <td>
                             <table cellpadding="3" cellspacing="1" border="0" class="legend">
-                                <? if ($find_work_in == "Y"): ?>
-                                    <tr>
-                                        <td valign="center">
-                                            <img
-                                                    src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OPEN_TICKET"] ?>"
-                                                    width="45"
-                                                    height="2"
-                                                    alt="find-work-in"
-                                            >
-                                        </td>
-                                        <td nowrap><?= GetMessage("SUP_WORK_IN") ?></td>
-                                    </tr>
-                                <? endif; ?>
-                                <? if ($find_close_ticket == "Y"): ?>
-                                    <tr>
-                                        <td valign="center">
-                                            <img
-                                                    src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["ALL_TICKET"] ?>"
-                                                    width="45"
-                                                    height="2"
-                                                    alt="find-close-ticket"
-                                            >
-                                        </td>
-                                        <td nowrap><?= GetMessage("SUP_CLOSE_TICKET") ?></td>
-                                    </tr>
-                                <? endif; ?>
-                                <? if ($find_wait_answer_dit == "Y"): ?>
-                                    <tr>
-                                        <td valign="center">
-                                            <img
-                                                    src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["MESSAGES"] ?>"
-                                                    width="45"
-                                                    height="2"
-                                                    alt="find-wait-answer-dit "
-                                            >
-                                        </td>
-                                        <td nowrap><?= GetMessage("SUP_WAIT_ANSWER_DIT") ?></td>
-                                    </tr>
-                                <? endif; ?>
-                                <? if ($find_wait_answer_user == "Y"): ?>
-                                    <tr>
-                                        <td valign="center">
-                                            <img
-                                                    src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OVERDUE_MESSAGES"] ?>"
-                                                    width="45"
-                                                    height="2"
-                                                    alt="find-wait-answer-user"
-                                            >
-                                        </td>
-                                        <td nowrap><?= GetMessage("SUP_WAIT_ANSWER_USER") ?></td>
-                                    </tr>
-                                <? endif; ?>
+                                <?
+                                    $z = CTicketDictionary::GetDropDown("S");
+                                    while ($zr = $z->Fetch())
+                                    {
+                                        if($zr["REFERENCE_ID"] == $status_id):
+                                        ?>
+                                        <tr>
+                                            <td valign="center">
+                                                <img
+                                                        src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OPEN_TICKET"] ?>"
+                                                        width="45"
+                                                        height="2"
+                                                        alt="line-graph-<?=$zr["REFERENCE_ID"]?>"
+                                                >
+                                            </td>
+                                            <td nowrap><?= $zr["REFERENCE"]?></td>
+                                        </tr>
+                                        <? elseif($status_id == null): ?>
+                                            <tr>
+                                                <td valign="center">
+                                                    <img
+                                                            src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OPEN_TICKET"] ?>"
+                                                            width="45"
+                                                            height="2"
+                                                            alt="line-graph-<?=$zr["REFERENCE_ID"]?>"
+                                                    >
+                                                </td>
+                                                <td nowrap><?= $zr["REFERENCE"]?></td>
+                                            </tr>
+                                        <?
+                                            endif;
+                                        }
+                                        ?>
                             </table>
                         </td>
                     </tr>
@@ -152,5 +134,4 @@ class Graph implements PropertyContainerInterface
             CAdminMessage :: ShowMessage(GetMessage("SUP_NOT_ENOUGH_DATA_FOR_GRAPH"));
         endif;
     }
-
 }

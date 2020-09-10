@@ -104,6 +104,7 @@ try {
     createImageGraph(
         $facade -> getSubsystemTicket() -> getTicket() -> getProperty('show_graph'),
         $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('arFilterFields'),
+        $find_status_id,
         $arrColor ?? null,
         '600',
         '400'
