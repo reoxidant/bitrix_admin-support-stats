@@ -147,8 +147,8 @@ class CAdmin implements PropertyContainerInterface
      */
     public function IsDefaultFilter($sTableID = "t_report_graph")
     {
-        $set_default = (!is_set($_REQUEST, "find_forum") ? (empty($_SESSION["SESS_STATS"]["LAST_TOPICS_LIST"]) ? "Y" : "N") : "N");;
-        return $set_default == "Y" && (!isset($_SESSION["SESS_STATS"][$sTableID]) || empty($_SESSION["SESS_STATS"][$sTableID]));
+        $set_default = (!is_set($_REQUEST, "find_forum") ? (empty($_SESSION["SESS_MUIV"]["LAST_TOPICS_LIST"]) ? "Y" : "N") : "N");;
+        return $set_default == "Y" && (!isset($_SESSION["SESS_MUIV"][$sTableID]) || empty($_SESSION["SESS_MUIV"][$sTableID]));
     }
 
     /**
@@ -161,29 +161,11 @@ class CAdmin implements PropertyContainerInterface
 
         foreach ($arName as $name) {
             global $$name;
-
-            if (isset($$name))
-                $FILTER[$name] = $$name;
-            else
-                $$name = $FILTER[$name];
+            $FILTER[$name] = $$name;
         }
 
         $_SESSION["SESS_MUIV"][$sTableID] = $FILTER;
     }
-
-    /**
-     * @param $arName
-     * @param string $sTableID
-     */
-/*    public function DelFilter($arName, $sTableID = "t_report_graph")
-    {
-        unset($_SESSION["SESS_ADMIN"][$sTableID]);
-
-        foreach ($arName as $name) {
-            global $$name;
-            $$name = "";
-        }
-    }*/
 
     /**
      * @param $name

@@ -10,10 +10,6 @@ require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/prolog.php"); 
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php"); // инициализация модуля
 
-// подключим языковой файл
-IncludeModuleLangFile($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
-IncludeModuleLangFile(__FILE__);
-
 include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php"); // подключим цвета для графика
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
 
@@ -44,8 +40,6 @@ $facade = new Facade(
 
 list('bAdmin' => $bAdmin, 'bDemo' => $bDemo) = $facade -> getSubsystemRole() -> showAuthFormByRole(true);
 
-//all ok
-
 $sTableID = $facade -> getSubsystemGraph() -> getGraph() -> addProperty("sTableID", 't_report_graph', true);
 
 $facade -> getSubsystemCAdmin() -> initCAdminPropertyList($sTableID);
@@ -55,18 +49,16 @@ if ($facade -> getSubsystemCAdmin() -> getAdmin() -> IsDefaultFilter())
 
 $arFilterFields = $facade -> getSubsystemCAdmin() -> getAdmin() -> addArFilterFields(true);
 
-if (empty($defaultFilterValues)) {
+if (empty($defaultDate) && $set_filter != "Y") {
     foreach ($_SESSION["SESS_MUIV"][$sTableID] as $key => $val) {
         global $$key;
-        if (isset($$key)) $$key = $val;
+        $$key = $val;
     }
 }
 
 if ($bAdmin != "Y" && $bDemo != "Y") $find_responsible_id = $USER -> GetID();
 
 InitBVar($find_responsible_exact_match);
-
-//TODO : need to understand why i don't have date interval when i got when
 
 $arFilterProps = [
     "find_site" => $find_site,
@@ -89,11 +81,13 @@ $facade -> getSubsystemCAdmin() -> getAdmin() -> initSessionFilter($arFilterFiel
 
 $facade -> getSubsystemCAdmin() -> getAdmin() -> addArFilterData($arFilterProps);
 
-$arUsersID = $facade -> getSubsystemTicket() -> initTicketProperty($facade -> getSubsystemCAdmin() -> getAdmin());
+$facade -> getSubsystemTicket() -> initTicketProperty($facade -> getSubsystemCAdmin() -> getAdmin());
 
 //ob_start
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> BeginCustomContent();
-$facade -> getSubsystemCAdmin() -> showErrorMessageIfExist(); ?>
+$facade -> getSubsystemCAdmin() -> showErrorMessageIfExist();
+
+?>
 
     <!--HTML CONTENT-->
 
@@ -106,19 +100,21 @@ $facade -> getSubsystemCAdmin() -> showErrorMessageIfExist(); ?>
 
 //Image
 try {
-    $facade -> getSubsystemGraph() -> createImage(
-        $facade -> getSubsystemTicket() -> getTicket(),
-        $facade -> getSubsystemCAdmin() -> getAdmin(),
-        $arrColor,
-        $defaultFilterValues ?? $arFilterProps,
-        "576",
-        "400"
+    $facade -> getSubsystemGraph() -> getGraph() ->
+    createImageGraph(
+        $facade -> getSubsystemTicket() -> getTicket() -> getProperty('show_graph'),
+        $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('arFilterFields'),
+        $find_status_id,
+        $arrColor ?? null,
+        '600',
+        '400'
     );
 } catch (\Exception $e) {
     $e -> getMessage();
 }
 
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty("lAdmin") -> EndCustomContent();
+$facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty("lAdmin") -> CheckListMode();
 
 global $APPLICATION;
 $APPLICATION -> SetTitle(GetMessage("SUP_PAGE_TITLE"));
@@ -131,5 +127,4 @@ $facade -> getSubsystemFilterForm() -> createAndShowFilterForm($arFilterFormProp
 
 //ob_get_contents
 $facade -> getSubsystemCAdmin() -> getAdmin() -> getProperty('lAdmin') -> DisplayList();
-
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/epilog_admin.php");

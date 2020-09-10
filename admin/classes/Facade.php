@@ -57,7 +57,7 @@ class Facade
     public function __construct(
         SubsystemRole $subsystemRole = null,
         SubsystemGraph $subsystemGraph = null,
-        SubsystemCAdmin $subsystemCAdmin= null,
+        SubsystemCAdmin $subsystemCAdmin = null,
         SubsystemTicket $subsystemTicket = null,
         SubsystemFilterForm $subsystemFilterForm = null
     )
@@ -169,28 +169,6 @@ class SubsystemGraph
     }
 
     /**
-     * @param $ticket
-     * @param $admin
-     * @param $arrColorInc
-     * @param $imageArFilter
-     * @param null $width
-     * @param null $height
-     * @throws \Protobuf\Exception
-     */
-    public function createImage($ticket, $admin, $arrColorInc, $imageArFilter, $width = null, $height = null)
-    {
-        $this -> graph ->
-        createImageGraph(
-            $ticket -> getProperty('show_graph'),
-            $admin -> getProperty('arFilterFields'),
-            ['data' => $imageArFilter, 'emergency' => $admin -> getProperty('lAdmin') -> getFilter()],
-            $arrColorInc ?? null,
-            $width,
-            $height
-        );
-    }
-
-    /**
      * @return Graph|null
      */
     public function getGraph(): ?Graph
@@ -286,8 +264,6 @@ class SubsystemTicket
         $this -> ticket -> addDefaultPropertyByKeys("arrTime", ["1", "1_2", "2_3", "3_4", "4_5", "5_6", "6_7", "7"], 0);
         $this -> ticket -> addDefaultPropertyByKeys("arrMess", ["2_m", "3_m", "4_m", "5_m", "6_m", "7_m", "8_m", "9_m", "10_m"], 0);
         $this -> ticket -> addAdditionalDataInto('rsTickets');
-
-        return $this -> ticket -> getProperty('arTicketUsersID');
     }
 
     /**
