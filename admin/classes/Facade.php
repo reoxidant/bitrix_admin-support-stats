@@ -286,8 +286,6 @@ class SubsystemTicket
         $this -> ticket -> addDefaultPropertyByKeys("arrTime", ["1", "1_2", "2_3", "3_4", "4_5", "5_6", "6_7", "7"], 0);
         $this -> ticket -> addDefaultPropertyByKeys("arrMess", ["2_m", "3_m", "4_m", "5_m", "6_m", "7_m", "8_m", "9_m", "10_m"], 0);
         $this -> ticket -> addAdditionalDataInto('rsTickets');
-
-        return $this -> ticket -> getProperty('arTicketUsersID');
     }
 
     /**
