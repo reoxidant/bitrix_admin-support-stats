@@ -34,7 +34,8 @@ class FilterForm implements PropertyContainerInterface
             "muiv_form", "Y");
     }
 
-    private function initClassAdminFilter(){
+    private function initClassAdminFilter()
+    {
         $arrMessages = array(
             GetMessage("SUP_F_SITE"),
             GetMessage("SUP_F_RESPONSIBLE"),
@@ -55,28 +56,29 @@ class FilterForm implements PropertyContainerInterface
      */
     public function generateFilterForm()
     {
-        $filter = $this->initClassAdminFilter();
+        $filter = $this -> initClassAdminFilter();
 
         global $APPLICATION;
         ?>
         <form name="muiv_form" method="GET" action="<?= $APPLICATION -> GetCurPage() ?>?">
-            <? $filter->Begin(); ?>
+            <? $filter -> Begin(); ?>
             <tr>
                 <td><? echo GetMessage("SUP_F_PERIOD") . "(" . FORMAT_DATE . "):" ?></td>
                 <td><? echo $this -> createCalendarPeriod($this -> getProperty("find_date1"), $this -> getProperty("find_date2")) ?></td>
             </tr>
             <tr>
                 <td nowrap>
-                    <?=GetMessage("SUP_F_STATUS")?>:
+                    <?= GetMessage("SUP_F_STATUS") ?>:
                 </td>
                 <td>
                     <?
                     //Create status content
-                    $ref = array(); $ref_id = array();
-                    $ref[] = GetMessage("SUP_NO"); $ref_id[] = "0";
-                    $z = CTicketDictionary::GetDropDown("S");
-                    while ($zr = $z->Fetch())
-                    {
+                    $ref = array();
+                    $ref_id = array();
+                    $ref[] = GetMessage("SUP_NO");
+                    $ref_id[] = "0";
+                    $z = CTicketDictionary ::GetDropDown("S");
+                    while ($zr = $z -> Fetch()) {
                         $ref[] = $zr["REFERENCE"];
                         $ref_id[] = $zr["REFERENCE_ID"];
                     }
@@ -87,11 +89,11 @@ class FilterForm implements PropertyContainerInterface
             </tr>
             <? $filter ->
             Buttons(array(
-                "table_id" => $this -> getProperty("sTableID"),
-                "url" => $APPLICATION -> GetCurPage(),
-                "form" => "form")
+                    "table_id" => $this -> getProperty("sTableID"),
+                    "url" => $APPLICATION -> GetCurPage(),
+                    "form" => "form")
             );
-            $filter->End();?>
+            $filter -> End(); ?>
         </form>
         <?php
     }

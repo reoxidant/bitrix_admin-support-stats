@@ -57,7 +57,7 @@ class Facade
     public function __construct(
         SubsystemRole $subsystemRole = null,
         SubsystemGraph $subsystemGraph = null,
-        SubsystemCAdmin $subsystemCAdmin= null,
+        SubsystemCAdmin $subsystemCAdmin = null,
         SubsystemTicket $subsystemTicket = null,
         SubsystemFilterForm $subsystemFilterForm = null
     )
