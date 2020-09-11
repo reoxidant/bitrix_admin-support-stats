@@ -67,7 +67,6 @@ class FilterForm implements PropertyContainerInterface
         ?>
         <form name="muiv_form" method="GET" action="<?= $APPLICATION -> GetCurPage() ?>?">
             <? $filter -> Begin(); ?>
-
             <tr>
                 <td><? echo GetMessage("SUP_F_PERIOD") . "(" . FORMAT_DATE . "):" ?></td>
                 <td><? echo $this -> createCalendarPeriod($this -> getProperty("find_date1"), $this -> getProperty("find_date2")) ?></td>
@@ -90,14 +89,9 @@ class FilterForm implements PropertyContainerInterface
                 </td>
             </tr>
             <tr>
-                <td></td>
-                <td></td>
-            </tr>
-            <tr>
                 <td nowrap><?=GetMessage("SUP_F_STATUS")?>:</td>
                 <td>
                     <?
-                    //Create status content
                     $ref = array();
                     $ref_id = array();
                     $ref[] = GetMessage("SUP_NO");

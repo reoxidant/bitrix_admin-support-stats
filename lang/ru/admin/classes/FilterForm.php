@@ -8,4 +8,3 @@
 $MESS["SUP_F_PERIOD"] = "Период";
 $MESS["SUP_F_CATEGORY"] = "Категория";
 $MESS["SUP_F_STATUS"] = "Статус";
-$MESS["SUP_ALL"] = "(все)";
