@@ -72,14 +72,15 @@ class FilterForm implements PropertyContainerInterface
                 <td><? echo $this -> createCalendarPeriod($this -> getProperty("find_date1"), $this -> getProperty("find_date2")) ?></td>
             </tr>
             <tr>
-                <td nowrap><?=GetMessage("SUP_F_CATEGORY")?>:</td>
+                <td nowrap><?= GetMessage("SUP_F_CATEGORY") ?>:</td>
                 <td>
                     <?
-                    $ref = array(); $ref_id = array();
-                    $ref[] = GetMessage("SUP_NO"); $ref_id[] = "0";
-                    $z = CTicketDictionary::GetDropDown("C");
-                    while ($zr = $z->Fetch())
-                    {
+                    $ref = array();
+                    $ref_id = array();
+                    $ref[] = GetMessage("SUP_NO");
+                    $ref_id[] = "0";
+                    $z = CTicketDictionary ::GetDropDown("C");
+                    while ($zr = $z -> Fetch()) {
                         $ref[] = $zr["REFERENCE"];
                         $ref_id[] = $zr["REFERENCE_ID"];
                     }
@@ -89,7 +90,7 @@ class FilterForm implements PropertyContainerInterface
                 </td>
             </tr>
             <tr>
-                <td nowrap><?=GetMessage("SUP_F_STATUS")?>:</td>
+                <td nowrap><?= GetMessage("SUP_F_STATUS") ?>:</td>
                 <td>
                     <?
                     $ref = array();
