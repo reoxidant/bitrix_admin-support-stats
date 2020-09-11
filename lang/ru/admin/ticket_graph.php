@@ -6,5 +6,6 @@
  * @package PhpStorm
  */
 
-$MESS["SUP_F_STATUS"] = 'Статус';
-$MESS["SUP_NOT_ENOUGH_DATA_FOR_GRAPH"] = "Недостаточно данных для построения графика";
+$MESS["SUP_SERVER_TIME"] = "Время на сервере: ";
+$MESS["SUP_GRAPH_ALT"] = "Статистика заявок по категориям";
+$MESS["SUP_PAGE_TITLE"] = "Уровни техподдержки (SLA)";

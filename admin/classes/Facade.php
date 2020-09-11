@@ -17,6 +17,8 @@ use CAdminList;
 use CAdminSorting;
 use CTicket;
 
+IncludeModuleLangFile(__FILE__);
+
 /**
  * Class Facade
  * @package admin\classes

@@ -8,9 +8,9 @@
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php"); // первый общий пролог
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/prolog.php"); // пролог модуля
 
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php"); // инициализация модуля
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/muiv.support/include.php"); // инициализация модуля
 
-include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php"); // подключим цвета для графика
+include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/muiv.support/colors.php"); // подключим цвета для графика
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
 
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/muiv.support/admin/classes/Facade.php"); //смотри паттерн фасад
@@ -68,7 +68,7 @@ $arFilterProps = [
     "find_responsible" => $find_responsible,
     "find_responsible_exact_match" => $find_responsible_exact_match,
     "find_sla_id" => $find_sla_id,
-    "find_category_id" => 20,
+    "find_category_id" => $find_category_id,
     "find_criticality_id" => $find_criticality_id,
     "find_status_id" => $find_status_id,
     "find_mark_id" => $find_mark_id,

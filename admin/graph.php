@@ -8,7 +8,7 @@
 ##############################################
 */
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php");
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/muiv.support/include.php");
 
 $bDemo = (CTicket ::IsDemo()) ? "Y" : "N";
 $bAdmin = (CTicket ::IsAdmin()) ? "Y" : "N";
@@ -16,7 +16,7 @@ $bSupportTeam = (CTicket ::IsSupportTeam()) ? "Y" : "N";
 
 if ($bAdmin != "Y" && $bSupportTeam != "Y" && $bDemo != "Y") $APPLICATION -> AuthForm(GetMessage("ACCESS_DENIED"));
 
-include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/colors.php");
+include($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/muiv.support/colors.php");
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/img.php");
 
 // создаем изображение

@@ -11,6 +11,8 @@ namespace admin\classes;
 use CAdminMessage;
 use CTicketDictionary;
 
+IncludeModuleLangFile(__FILE__);
+
 require_once('PropertyContainerInterface.php');
 
 /**
