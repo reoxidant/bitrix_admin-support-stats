@@ -85,7 +85,7 @@ class FilterForm implements PropertyContainerInterface
                         $ref_id[] = $zr["REFERENCE_ID"];
                     }
                     $arr = array("REFERENCE" => $ref, "REFERENCE_ID" => $ref_id);
-                    echo SelectBoxFromArray("find_category_id", $arr, $find_category_id, GetMessage("SUP_ALL"));
+                    echo SelectBoxFromArray("find_category_id", $arr, $this -> getProperty("find_category_id"), GetMessage("SUP_ALL"));
                     ?>
                 </td>
             </tr>
