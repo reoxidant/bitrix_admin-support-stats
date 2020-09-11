@@ -10,6 +10,8 @@ namespace admin\classes;
 
 use CTicket;
 
+IncludeModuleLangFile(__FILE__);
+
 /**
  * Class Ticket
  * @package admin\classes

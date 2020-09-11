@@ -10,6 +10,8 @@ namespace admin\classes;
 
 use CTicketDictionary;
 
+IncludeModuleLangFile(__FILE__);
+
 /**
  * Class FilterForm
  * @package admin\classes
@@ -34,6 +36,9 @@ class FilterForm implements PropertyContainerInterface
             "muiv_form", "Y");
     }
 
+    /**
+     * @return \CAdminFilter
+     */
     private function initClassAdminFilter()
     {
         $arrMessages = array(
@@ -62,14 +67,34 @@ class FilterForm implements PropertyContainerInterface
         ?>
         <form name="muiv_form" method="GET" action="<?= $APPLICATION -> GetCurPage() ?>?">
             <? $filter -> Begin(); ?>
+
             <tr>
                 <td><? echo GetMessage("SUP_F_PERIOD") . "(" . FORMAT_DATE . "):" ?></td>
                 <td><? echo $this -> createCalendarPeriod($this -> getProperty("find_date1"), $this -> getProperty("find_date2")) ?></td>
             </tr>
             <tr>
-                <td nowrap>
-                    <?= GetMessage("SUP_F_STATUS") ?>:
+                <td nowrap><?=GetMessage("SUP_F_CATEGORY")?>:</td>
+                <td>
+                    <?
+                    $ref = array(); $ref_id = array();
+                    $ref[] = GetMessage("SUP_NO"); $ref_id[] = "0";
+                    $z = CTicketDictionary::GetDropDown("C");
+                    while ($zr = $z->Fetch())
+                    {
+                        $ref[] = $zr["REFERENCE"];
+                        $ref_id[] = $zr["REFERENCE_ID"];
+                    }
+                    $arr = array("REFERENCE" => $ref, "REFERENCE_ID" => $ref_id);
+                    echo SelectBoxFromArray("find_category_id", $arr, $find_category_id, GetMessage("SUP_ALL"));
+                    ?>
                 </td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td nowrap><?=GetMessage("SUP_F_STATUS")?>:</td>
                 <td>
                     <?
                     //Create status content

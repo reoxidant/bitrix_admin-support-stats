@@ -11,6 +11,8 @@ namespace admin\classes;
 use CAdminException;
 use CAdminMessage;
 
+IncludeModuleLangFile(__FILE__);
+
 require_once('PropertyContainerInterface.php');
 
 /**
