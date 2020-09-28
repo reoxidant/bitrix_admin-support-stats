@@ -94,25 +94,35 @@ class Graph implements PropertyContainerInterface
                             <table cellpadding="3" cellspacing="1" border="0" class="legend">
                                 <?
                                 $z = CTicketDictionary ::GetDropDown("S");
-                                while ($zr = $z -> Fetch()) {
-                                    if ($zr["REFERENCE_ID"] == $status_id):
+
+                                foreach ($arrColor as $key => $value){
+                                    $colors[] = $value;
+                                }
+
+                                $i = 0;
+
+                                    if (!$status_id):
                                         ?>
                                         <tr>
                                             <td valign="center">
                                                 <img
-                                                        src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OPEN_TICKET"] ?>"
+                                                        src="/bitrix/admin/ticket_graph_legend.php?color=<?= $colors[$i] ?>"
                                                         width="45"
                                                         height="2"
                                                         alt="line-graph-<?= $zr["REFERENCE_ID"] ?>"
                                                 >
                                             </td>
-                                            <td nowrap><?= $zr["REFERENCE"] ?></td>
+                                            <td nowrap>Все обращения</td>
                                         </tr>
-                                    <? elseif ($status_id == null): ?>
+                                    <?
+                                    else:
+                                        while ($zr = $z -> Fetch()) {
+                                    ?>
+                                        <?if($zr["ID"] == $status_id):?>
                                         <tr>
                                             <td valign="center">
                                                 <img
-                                                        src="/bitrix/admin/ticket_graph_legend.php?color=<?= $arrColor["OPEN_TICKET"] ?>"
+                                                        src="/bitrix/admin/ticket_graph_legend.php?color=<?= $colors[$i] ?>"
                                                         width="45"
                                                         height="2"
                                                         alt="line-graph-<?= $zr["REFERENCE_ID"] ?>"
@@ -120,10 +130,11 @@ class Graph implements PropertyContainerInterface
                                             </td>
                                             <td nowrap><?= $zr["REFERENCE"] ?></td>
                                         </tr>
-                                    <?
+                                        <?endif;?>
+                                    <?$i++;}
                                     endif;
-                                }
-                                ?>
+
+                                    ?>
                             </table>
                         </td>
                     </tr>
