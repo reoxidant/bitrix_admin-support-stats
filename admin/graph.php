@@ -8,7 +8,7 @@
 ##############################################
 */
 require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/main/include/prolog_admin_before.php");
-require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/support/include.php");
+require_once($_SERVER["DOCUMENT_ROOT"] . "/bitrix/modules/muiv.support/include.php");
 
 $bDemo = (CTicket ::IsDemo()) ? "Y" : "N";
 $bAdmin = (CTicket ::IsAdmin()) ? "Y" : "N";

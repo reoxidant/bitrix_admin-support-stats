@@ -763,4 +763,6 @@ class CTicket extends CAllTicket
         $res = $DB->Query($strSql, false, $err_mess.__LINE__);
         return $res;
     }
+
+
 }
