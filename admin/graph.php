@@ -37,13 +37,66 @@ $find_close = "N";
 $find_mess = "N";
 $find_overdue_mess = "N";
 
-
 $z = CTicketDictionary ::GetDropDown("S");
+$DataMinY = null;
+$DataMaxY = null;
+
 while ($zr = $z -> Fetch()) {
     $arStatus[] = $zr['ID'];
 }
 
+$arFilter = Array(
+    "SITE"						=> $find_site,
+    "DATE_CREATE_1"				=> $find_date1,
+    "DATE_CREATE_2"				=> $find_date2,
+    "RESPONSIBLE_ID"			=> $find_responsible_id,
+    "RESPONSIBLE"				=> $find_responsible,
+    "RESPONSIBLE_EXACT_MATCH"	=> $find_responsible_exact_match,
+    "SLA"						=> $find_sla_id,
+    "CATEGORY"					=> $find_category_id,
+    "CRITICALITY"				=> $find_criticality_id,
+    "STATUS"					=> null,
+    "MARK"						=> $find_mark_id,
+    "SOURCE"					=> $find_source_id,
+);
+$rsTickets = CTicket ::GetDynamicList($by = "s_date_create", $order = "asc", $arFilter);
+while ($rsTickets->ExtractFields("f_",false))
+{
+    $date = mktime(0,0,0, $f_CREATE_MONTH, $f_CREATE_DAY, $f_CREATE_YEAR);
+    $date_tmp = 0;
+    // если даты пропущены (идут не по порядку) то
+    $next_date = AddTime($prev_date_data,1,"D");
+    if ($date>$next_date && intval($prev_date_data)>0)
+    {
+        // заполняем пропущенные даты
+        $date_tmp = $next_date;
+        while ($date_tmp<$date)
+        {
+            $arrX_main[] = $date_tmp;
+            $arrY_all_main[] = 0;
+            $date_tmp = AddTime($date_tmp,1,"D");
+        }
+    }
+    $arrX_main[] = $date;
+    $arrY_all_main[] = intval($f_ALL_TICKETS);
+    $prev_date_data = $date;
+}
 
+//Цифры по X
+$arrayX = GetArrayX($arrX_main, $MinX, $MaxX);
+
+$arrY = array();
+$arrY = array_merge($arrY, $arrY_all_main);
+$arrayY = GetArrayY($arrY, $MinY, $MaxY);
+
+$DataMinY = $MinY;
+$DataMaxY = $MaxY;
+
+DrawCoordinatGrid($arrayX, $arrayY, $width, $height, $ImageHendle);
+
+foreach ($arrColor as $key => $value){
+    $colors[] = $value;
+}
 
 $arFilter = Array(
     "SITE"						=> $find_site,
@@ -88,17 +141,17 @@ while ($rsTickets->ExtractFields("f_",false))
 //Цифры по X
 $arrayX = GetArrayX($arrX, $MinX, $MaxX);
 
-//Цифры по Y
-$arrY = array();
-$arrY = array_merge($arrY, $arrY_all);
-$arrayY = GetArrayY($arrY, $MinY, $MaxY);
+//$arrayX - даты
 
-DrawCoordinatGrid($arrayX, $arrayY, $width, $height, $ImageHendle);
+//How to create lines on the graph
 
-foreach ($arrColor as $key => $value){
-    $colors[] = $value;
-}
-Graf($arrX, $arrY_all, $ImageHendle, $MinX, $MaxX, $MinY, $MaxY, $colors[array_search($find_status_id, $arStatus)]);
+/*$arrY_all = [1,1,0,0,0,0,1];
+
+Graf($arrX, $arrY_all, $ImageHendle, $MinX, $MaxX, $DataMinY, $DataMaxY, $colors[array_search($find_status_id, $arStatus)]);
+
+$arrY_all = [1,1,2,0,2,1,1];
+
+Graf($arrX, $arrY_all, $ImageHendle, $MinX, $MaxX, $DataMinY, $DataMaxY, $colors[1]);*/
 
 ShowImageHeader($ImageHendle);
 ?>
