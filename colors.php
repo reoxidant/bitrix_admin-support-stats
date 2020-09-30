@@ -1,9 +1,9 @@
 <?
 $arrColor = array();
+$arrColor["MESSAGES"] = "00CE67";
 $arrColor["ALL_TICKET"] = "8080C0";
 $arrColor["OPEN_TICKET"] = "FF0000";
 $arrColor["CLOSE_TICKET"] = "0000FF";
-$arrColor["MESSAGES"] = "00CE67";
 $arrColor["OVERDUE_MESSAGES"] = "F2BE0D";
 
 $arrColor["1"] = "FB0600";

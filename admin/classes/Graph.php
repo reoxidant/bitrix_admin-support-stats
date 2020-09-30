@@ -101,23 +101,8 @@ class Graph implements PropertyContainerInterface
 
                                 $i = 0;
 
-                                    if (!$status_id):
-                                        ?>
-                                        <tr>
-                                            <td valign="center">
-                                                <img
-                                                        src="/bitrix/admin/ticket_graph_legend.php?color=<?= $colors[$i] ?>"
-                                                        width="45"
-                                                        height="2"
-                                                        alt="line-graph-<?= $zr["REFERENCE_ID"] ?>"
-                                                >
-                                            </td>
-                                            <td nowrap>Все обращения</td>
-                                        </tr>
-                                    <?
-                                    else:
-                                        while ($zr = $z -> Fetch()) {
-                                    ?>
+                                while ($zr = $z -> Fetch()) {?>
+                                    <?if($status_id ?? null):?>
                                         <?if($zr["ID"] == $status_id):?>
                                         <tr>
                                             <td valign="center">
@@ -131,10 +116,22 @@ class Graph implements PropertyContainerInterface
                                             <td nowrap><?= $zr["REFERENCE"] ?></td>
                                         </tr>
                                         <?endif;?>
-                                    <?$i++;}
-                                    endif;
-
-                                    ?>
+                                    <?else:?>
+                                        <tr>
+                                            <td valign="center">
+                                                <img
+                                                        src="/bitrix/admin/ticket_graph_legend.php?color=<?= $colors[$i] ?>"
+                                                        width="45"
+                                                        height="2"
+                                                        alt="line-graph-<?= $zr["REFERENCE_ID"] ?>"
+                                                >
+                                            </td>
+                                            <td nowrap><?= $zr["REFERENCE"] ?></td>
+                                        </tr>
+                                    <?endif;?>
+                                <?
+                                $i++;
+                                }?>
                             </table>
                         </td>
                     </tr>
